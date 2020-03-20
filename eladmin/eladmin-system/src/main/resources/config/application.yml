@@ -25,7 +25,7 @@ spring:
     database: 0
     host: 121.42.229.189
     port: 6379
-    password:
+    password: scmt123456
     #连接超时时间
     timeout: 5000
 

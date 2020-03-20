@@ -10,6 +10,7 @@
 
 	<artifactId>eladmin-logging</artifactId>
 	<name>日志模块</name>
+	<version>2.5</version>
 
 	<dependencies>
 		<dependency>
