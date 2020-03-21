@@ -95,20 +95,20 @@ public class TPersonnelServiceImpl implements TPersonnelService {
         List<Map<String, Object>> list = new ArrayList<>();
         for (TPersonnelDto tPersonnel : all) {
             Map<String,Object> map = new LinkedHashMap<>();
-            map.put("姓名", tPersonnel.getName());
-            map.put("身份证号", tPersonnel.getCardid());
+            map.put("身份证号", tPersonnel.getCardId());
             map.put("电话", tPersonnel.getPhone());
             map.put("身份类型", tPersonnel.getType());
-            map.put("创建时间", tPersonnel.getCreatetime());
+            map.put("创建时间", tPersonnel.getCreateTime());
             map.put("创建人Id", tPersonnel.getCreateid());
-            map.put("修改时间", tPersonnel.getUpdatetime());
-            map.put("修改人ID", tPersonnel.getUpdateid());
+            map.put("修改时间", tPersonnel.getUpdateTime());
+            map.put("修改人ID", tPersonnel.getUpdateId());
             map.put("备注", tPersonnel.getMark());
             map.put("状态（是否启用）", tPersonnel.getState());
             map.put("备用字段2", tPersonnel.getBak2());
             map.put("备用字段3", tPersonnel.getBak3());
             map.put("备用字段4", tPersonnel.getBak4());
             map.put("备用字段5", tPersonnel.getBak5());
+            map.put("姓名", tPersonnel.getTname());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);

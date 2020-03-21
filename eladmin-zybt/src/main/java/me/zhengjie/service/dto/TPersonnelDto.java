@@ -13,11 +13,6 @@ public class TPersonnelDto implements Serializable {
 
     private Long id;
 
-    /** 姓名 */
-    private String name;
-
-    /** 身份证号 */
-    private String cardid;
 
     /** 电话 */
     private String phone;
@@ -25,17 +20,10 @@ public class TPersonnelDto implements Serializable {
     /** 身份类型 */
     private String type;
 
-    /** 创建时间 */
-    private Timestamp createtime;
 
     /** 创建人Id */
     private String createid;
 
-    /** 修改时间 */
-    private Timestamp updatetime;
-
-    /** 修改人ID */
-    private String updateid;
 
     /** 备注 */
     private String mark;
@@ -54,4 +42,15 @@ public class TPersonnelDto implements Serializable {
 
     /** 备用字段5 */
     private String bak5;
+
+    /** 姓名 */
+    private String tname;
+
+    private String cardId;
+
+    private Timestamp createTime;
+
+    private String updateId;
+
+    private Timestamp updateTime;
 }

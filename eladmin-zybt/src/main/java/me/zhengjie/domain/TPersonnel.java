@@ -22,15 +22,6 @@ public class TPersonnel implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    /** 姓名 */
-    @Column(name = "name",nullable = false)
-    @NotBlank
-    private String name;
-
-    /** 身份证号 */
-    @Column(name = "cardId",nullable = false)
-    @NotBlank
-    private String cardid;
 
     /** 电话 */
     @Column(name = "phone",nullable = false)
@@ -42,24 +33,11 @@ public class TPersonnel implements Serializable {
     @NotBlank
     private String type;
 
-    /** 创建时间 */
-    @Column(name = "createTime",nullable = false)
-    @NotNull
-    private Timestamp createtime;
 
     /** 创建人Id */
     @Column(name = "createID",nullable = false)
     @NotBlank
     private String createid;
-
-    /** 修改时间 */
-    @Column(name = "updateTime",nullable = false)
-    @NotNull
-    private Timestamp updatetime;
-
-    /** 修改人ID */
-    @Column(name = "updateId")
-    private String updateid;
 
     /** 备注 */
     @Column(name = "mark")
@@ -84,6 +62,27 @@ public class TPersonnel implements Serializable {
     /** 备用字段5 */
     @Column(name = "bak5")
     private String bak5;
+
+    /** 姓名 */
+    @Column(name = "Tname",nullable = false)
+    @NotBlank
+    private String tname;
+
+    /** 身份证号 */
+    @Column(name = "card_id",nullable = false)
+    @NotBlank
+    private String cardId;
+    /** 创建时间 */
+    @Column(name = "create_time",nullable = false)
+    @NotNull
+    private Timestamp createTime;
+
+    @Column(name = "update_id")
+    private String updateId;
+
+    @Column(name = "update_time",nullable = false)
+    @NotNull
+    private Timestamp updateTime;
 
     public void copy(TPersonnel source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
