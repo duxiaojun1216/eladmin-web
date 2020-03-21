@@ -36,7 +36,6 @@ public class TPersonnel implements Serializable {
 
     /** 创建人Id */
     @Column(name = "createID",nullable = false)
-    @NotBlank
     private String createid;
 
     /** 备注 */
@@ -74,14 +73,12 @@ public class TPersonnel implements Serializable {
     private String cardId;
     /** 创建时间 */
     @Column(name = "create_time",nullable = false)
-    @NotNull
     private Timestamp createTime;
 
     @Column(name = "update_id")
     private String updateId;
 
     @Column(name = "update_time",nullable = false)
-    @NotNull
     private Timestamp updateTime;
 
     public void copy(TPersonnel source){
