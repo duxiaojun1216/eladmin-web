@@ -1,4 +1,4 @@
-package me.zybt.config;
+package me.zhengjie.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
