@@ -88,6 +88,7 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(authUser.getUsername(), password);
 
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        
         SecurityContextHolder.getContext().setAuthentication(authentication);
         // 生成令牌
         String token = tokenProvider.createToken(authentication);

@@ -1,9 +1,5 @@
 package me.zhengjie;
 
-import me.zhengjie.annotation.AnonymousAccess;
-import me.zhengjie.utils.SpringContextHolder;
-
-import org.activiti.spring.boot.SecurityAutoConfiguration;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,13 +11,16 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import me.zhengjie.annotation.AnonymousAccess;
+import me.zhengjie.utils.SpringContextHolder;
+
 /**
  * @author Zheng Jie
  * @date 2018/11/15 9:20:19
  */
 @EnableAsync
 @RestController
-@SpringBootApplication(exclude = SecurityAutoConfiguration.class)
+@SpringBootApplication/*(exclude = SecurityAutoConfiguration.class)*/
 @MapperScan("me.zhengjie.mapper")
 @EnableTransactionManagement
 public class AppRun {
