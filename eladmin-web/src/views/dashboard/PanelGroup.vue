@@ -6,7 +6,7 @@
           <svg-icon icon-class="visits" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">日流量</div>
+          <div class="card-panel-text">申报人数</div>
           <count-to :start-val="0" :end-val="count.newVisits" :duration="2600" class="card-panel-num" />
         </div>
       </div>
@@ -17,7 +17,7 @@
           <svg-icon icon-class="ipvisits" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">日IP量</div>
+          <div class="card-panel-text">申报金额(万元)</div>
           <count-to :start-val="0" :end-val="count.newIp" :duration="3000" class="card-panel-num" />
         </div>
       </div>
@@ -28,7 +28,7 @@
           <svg-icon icon-class="visits" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">周流量</div>
+          <div class="card-panel-text">已发放金额(万元)</div>
           <count-to :start-val="0" :end-val="count.recentVisits" :duration="3200" class="card-panel-num" />
         </div>
       </div>
@@ -39,7 +39,7 @@
           <svg-icon icon-class="ipvisits" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">周IP量</div>
+          <div class="card-panel-text">待审批金额(万元)</div>
           <count-to :start-val="0" :end-val="count.recentIp" :duration="3600" class="card-panel-num" />
         </div>
       </div>
@@ -61,8 +61,12 @@ export default {
   },
   mounted() {
     get().then(res => {
-      this.count.newIp = res.newIp
-      this.count.newVisits = res.newVisits
+      //    this.count.newIp = res.newIp
+      //    this.count.newVisits = res.newVisits
+      //    this.count.recentIp = res.recentIp
+      //    this.count.recentVisits = res.recentVisits
+      this.count.newIp = 1120
+      this.count.newVisits = 5003
       this.count.recentIp = res.recentIp
       this.count.recentVisits = res.recentVisits
     })

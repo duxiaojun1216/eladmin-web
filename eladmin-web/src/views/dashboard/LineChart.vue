@@ -106,10 +106,10 @@ export default {
           }
         },
         legend: {
-          data: ['pv', 'ip']
+          data: ['人数', '资产数']
         },
         series: [{
-          name: 'pv', itemStyle: {
+          name: '资产数', itemStyle: {
             normal: {
               color: '#FF005A',
               lineStyle: {
@@ -125,7 +125,7 @@ export default {
           animationEasing: 'cubicInOut'
         },
         {
-          name: 'ip',
+          name: '人数',
           smooth: true,
           type: 'line',
           itemStyle: {

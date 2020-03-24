@@ -66,7 +66,7 @@ export default {
         },
         xAxis: [{
           type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          data: ['标准厂房(总额：万元)', '营业用房(总额：万元)', '自住用房(总额：万元)', '车位(总额：万元)', '农民工(总额：万元)', '高校毕业生(总额：万元)', '退役军人(总额：万元)', '外来就业人员(总额：万元)'],
           axisTick: {
             alignWithLabel: true
           }
@@ -78,25 +78,25 @@ export default {
           }
         }],
         series: [{
-          name: 'pageA',
+          name: '江阳区',
           type: 'bar',
           stack: 'vistors',
           barWidth: '60%',
-          data: [79, 52, 200, 334, 390, 330, 220],
+          data: [79, 52, 200, 334, 390, 330, 220, 330],
           animationDuration
         }, {
-          name: 'pageB',
+          name: '龙马潭区',
           type: 'bar',
           stack: 'vistors',
           barWidth: '60%',
-          data: [80, 52, 200, 334, 390, 330, 220],
+          data: [80, 52, 200, 334, 390, 330, 220, 130],
           animationDuration
         }, {
-          name: 'pageC',
+          name: '纳溪区',
           type: 'bar',
           stack: 'vistors',
           barWidth: '60%',
-          data: [30, 52, 200, 334, 390, 330, 220],
+          data: [30, 52, 200, 334, 390, 330, 220, 230],
           animationDuration
         }]
       })

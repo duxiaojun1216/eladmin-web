@@ -72,18 +72,17 @@ export default {
             }
           },
           indicator: [
-            { name: 'Sales', max: 10000 },
-            { name: 'Administration', max: 20000 },
-            { name: 'Information Techology', max: 20000 },
-            { name: 'Customer Support', max: 20000 },
-            { name: 'Development', max: 20000 },
-            { name: 'Marketing', max: 20000 }
+            { name: '农民工', max: 1000 },
+            { name: '退役军人', max: 200 },
+            { name: '高校毕业生', max: 200 },
+            { name: '外来人口', max: 200 },
+            { name: '法人', max: 200 }
           ]
         },
         legend: {
           left: 'center',
           bottom: '10',
-          data: ['Allocated Budget', 'Expected Spending', 'Actual Spending']
+          data: ['江阳区', '龙马潭区', '纳溪区']
         },
         series: [{
           type: 'radar',
@@ -99,16 +98,16 @@ export default {
           },
           data: [
             {
-              value: [5000, 7000, 12000, 11000, 15000, 14000],
-              name: 'Allocated Budget'
+              value: [500, 70, 120, 110, 100],
+              name: '江阳区'
             },
             {
-              value: [4000, 9000, 15000, 15000, 13000, 11000],
-              name: 'Expected Spending'
+              value: [400, 90, 150, 150, 100],
+              name: '龙马潭区'
             },
             {
-              value: [5500, 11000, 12000, 15000, 12000, 12000],
-              name: 'Actual Spending'
+              value: [550, 110, 120, 150, 120],
+              name: '纳溪区'
             }
           ],
           animationDuration: animationDuration

@@ -1,9 +1,7 @@
 <template>
   <div class="login">
+    <div class="title" />
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" label-position="left" label-width="0px" class="login-form">
-      <h3 class="title">
-        EL-ADMIN 后台管理系统
-      </h3>
       <el-form-item prop="username">
         <el-input v-model="loginForm.username" type="text" auto-complete="off" placeholder="账号">
           <svg-icon slot="prefix" icon-class="user" class="el-input__icon input-icon" />
@@ -22,9 +20,6 @@
           <img :src="codeUrl" @click="getCode">
         </div>
       </el-form-item>
-      <el-checkbox v-model="loginForm.rememberMe" style="margin:0 0 25px 0;">
-        记住我
-      </el-checkbox>
       <el-form-item style="width:100%;">
         <el-button :loading="loading" size="medium" type="primary" style="width:100%;" @click.native.prevent="handleLogin">
           <span v-if="!loading">登 录</span>
@@ -33,10 +28,8 @@
       </el-form-item>
     </el-form>
     <!--  底部  -->
-    <div v-if="$store.state.settings.showFooter" id="el-login-footer">
-      <span v-html="$store.state.settings.footerTxt" />
-      <span> ⋅ </span>
-      <a href="http://www.beian.miit.gov.cn" target="_blank">{{ $store.state.settings.caseNumber }}</a>
+    <div id="el-login-footer">
+      技术支持：泸州市城投智慧科技发展有限责任公司
     </div>
   </div>
 </template>
@@ -147,7 +140,7 @@ export default {
     justify-content: center;
     align-items: center;
     height: 100%;
-    background-image:url(https://api.isoyu.com/bing_images.php);
+	background-image: url(img/bj.png);
     background-size: cover;
   }
   .title {
@@ -157,9 +150,10 @@ export default {
   }
 
   .login-form {
-    border-radius: 6px;
-    background: #ffffff;
-    width: 385px;
+   /* border-radius: 6px;
+    background: #ffffff;*/
+    width: 389px;
+    height: 260px;
     padding: 25px 25px 5px 25px;
     .el-input {
       height: 38px;
@@ -170,6 +164,8 @@ export default {
     .input-icon{
       height: 39px;width: 14px;margin-left: 2px;
     }
+		background-image: url(img/form.png);
+    margin-top: 10%;
   }
   .login-tip {
     font-size: 13px;
@@ -185,5 +181,35 @@ export default {
       cursor: pointer;
       vertical-align:middle
     }
+  }
+  .el-form-item--small.el-form-item {
+    padding: 0 10px 0px 10px;
+  }
+	.title {
+		position: absolute;
+		top: 20%;
+		width: 574px;
+		height: 61px;
+		background-image: url(img/loginicon.png);
+	}
+	.title img{
+		width: 574px;
+		height: 61px;
+	}
+	#el-login-footer {
+    color: #0878c4;
+  }
+  .login-form .el-input input {
+      height: 38px;
+      border-radius: 4pc;
+    }
+  .el-button--primary {
+    color: #fff;
+    background-image: url(img/logionbutton.png);
+  }
+  .el-button--primary:hover {
+    color: #fff;
+    border-color: #1890ff;
+    background-image: url(img/logionbutton.png);
   }
 </style>

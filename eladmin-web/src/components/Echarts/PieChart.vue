@@ -56,22 +56,23 @@ export default {
         legend: {
           left: 'center',
           bottom: '10',
-          data: ['Industries', 'Technology', 'Forex', 'Gold', 'Forecasts']
+          data: ['标准化厂房', '营业用房', '自助住房', '二手营业用房', '二手自助住房', '车位']
         },
         calculable: true,
         series: [
           {
-            name: 'WEEKLY WRITE ARTICLES',
+            name: '申报总额(万元)',
             type: 'pie',
             roseType: 'radius',
             radius: [15, 95],
             center: ['50%', '38%'],
             data: [
-              { value: 320, name: 'Industries' },
-              { value: 240, name: 'Technology' },
-              { value: 149, name: 'Forex' },
-              { value: 100, name: 'Gold' },
-              { value: 59, name: 'Forecasts' }
+              { value: 320, name: '标准化厂房' },
+              { value: 240, name: '营业用房' },
+              { value: 149, name: '自助住房' },
+              { value: 100, name: '二手营业用房' },
+              { value: 110, name: '二手自助住房' },
+              { value: 59, name: '车位' }
             ],
             animationEasing: 'cubicInOut',
             animationDuration: 2600

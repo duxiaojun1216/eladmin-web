@@ -6,19 +6,19 @@
 
     <div class="right-menu">
       <template v-if="device!=='mobile'">
-        <search id="header-search" class="right-menu-item" />
+        <!--<search id="header-search" class="right-menu-item" />-->
 
-        <el-tooltip content="源码地址" effect="dark" placement="bottom">
+        <!--<el-tooltip content="源码地址" effect="dark" placement="bottom">
           <Github class="right-menu-item hover-effect" />
-        </el-tooltip>
+        </el-tooltip>-->
 
-        <el-tooltip content="全屏缩放" effect="dark" placement="bottom">
+        <!--<el-tooltip content="全屏缩放" effect="dark" placement="bottom">
           <screenfull id="screenfull" class="right-menu-item hover-effect" />
-        </el-tooltip>
+        </el-tooltip>-->
 
-        <el-tooltip content="布局设置" effect="dark" placement="bottom">
+        <!--<el-tooltip content="布局设置" effect="dark" placement="bottom">
           <size-select id="size-select" class="right-menu-item hover-effect" />
-        </el-tooltip>
+        </el-tooltip>-->
 
       </template>
 
@@ -56,22 +56,22 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import Breadcrumb from '@/components/Breadcrumb'
-import Hamburger from '@/components/Hamburger'
-import Github from '@/components/Github'
-import Screenfull from '@/components/Screenfull'
-import SizeSelect from '@/components/SizeSelect'
-import Search from '@/components/HeaderSearch'
+// import Breadcrumb from '@/components/Breadcrumb'
+// import Hamburger from '@/components/Hamburger'
+// import Github from '@/components/Github'
+// import Screenfull from '@/components/Screenfull'
+// import SizeSelect from '@/components/SizeSelect''
+// import Search from '@/components/HeaderSearch'
 import Avatar from '@/assets/images/avatar.png'
 
 export default {
   components: {
-    Breadcrumb,
-    Hamburger,
-    Screenfull,
-    SizeSelect,
-    Search,
-    Github
+    //  Breadcrumb,
+    //  Hamburger,
+    //  Screenfull,
+    //  SizeSelect,
+    //  Search,
+    //  Github
   },
   data() {
     return {

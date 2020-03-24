@@ -36,7 +36,6 @@ import 'view-design/dist/styles/iview.css'
 
 Vue.use(ViewUI)
 
-
 Vue.use(VueHighlightJS)
 Vue.use(mavonEditor)
 Vue.use(permission)
