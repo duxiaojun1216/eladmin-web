@@ -37,7 +37,7 @@ export default {
       sidebar: state => state.app.sidebar,
       device: state => state.app.device,
       showSettings: state => state.settings.showSettings,
-      needTagsView: state => state.settings.tagsView,
+      needTagsView: state => false,
       fixedHeader: state => state.settings.fixedHeader
     }),
     classObj() {

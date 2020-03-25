@@ -1,12 +1,12 @@
 <template>
   <div class="navbar">
-    <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
-
+    <!--<hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
+-->
     <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
 
     <div class="right-menu">
       <template v-if="device!=='mobile'">
-        <!--<search id="header-search" class="right-menu-item" />-->
+        <search id="header-search" class="right-menu-item" />
 
         <!--<el-tooltip content="源码地址" effect="dark" placement="bottom">
           <Github class="right-menu-item hover-effect" />
@@ -25,10 +25,10 @@
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">
           <img :src="user.avatar ? baseApi + '/avatar/' + user.avatar : Avatar" class="user-avatar">
-          <i class="el-icon-caret-bottom" />
+          <!--<i class="el-icon-caret-bottom" />-->
         </div>
         <el-dropdown-menu slot="dropdown">
-          <a target="_blank" href="https://docs.auauz.net/">
+          <!--<a target="_blank" href="https://docs.auauz.net/">
             <el-dropdown-item>
               项目文档
             </el-dropdown-item>
@@ -37,7 +37,7 @@
             <el-dropdown-item>
               布局设置
             </el-dropdown-item>
-          </span>
+          </span>-->
           <router-link to="/user/center">
             <el-dropdown-item>
               个人中心
@@ -56,21 +56,21 @@
 
 <script>
 import { mapGetters } from 'vuex'
-// import Breadcrumb from '@/components/Breadcrumb'
+   import Breadcrumb from '@/components/Breadcrumb'
 // import Hamburger from '@/components/Hamburger'
 // import Github from '@/components/Github'
 // import Screenfull from '@/components/Screenfull'
 // import SizeSelect from '@/components/SizeSelect''
-// import Search from '@/components/HeaderSearch'
+   import Search from '@/components/HeaderSearch'
 import Avatar from '@/assets/images/avatar.png'
 
 export default {
   components: {
-    //  Breadcrumb,
-    //  Hamburger,
+        Breadcrumb,
+//      Hamburger,
     //  Screenfull,
     //  SizeSelect,
-    //  Search,
+        Search
     //  Github
   },
   data() {
@@ -181,14 +181,14 @@ export default {
       margin-right: 30px;
 
       .avatar-wrapper {
-        margin-top: 5px;
+        margin-top: 10px;
         position: relative;
 
         .user-avatar {
           cursor: pointer;
-          width: 40px;
-          height: 40px;
-          border-radius: 10px;
+          width: 30px;
+          height: 30px;
+          border-radius: 0px;
         }
 
         .el-icon-caret-bottom {

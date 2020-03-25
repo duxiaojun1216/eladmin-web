@@ -15,6 +15,9 @@
         <sidebar-item v-for="route in permission_routers" :key="route.path" :item="route" :base-path="route.path" />
       </el-menu>
     </el-scrollbar>
+    <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
+
+    <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
   </div>
 </template>
 
@@ -23,9 +26,9 @@ import { mapGetters } from 'vuex'
 import Logo from './Logo'
 import SidebarItem from './SidebarItem'
 import variables from '@/assets/styles/variables.scss'
-
+import Hamburger from '@/components/Hamburger'
 export default {
-  components: { SidebarItem, Logo },
+  components: { SidebarItem, Logo, Hamburger },
   computed: {
     ...mapGetters([
       'permission_routers',
@@ -49,6 +52,19 @@ export default {
     isCollapse() {
       return !this.sidebar.opened
     }
+  },
+  methods: {
+    toggleSideBar() {
+      this.$store.dispatch('app/toggleSideBar')
+    }
   }
 }
 </script>
+<style lang="scss" scoped>
+.hamburger-container{
+	position: absolute;
+	bottom: 20px;
+	right: -10px;
+}
+
+</style>

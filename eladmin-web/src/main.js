@@ -30,10 +30,12 @@ import './assets/icons' // icon
 import './router/index' // permission control
 
 import ViewUI from 'view-design'
-
 // import style
 import 'view-design/dist/styles/iview.css'
 
+import VueApexCharts from 'vue-apexcharts'
+Vue.use(VueApexCharts)
+Vue.component('apexchart', VueApexCharts)
 Vue.use(ViewUI)
 
 Vue.use(VueHighlightJS)

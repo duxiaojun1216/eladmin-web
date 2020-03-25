@@ -6,9 +6,7 @@
       </keep-alive>
     </transition>
     <div v-if="$store.state.settings.showFooter" id="el-main-footer">
-      <span v-html="$store.state.settings.footerTxt" />
-      <span> ⋅ </span>
-      <a href="http://www.beian.miit.gov.cn" target="_blank">{{ $store.state.settings.caseNumber }}</a>
+      技术支持：泸州市城投智慧科技发展有限责任公司
     </div>
   </section>
 </template>
