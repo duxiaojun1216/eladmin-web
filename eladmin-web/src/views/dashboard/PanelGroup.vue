@@ -3,7 +3,8 @@
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-people">
-          <svg-icon icon-class="visits" class-name="card-panel-icon" />
+          <!--<svg-icon icon-class="visits" class-name="card-panel-icon" />-->
+          <img :src="sbdx" class="icon">
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">申报人数</div>
@@ -14,7 +15,8 @@
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-message">
-          <svg-icon icon-class="ipvisits" class-name="card-panel-icon" />
+          <!--<svg-icon icon-class="ipvisits" class-name="card-panel-icon" />-->
+          <img :src="sbzj" class="icon">
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">申报金额(万元)</div>
@@ -25,7 +27,8 @@
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-money">
-          <svg-icon icon-class="visits" class-name="card-panel-icon" />
+          <!--<svg-icon icon-class="visits" class-name="card-panel-icon" />-->
+          <img :src="ffzj" class="icon">
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">已发放金额(万元)</div>
@@ -36,10 +39,11 @@
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-shopping">
-          <svg-icon icon-class="ipvisits" class-name="card-panel-icon" />
+          <!--<svg-icon icon-class="ipvisits" class-name="card-panel-icon" />-->
+          <img :src="fc" class="icon">
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">待审批金额(万元)</div>
+          <div class="card-panel-text">申报资产</div>
           <count-to :start-val="0" :end-val="count.recentIp" :duration="3600" class="card-panel-num" />
         </div>
       </div>
@@ -50,13 +54,21 @@
 <script>
 import CountTo from 'vue-count-to'
 import { get } from '@/api/monitor/visits'
+	import sbdx from '../img/0111.png';
+	import ffzj from '../img/ffzj.png';
+	import sbzj from '../img/sbzj.png';
+	import fc from '../img/fc.png';
 export default {
   components: {
     CountTo
   },
   data() {
     return {
-      count: { newIp: 0, newVisits: 0, recentIp: 0, recentVisits: 0 }
+      count: { newIp: 0, newVisits: 0, recentIp: 0, recentVisits: 0 },
+				sbdx: sbdx,
+				ffzj: ffzj,
+				sbzj: sbzj,
+				fc: fc
     }
   },
   mounted() {
@@ -91,15 +103,19 @@ export default {
     border-color: rgba(0, 0, 0, .05);
     .icon-people {
       color: #40c9c6;
+      background-color: #40c9c6;
     }
     .icon-message {
       color: #36a3f7;
+      background-color: #36a3f7;
     }
     .icon-money {
       color: #f4516c;
+      background-color: #f4516c;
     }
     .icon-shopping {
-      color: #34bfa3
+      color: #34bfa3;
+      background-color: #34bfa3;
     }
     .card-panel-icon-wrapper {
       float: left;
