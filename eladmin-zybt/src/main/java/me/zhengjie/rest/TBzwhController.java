@@ -4,15 +4,22 @@ import me.zhengjie.aop.log.Log;
 import me.zhengjie.domain.TBzwh;
 import me.zhengjie.service.TBzwhService;
 import me.zhengjie.service.dto.TBzwhQueryCriteria;
+import me.zhengjie.utils.SecurityUtils;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import cn.hutool.json.JSONObject;
 import io.swagger.annotations.*;
 import java.io.IOException;
+import java.sql.Timestamp;
+
 import javax.servlet.http.HttpServletResponse;
+import cn.hutool.json.JSONObject;
 
 /**
 * @author dengjie
@@ -50,6 +57,9 @@ public class TBzwhController {
     @ApiOperation("新增t_bzwh")
     @PreAuthorize("@el.check('tBzwh:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody TBzwh resources){
+    	String userId = new JSONObject(SecurityUtils.getUserDetails()).get("id", String.class);
+    	resources.setCreateId(userId);
+    	resources.setCreateTime(new Timestamp(System.currentTimeMillis()));
         return new ResponseEntity<>(tBzwhService.create(resources),HttpStatus.CREATED);
     }
 
@@ -58,6 +68,9 @@ public class TBzwhController {
     @ApiOperation("修改t_bzwh")
     @PreAuthorize("@el.check('tBzwh:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody TBzwh resources){
+    	String userId = new JSONObject(SecurityUtils.getUserDetails()).get("id", String.class);
+    	resources.setUpdateId(userId);
+    	resources.setUpdateTime(new Timestamp(System.currentTimeMillis()));
         tBzwhService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

@@ -42,7 +42,7 @@
       <!--表格渲染-->
       <el-table ref="table" v-loading="crud.loading" :data="crud.data" size="small" style="width: 100%;" @selection-change="crud.selectionChangeHandler">
         <el-table-column type="selection" width="55" />
-        <el-table-column v-if="columns.visible('zclx')" prop="zclx" label="资产类型">
+        <el-table-column v-if="columns.visible('zclx')" prop="zclx" label="资产类型" width="180px">
           <template slot-scope="scope">
             {{ dict.label.house_type[scope.row.zclx] }}
           </template>
@@ -57,14 +57,14 @@
             <span>{{ parseTime(scope.row.zzsj) }}</span>
           </template>
         </el-table-column>
-        <el-table-column v-if="columns.visible('bl')" prop="bl" label="比例" />
-        <el-table-column v-if="columns.visible('createId')" prop="createId" label="创建人" />
+        <el-table-column v-if="columns.visible('bl')" prop="bl" label="比例(%)" />
+        <!--<el-table-column v-if="columns.visible('createId')" prop="createId" label="创建人" />-->
         <el-table-column v-if="columns.visible('createTime')" prop="createTime" label="创建时间">
           <template slot-scope="scope">
             <span>{{ parseTime(scope.row.createTime) }}</span>
           </template>
         </el-table-column>
-        <el-table-column v-if="columns.visible('updateId')" prop="updateId" label="修改人" />
+        <!--<el-table-column v-if="columns.visible('updateId')" prop="updateId" label="修改人" />-->
         <el-table-column v-if="columns.visible('updateTime')" prop="updateTime" label="修改时间">
           <template slot-scope="scope">
             <span>{{ parseTime(scope.row.updateTime) }}</span>
