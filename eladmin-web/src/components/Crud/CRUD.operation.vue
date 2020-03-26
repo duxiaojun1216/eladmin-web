@@ -50,6 +50,59 @@
         icon="el-icon-download"
         @click="crud.doExport"
       >导出</el-button>
+      <el-button
+        v-if="crud.optShow.download"
+        :loading="crud.downloadLoading"
+        :disabled="!crud.data.length"
+        class="filter-item"
+        size="mini"
+        type="warning"
+        icon="el-icon-user"
+        @click="crud.doExport"
+        :style="{ display: permission.share==undefined?visibleLine:permission.share }"
+      >
+        批量核实
+      </el-button>
+         <el-button
+           v-if="crud.optShow.del"
+           slot="reference"
+           v-permission="permission.del"
+           class="filter-item"
+           type="danger"
+           icon="el-icon-date"
+           size="mini"
+           :loading="crud.delAllLoading"
+           :disabled="crud.selections.length === 0"
+           @click="toDelete(crud.selections)"
+           :style="{ display: permission.share==undefined?visibleLine:permission.share }"
+         >
+        批量审批
+      </el-button>
+      <el-button
+        v-if="crud.optShow.edit"
+        v-permission="permission.edit"
+        class="filter-item"
+        size="mini"
+        type="success"
+        icon="el-icon-document-copy"
+        :disabled="crud.selections.length !== 1"
+        @click="crud.toEdit(crud.selections[0])"
+        :style="{ display: permission.share==undefined?visibleLine:permission.share }"
+      >
+        批量发放
+      </el-button>
+      <el-button
+        v-if="crud.optShow.add"
+        v-permission="permission.add"
+        class="filter-item"
+        size="mini"
+        type="primary"
+        icon="el-icon-takeaway-box"
+        @click="crud.toAdd"
+        :style="{ display: permission.share==undefined?visibleLine:permission.share }"
+      >
+        生成批次号
+        </el-button>
       <!--右侧-->
       <slot name="right" />
     </span>
@@ -113,7 +166,8 @@ export default {
   data() {
     return {
       allColumnsSelected: true,
-      allColumnsSelectedIndeterminate: false
+      allColumnsSelectedIndeterminate: false,
+        visibleLine: 'none'  //隐藏
     }
   },
   created() {

@@ -80,7 +80,8 @@ function CRUD(options) {
       submit: '提交成功',
       add: '新增成功',
       edit: '编辑成功',
-      del: '删除成功'
+      del: '删除成功',
+      /*up: '批量导出成功'*/
     },
     page: {
       // 页码

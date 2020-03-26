@@ -1,14 +1,17 @@
 <template>
   <div>
-    <el-button v-permission="permission.edit" :loading="crud.status.cu === 2" :disabled="disabledEdit" size="mini" type="primary" icon="el-icon-edit" @click="crud.toEdit(data)" />
-    <el-popover v-model="pop" v-permission="permission.del" placement="top" width="180" trigger="manual" @show="onPopoverShow" @hide="onPopoverHide">
-      <p>{{ msg }}</p>
-      <div style="text-align: right; margin: 0">
-        <el-button size="mini" type="text" @click="doCancel">取消</el-button>
-        <el-button :loading="crud.dataStatus[data.id].delete === 2" type="primary" size="mini" @click="crud.doDelete(data)">确定</el-button>
-      </div>
-      <el-button slot="reference" :disabled="disabledDle" type="danger" icon="el-icon-delete" size="mini" @click="toDelete" />
-    </el-popover>
+    <el-button-group>
+      <el-button v-permission="permission.edit" :loading="crud.status.cu === 2" :disabled="disabledEdit" size="mini" type="primary" icon="el-icon-edit" @click="crud.toEdit(data)" />
+      <el-button type="primary" icon="el-icon-share"  :style="{ display: permission.share==undefined?visibleLine:permission.share }" size="mini"/>
+      <el-popover v-model="pop" v-permission="permission.del" placement="top" width="180" trigger="manual" @show="onPopoverShow" @hide="onPopoverHide">
+        <p>{{ msg }}</p>
+        <div style="text-align: right; margin: 0">
+          <el-button size="mini" type="text" @click="doCancel">取消</el-button>
+          <el-button :loading="crud.dataStatus[data.id].delete === 2" type="primary" size="mini" @click="crud.doDelete(data)">确定</el-button>
+        </div>
+        <el-button slot="reference" :disabled="disabledDle" type="danger" icon="el-icon-delete" size="mini" @click="toDelete" />
+      </el-popover>
+    </el-button-group>
   </div>
 </template>
 <script>
@@ -37,9 +40,13 @@ export default {
       default: '确定删除本条数据吗？'
     }
   },
+
   data() {
     return {
-      pop: false
+      pop: false,
+        visiblePublish: '',   //显示
+        visibleSubmit: '',   //显示
+        visibleLine: 'none'  //隐藏
     }
   },
   methods: {
