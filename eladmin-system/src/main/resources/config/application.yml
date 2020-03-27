@@ -2,6 +2,15 @@ server:
   port: 8000
 
 spring:
+  mvc:
+  static-path-pattern: /**
+  
+  thymeleaf:
+  prefix: classpath:/static/
+  
+  resources:
+  static-locations: classpath:/static/
+  
   freemarker:
     check-template-location: false
   profiles:
