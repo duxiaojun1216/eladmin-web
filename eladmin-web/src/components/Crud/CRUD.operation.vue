@@ -59,7 +59,7 @@
         type="warning"
         icon="el-icon-user"
         @click="crud.doExport"
-        :style="{ display: permission.share==undefined?visibleLine:permission.share }"
+        :style="{ display: permission.share1==undefined?visibleLine:permission.share }"
       >
         批量核实
       </el-button>
@@ -74,7 +74,7 @@
            :loading="crud.delAllLoading"
            :disabled="crud.selections.length === 0"
            @click="toDelete(crud.selections)"
-           :style="{ display: permission.share==undefined?visibleLine:permission.share }"
+           :style="{ display: permission.share2==undefined?visibleLine:permission.share }"
          >
         批量审批
       </el-button>
@@ -87,7 +87,7 @@
         icon="el-icon-document-copy"
         :disabled="crud.selections.length !== 1"
         @click="crud.toEdit(crud.selections[0])"
-        :style="{ display: permission.share==undefined?visibleLine:permission.share }"
+        :style="{ display: permission.share3==undefined?visibleLine:permission.share }"
       >
         批量发放
       </el-button>
@@ -99,7 +99,7 @@
         type="primary"
         icon="el-icon-takeaway-box"
         @click="crud.toAdd"
-        :style="{ display: permission.share==undefined?visibleLine:permission.share }"
+        :style="{ display: permission.share4==undefined?visibleLine:permission.share }"
       >
         生成批次号
         </el-button>
