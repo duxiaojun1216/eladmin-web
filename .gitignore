@@ -3,3 +3,15 @@
 /.metadata/
 /eladmin-zybt/bin
 /eladmin-zybt/.settings
+/eladmin-system/.project
+/eladmin-system/.classpath
+/eladmin-system/.env.development
+/eladmin-system/.env.production
+/eladmin-system/.eslintignore
+/eladmin-system/.eslintrc.js
+/eladmin-zybt/.project
+/eladmin-zybt/.classpath
+/eladmin-system/.settings
+/eladmin-system/tBzwh
+/eladmin-system/eladmin-zybt
+/eladmin-web/.project
