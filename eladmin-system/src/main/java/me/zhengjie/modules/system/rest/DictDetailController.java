@@ -4,12 +4,16 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import me.zhengjie.aop.log.Log;
+import me.zhengjie.common.utils.ResultUtil;
+import me.zhengjie.common.vo.Result;
 import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.system.domain.DictDetail;
 import me.zhengjie.system.service.DictDetailService;
+import me.zhengjie.system.service.dto.DictDetailDto;
 import me.zhengjie.system.service.dto.DictDetailQueryCriteria;
 
 import org.springframework.data.domain.Pageable;
@@ -52,7 +56,18 @@ public class DictDetailController {
                                          @PageableDefault(sort = {"sort"}, direction = Sort.Direction.ASC) Pageable pageable){
         return new ResponseEntity<>(dictDetailService.queryAll(criteria,pageable),HttpStatus.OK);
     }
-
+    
+    @Log("查询字典详情")
+    @ApiOperation("查询字典详情")
+    @GetMapping(value = "/{type}")
+    public Result<List<DictDetailDto>> getDictDetailsByType(@PathVariable String type){
+    	DictDetailQueryCriteria criteria=new DictDetailQueryCriteria();
+    	criteria.setDictName(type);
+    	List<DictDetailDto> list=dictDetailService.queryAll(criteria);
+    	return new ResultUtil<List<DictDetailDto>>().setData(list);
+    	//return new ResponseEntity<>(dictDetailService.queryAll(criteria),HttpStatus.OK);
+    }
+    
     @Log("查询多个字典详情")
     @ApiOperation("查询多个字典详情")
     @GetMapping(value = "/map")
