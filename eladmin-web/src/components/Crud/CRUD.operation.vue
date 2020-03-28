@@ -92,13 +92,14 @@
         批量发放
       </el-button>
       <el-button
-        v-if="crud.optShow.add"
-        v-permission="permission.add"
+        v-if="crud.optShow.download"
+        :loading="crud.downloadLoading"
+        :disabled="!crud.data.length"
         class="filter-item"
         size="mini"
-        type="primary"
-        icon="el-icon-takeaway-box"
-        @click="crud.toAdd"
+        type="warning"
+        icon="el-icon-goods"
+        @click="crud.Export"
         :style="{ display: permission.share4==undefined?visibleLine:permission.share }"
       >
         生成批次号
