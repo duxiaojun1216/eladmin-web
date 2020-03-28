@@ -99,6 +99,14 @@ public class TShenbaoxingxi implements Serializable {
     @Column(name = "bak1")
     private String bak1;
 
+    //部门id
+    @Column(name = "dep_id")
+    private Long  depId;
+
+    //部门id
+    @Column(name = "pch")
+    private String  pch;
+
     public void copy(TShenbaoxingxi source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
     }

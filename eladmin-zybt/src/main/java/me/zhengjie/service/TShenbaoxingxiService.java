@@ -4,6 +4,8 @@ import me.zhengjie.domain.TShenbaoxingxi;
 import me.zhengjie.service.dto.TShenbaoxingxiDto;
 import me.zhengjie.service.dto.TShenbaoxingxiQueryCriteria;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.Map;
 import java.util.List;
 import java.io.IOException;
@@ -62,5 +64,11 @@ public interface TShenbaoxingxiService {
     * @param response /
     * @throws IOException /
     */
+
     void download(List<TShenbaoxingxiDto> all, HttpServletResponse response) throws IOException;
+    /**
+     * sha
+     * @param file 上传的文件
+     */
+    void uploadFj(MultipartFile[] file,String sbxxId) throws IOException;
 }

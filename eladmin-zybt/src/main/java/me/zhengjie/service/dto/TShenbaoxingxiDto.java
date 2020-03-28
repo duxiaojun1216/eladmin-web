@@ -67,5 +67,11 @@ public class TShenbaoxingxiDto implements Serializable {
     /** 住建复核状态 */
     private String zjfh;
 
+    /** 批次号 */
+    private String pch;
+
     private String bak1;
+    //部门id
+    private Long depId;
+
 }

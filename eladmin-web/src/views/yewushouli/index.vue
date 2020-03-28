@@ -1,20 +1,21 @@
 <template>
-  <div class="app-container">
+  <div class="app-container" style="width: 70%;margin-left: 15%;border: 1px solid #dcdfe6;">
     <!--工具栏-->
     <div class="head-container">
       <!--如果想在工具栏加入更多按钮，可以使用插槽方式， slot = 'left' or 'right'-->
       <!--表单组件-->
       <!--表单组件-->
+      <h2 align="center">泸州置业补助申请表</h2>
       <el-form ref="form" :model="form" :rules="rules" size="medium" inline="true" label-width="150px" label-position="left">
         <el-divider content-position="left" ><el-tag size="medium" effect="plain">申报房产信息</el-tag></el-divider>
-        <el-form-item label="申报人" prop="tname" style="width: 48%"  >
-          <el-input v-model="form.tname" style="width: 300px; margin-left: 20px" />
+        <el-form-item label="申报人" prop="tname" style="width: 48%;"  >
+          <el-input v-model="form.tname" style="width: 300px; "  />
         </el-form-item>
-        <el-form-item label="身份证号" prop="cardId" style="width: 48%" >
-          <el-input v-model="form.cardId" style="width: 300px; margin-left: 20px;" />
+        <el-form-item label="身份证号" prop="cardId" style="width: 48% " >
+          <el-input v-model="form.cardId" style="width: 300px; margin-left: 35px;" />
         </el-form-item>
 
-        <el-form-item label="申请人类型" style="width: 48% " prop="sqrlx" labelPosition="right">
+        <el-form-item label="申请人类型" style="width: 48% ;" prop="sqrlx" labelPosition="right" >
           <!--<el-radio-group v-model="form.sqrlx" size="mini" style="width: 600px" @change="changeFromRY()">
             <el-radio-button
               v-for="item in dict.peoson_type"
@@ -23,7 +24,7 @@
               :value="item.value"
             />
           </el-radio-group>-->
-          <el-select v-model="form.sqrlx" filterable placeholder="请选择" style="width: 300px; margin-left: 10px;"  @change="changeFromRY()">
+          <el-select v-model="form.sqrlx" filterable placeholder="请选择" style="width: 300px;"  @change="changeFromRY()">
             <el-option
               v-for="item in dict.peoson_type"
               :key="item.id"
@@ -31,12 +32,12 @@
               :value="item.value" />
           </el-select>
         </el-form-item>
-        <el-form-item label="联系电话" prop="phone"  style="width: 48%">
-          <el-input v-model="form.phone" style="width: 300px; margin-left: 20px;" />
+        <el-form-item label="联系电话" prop="phone"  style="width: 48%;;">
+          <el-input v-model="form.phone" style="width: 300px;margin-left: 35px;" />
         </el-form-item>
 
           <el-divider  content-position="left"><el-tag size="medium" effect="plain" >申报房产信息</el-tag></el-divider>
-        <el-form-item label="房产类型" prop="fclx" style="width:  90%" >
+        <el-form-item label="房产类型"  style="width:  90%" v-model="form.fclx" >
           <!--<el-select v-model="form.fclx" filterable placeholder="请选择" @change="changeFromFC()">
               <el-option
                 v-for="item in dict.house_type"
@@ -44,37 +45,38 @@
                 :label="item.label"
                 :value="item.value" />
             </el-select>-->
-          <el-radio-group v-model="form.fclx" size="medium" style="width: 1000px" @change="changeFromFC()">
+          <el-radio-group v-model="radio1"  size="medium" style="width: 100%" @change="changeFromFC()">
             <el-radio
               v-for="item in dict.house_type"
               :key="item.id"
-              :label="item.label"
-              :value="item.value"
-            />
+              :label="item.value">{{item.label}}</el-radio>
+
           </el-radio-group>
         </el-form-item>
 
         <el-form-item label="购房日期" prop="gfrq" style="width:30%">
-          <el-date-picker v-model="form.htsj" type="datetime" style="width: 280px; margin-left: 20px;" />
+          <el-date-picker v-model="form.gfrq" type="datetime" style="width: 180px;;" />
         </el-form-item>
-        <el-form-item label="网签备案日期" prop="wqsj" style="width:30%">
-          <el-date-picker v-model="form.wqsj" type="datetime" style="width: 280px; margin-left: 20px;" />
+        <el-form-item label="网签备案日期" prop="wqrq" style="width:30%">
+          <el-date-picker v-model="form.wqrq" type="datetime" style="width: 180px;" />
         </el-form-item>
-        <el-form-item label="完税日期" prop="wsrq" style="width:30%">
-          <el-date-picker v-model="form.htsj" type="datetime" style="width: 280px; margin-left: 20px;" />
+        <el-form-item label="完税日期" prop="wsrq" style="width:35%" label-width="180px">
+          <el-date-picker v-model="form.wsrq" type="datetime" style="width: 180px;" />
         </el-form-item>
 
-        <el-form-item  label="房屋地址" prop="scwz" style="width:90%">
-          <el-input v-model="form.fcje" style="width: 500px; margin-left: 20px;" />
-        </el-form-item>
+
         <el-form-item  label="增值税发票总金额" prop="fpje" style="width:30%" >
-          <el-input v-model="form.btje" style="width: 300px; margin-left: 20px;" />
+          <el-input v-model="form.fpje" style="width: 180px;" />
         </el-form-item>
         <el-form-item label="购房面积（平方米）" prop="fcmj"  style="width:30%">
-        <el-input v-model="form.fcmj" style="width: 300px; margin-left: 20px;" />
+        <el-input v-model="form.fcmj" style="width: 180px; " />
         </el-form-item>
-        <el-form-item label="不动产权证号（二手房）" prop="fcid" v-if="form.fclx == '二手营业用房/自住用房'" label-width="180px" style="width:30%">
-          <el-input v-model="form.btye" style="width: 300px; margin-left: 20px;" />
+        <el-form-item label="不动产权证号（二手房）" prop="bdcqzh" v-if="radio1 == '二手营业用房/自住用房'" label-width="180px" >
+          <el-input v-model="form.bdcqzh" style="width: 180px; " />
+        </el-form-item>
+
+        <el-form-item  label="房屋地址" prop="scwz" style="width:100%">
+          <el-input v-model="form.scwz" style="width:938px; " />
         </el-form-item>
 
         <!--
@@ -114,10 +116,10 @@
             </el-table-column>
             <el-table-column
               label="资料名称"
-              width="1000"
+              width="800px"
               prop="name">
             </el-table-column>
-            <el-table-column label="操作" width="600px">
+            <el-table-column label="操作" width="200px">
               <template slot-scope="scope">
                 <!--<el-button
                   size="mini"
@@ -126,9 +128,10 @@
                   @click="handleEdit(scope.$index, scope.row)">上传</el-button>-->
                 <el-upload
                   class="upload-demo"
-                  action="https://jsonplaceholder.typicode.com/posts/"
+                  action="/api/yewushouli/uploadFj"
                   multiple
-                  :limit="3"
+                  :data="sbxx"
+                  :limit="1"
                   :on-exceed="handleExceed"
                   :file-list="fileList">
                   <el-button
@@ -154,14 +157,20 @@
         </el-dialog>
       </el-form>
 
+      <div slot="footer" class="dialog-footer">
+        <el-button type="text" @click="crud.cancelCU">取消</el-button>
+        <el-button  type="primary" @click="submitForm()">确认</el-button>
+<!--        <el-button :loading="crud.cu === 2" type="primary" @click="crud.submitCU">确认2</el-button>-->
 
+      </div>
 
     </div>
   </div>
 </template>
 
 <script>
-  import crudTShenbaoxingxi from '@/api/tShenbaoxingxi'
+  import crudTYewushouli from '@/api/yewushouli'
+  import request from '@/utils/request'
   import CRUD, { presenter, header, form, crud } from '@crud/crud'
   import rrOperation from '@crud/RR.operation'
   import crudOperation from '@crud/CRUD.operation'
@@ -169,8 +178,8 @@
   import pagination from '@crud/Pagination'
 
   // crud交由presenter持有
-  const defaultCrud = CRUD({ title: '申报信息', url: 'api/tShenbaoxingxi', sort: 'id,desc', crudMethod: { ...crudTShenbaoxingxi }})
-  const defaultForm = { id: null, sbrid: null, fcid: null, htsj: null, wqsj: null, fcje: null, fclx: null, btje: null, btye: null, sqrlx: null, bak2: null, bak3: null, bak4: null, bak5: null, createId: null, createTime: null, updateId: null, updateTime: null, zjfh: null, bak1: null }
+  const defaultCrud = CRUD({ title: '申报信息', url: 'api/tShenbaoxingxi', sort: 'id,desc', crudMethod: { ...crudTYewushouli }})
+  const defaultForm = { tname: null, cardId: null, sqrlx : null, phone: null, fclx: null, gfrq: null, wqsj: null, wsrq: null, fpje: null, fcmj: null, bdcqzh: null, scwz: null }
   export default {
     name: 'TShenbaoxingxi',
     components: { pagination, crudOperation, rrOperation, udOperation },
@@ -229,6 +238,10 @@
         tableData4:[{
           name: '申请人身份证明（验原件，收复印件）'
         }],
+        sbxx:{
+          code:'',
+          sqxxId:'',
+        },
         rules: {
           htsj: [
             { required: true, message: '合同时间不能为空', trigger: 'blur' }
@@ -248,9 +261,9 @@
           phone: [
             { required: true, message: '联系电话不能为空', trigger: 'blur' }
           ],
-          fclx: [
+          /*fclx: [
             { required: true, message: '房产类型不能为空', trigger: 'blur' }
-          ],
+          ],*/
           gfrq: [
             { required: true, message: '购房日期不能为空', trigger: 'blur' }
           ],
@@ -263,24 +276,90 @@
           fpje: [
             { required: true, message: '增值税发票总金额不能为空', trigger: 'blur' }
           ],
-          fcid: [
+          bdcqzh: [
             { required: true, message: '不动产权证号（二手房）', trigger: 'blur' }
           ],
           fcmj: [
             { required: true, message: '房产面积', trigger: 'blur' }
           ]
-        }    }
+        },
+        radio1: '1'
 
+      }
     },
     methods: {
       // 获取数据前设置好接口地址
       [CRUD.HOOK.beforeRefresh]() {
         return true
       },
-      tableDataOnload(){
+      /**
+       * 提交表单
+       */
+     /* submitForm() {
+        var that= this;
+        var data= that.form;
+        data.fclx=that.radio1;
+        console.debug(that.form);
+
+      },*/
+      submitForm(form) {
+        var that= this;
+        var data= that.form;
+        data.fclx=that.radio1;
+        console.debug(that.form);
+        this.$refs['form'].validate((valid) => {
+          if (valid) {
+            return request({
+              url: 'api/yewushouli',
+              method: 'post',
+              data
+            }).then(function (res) {
+                if(res.success){
+                  that.sbxx.code=res.code;
+                  that.sbxx.sqxxid=res.sqxxid;
+                  alert("信息保存成功")
+                  console.debug(that.sbxx)
+                }
+            })
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        })
       },
 
       //改变房产类型触发
+      changeFromFC(){
+        var _this= this;
+        if(!_this.form.sqrlx){
+          _this.centerDialogVisible = true;
+          return;
+        }
+        if (_this.form.sqrlx){
+          if(_this.radio1=='1'){
+
+            _this.tableData=_this.tableData3;
+              return;
+          }
+          if(_this.radio1=='2'){
+
+            _this.tableData=_this.tableData2;
+            return;
+          }
+          if(_this.radio1=='3'){
+
+            _this.tableData=_this.tableData1;
+            return;
+          }
+          if(_this.radio1=='4'){
+
+            _this.tableData=_this.tableData4;
+            return;
+          }
+        }
+
+      },
+/*
       changeFromFC(){
         var _this= this;
         if(!_this.form.sqrlx){
@@ -307,20 +386,25 @@
         }
 
       },
+*/
       //改变申请人类型触发
       changeFromRY(){
-        if(this.form.fclx){
+        if(this.radio1){
 
-          if(this.form.fclx=='标准厂房'){
+          if(this.radio1=='1'){
+
             this.tableData=this.tableData3;
           }
-          if(this.form.fclx=='新建营业用房/自住住房'){
+          if(this.radio1=='2'){
+
             this.tableData=this.tableData2;
           }
-          if(this.form.fclx=='二手营业用房/自住用房'){
+          if(this.radio1=='3'){
+
             this.tableData=this.tableData1;
           }
-          if(this.form.fclx=='一手车位（车库）'){
+          if(this.radio1=='4'){
+
             this.tableData=this.tableData4;
           }
         }
@@ -340,6 +424,11 @@
 
     padding: 0 0px;
 
+
+  }
+  .el-input__inner {
+
+    border: 1px solid #4D5A79;
 
   }
 </style>

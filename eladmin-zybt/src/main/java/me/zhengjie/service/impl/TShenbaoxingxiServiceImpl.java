@@ -1,8 +1,9 @@
 package me.zhengjie.service.impl;
 
+import me.zhengjie.domain.TFjxx;
 import me.zhengjie.domain.TShenbaoxingxi;
-import me.zhengjie.utils.ValidationUtil;
-import me.zhengjie.utils.FileUtil;
+import me.zhengjie.service.TFjxxService;
+import me.zhengjie.utils.*;
 import me.zhengjie.repository.TShenbaoxingxiRepository;
 import me.zhengjie.service.TShenbaoxingxiService;
 import me.zhengjie.service.dto.TShenbaoxingxiDto;
@@ -17,14 +18,13 @@ import org.springframework.transaction.annotation.Transactional;
 //import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import me.zhengjie.utils.PageUtil;
-import me.zhengjie.utils.QueryHelp;
-import java.util.List;
-import java.util.Map;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 
 /**
 * @author zengjian
@@ -39,9 +39,14 @@ public class TShenbaoxingxiServiceImpl implements TShenbaoxingxiService {
 
     private final TShenbaoxingxiMapper tShenbaoxingxiMapper;
 
-    public TShenbaoxingxiServiceImpl(TShenbaoxingxiRepository tShenbaoxingxiRepository, TShenbaoxingxiMapper tShenbaoxingxiMapper) {
+    private final TFjxxService fjxxService;
+
+
+
+    public TShenbaoxingxiServiceImpl(TShenbaoxingxiRepository tShenbaoxingxiRepository, TShenbaoxingxiMapper tShenbaoxingxiMapper, TFjxxService fjxxService) {
         this.tShenbaoxingxiRepository = tShenbaoxingxiRepository;
         this.tShenbaoxingxiMapper = tShenbaoxingxiMapper;
+        this.fjxxService = fjxxService;
     }
 
     @Override
@@ -114,8 +119,70 @@ public class TShenbaoxingxiServiceImpl implements TShenbaoxingxiService {
             map.put("修改时间", tShenbaoxingxi.getUpdateTime());
             map.put("住建复核状态", tShenbaoxingxi.getZjfh());
             map.put(" bak1",  tShenbaoxingxi.getBak1());
+            map.put(" 部门id",  tShenbaoxingxi.getDepId());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);
     }
+
+    @Override
+    public void uploadFj(MultipartFile[] files,String sbxxId) throws IOException{
+
+        if(files !=null && files.length>0){
+            for (MultipartFile file :files) {
+                //获取文件名
+                String fileName = file.getOriginalFilename();
+                //获取后缀名的.下标
+                int lastIndex = fileName.lastIndexOf(".");
+                //新建文件名
+                String newFileName="";
+                //文件类型
+                String fileType="";
+                if(lastIndex!=-1){
+                    newFileName=fileName.substring(0,lastIndex);
+                    fileType=fileName.substring(lastIndex+1);
+                }else {
+                    newFileName=fileName;
+                }
+                String dirPath= this.getClass().getResource("/").getPath().replaceAll("\\/classes", "");
+                String tempPath=dirPath+"uploadfile/tempfile/";
+
+                File dirFile= new File(tempPath);
+                if(!dirFile.exists()){
+                    dirFile.mkdir();
+                }
+                String fileNameStr = newFileName + getDateStr() + "." + fileType;
+                //创建本地文件
+                File tempFile =new File(dirPath,fileNameStr);
+                //获取存放地址
+                String path = tempFile.getPath();
+                file.transferTo(tempFile);
+                //获取文件大小
+                String fileSize = tempFile.length() + "";
+
+                //保存附件信息至数据库
+                TFjxx fjxx = new TFjxx();
+                //TODO  流程id  申请信息id
+                fjxx.setLcid("test");
+                fjxx.setSbxxid(sbxxId);
+                fjxx.setFjmc(fileNameStr);
+                fjxx.setCfwz(dirPath);
+                fjxx.setFjdx(fileSize);
+                fjxx.setUrl(path);
+                fjxx.setFjhz(fileType);
+                fjxxService.create(fjxx);
+
+            }
+        }
+    }
+    //时间戳
+    public String getDateStr() {
+    	Date date = new Date();
+        String str = "yyyyMMddHHmmss";
+        SimpleDateFormat sdf = new SimpleDateFormat(str);
+        System.out.println(sdf.format(date));
+        return sdf.format(date);
+    }
+
+
 }
