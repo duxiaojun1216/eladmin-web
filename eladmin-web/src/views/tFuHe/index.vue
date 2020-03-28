@@ -80,9 +80,9 @@
           <el-form-item label="修改时间">
             <el-input v-model="form.updateTime" style="width: 370px;" />
           </el-form-item>-->
-          <el-form-item label="意见汇总">
+          <!--<el-form-item label="意见汇总">
             <el-input v-model="form.zjfh" style="width: 370px;" />
-          </el-form-item>
+          </el-form-item>-->
           <!--<el-form-item label="bak1">
             <el-input v-model="form.bak1" style="width: 370px;" />
           </el-form-item>-->
@@ -135,7 +135,7 @@
             <span>{{ parseTime(scope.row.updateTime) }}</span>
           </template>
         </el-table-column>-->
-        <el-table-column v-if="columns.visible('zjfh')" prop="zjfh" label="意见汇总" />
+        <!--<el-table-column v-if="columns.visible('zjfh')" prop="zjfh" label="意见汇总" />-->
         <el-table-column v-permission="['admin','tShenbaoxingxi:edit','tShenbaoxingxi:del']" label="操作" width="200px" align="center">
           <template slot-scope="scope">
             <udOperation
