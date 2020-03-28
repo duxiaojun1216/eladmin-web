@@ -57,6 +57,21 @@ export const constantRouterMap = [
         meta: { title: '个人中心' }
       }
     ]
+  },
+    {
+    path: '/',
+    component: Layout,
+    hidden: true,
+    redirect: 'noredirect',
+    children: [
+      {
+        path: 'leave',
+        component: () => import('@/views/activiti/business/leave.vue'),
+		//component: () => import('@/views/yewushouli/yewushouli.vue'),
+        name: 'leave',
+        meta: { title: '业务受理' }
+      }
+    ]
   }
 ]
 

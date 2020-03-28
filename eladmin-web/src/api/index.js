@@ -144,7 +144,7 @@ export const getRelatedListData = (params) => {
 
 // 获取用户数据 多条件
 export const getUserListData = (params) => {
-    return getRequest('/user/getByCondition', params)
+    return getRequest('/users/getAllUsers', params)
 }
 // 通过用户名搜索
 export const searchUserByName = (username, params) => {
@@ -191,7 +191,7 @@ export const resetUserPass = (params) => {
 
 // 获取一级部门
 export const initDepartment = (params) => {
-    return getRequest('/department/getByParentId/0', params)
+    return getRequest('/dept/getAllDpets', params)
 }
 // 加载部门子级数据
 export const loadDepartment = (id, params) => {
@@ -218,35 +218,35 @@ export const searchDepartment = (params) => {
 
 // 获取全部角色数据
 export const getAllRoleList = (params) => {
-    return getRequest('/role/getAllList', params)
+    return getRequest('/roles/getAllList', params)
 }
 // 分页获取角色数据
 export const getRoleList = (params) => {
-    return getRequest('/role/getAllByPage', params)
+    return getRequest('/roles/getAllByPage', params)
 }
 // 添加角色
 export const addRole = (params) => {
-    return postRequest('/role/save', params)
+    return postRequest('/roles/save', params)
 }
 // 编辑角色
 export const editRole = (params) => {
-    return postRequest('/role/edit', params)
+    return postRequest('/roles/edit', params)
 }
 // 设为或取消注册角色
 export const setDefaultRole = (params) => {
-    return postRequest('/role/setDefault', params)
+    return postRequest('/roles/setDefault', params)
 }
 // 分配角色权限
 export const editRolePerm = (params) => {
-    return postRequest('/role/editRolePerm', params)
+    return postRequest('/roles/editRolePerm', params)
 }
 // 分配角色数据权限
 export const editRoleDep = (params) => {
-    return postRequest('/role/editRoleDep', params)
+    return postRequest('/roles/editRoleDep', params)
 }
 // 删除角色
 export const deleteRole = (ids, params) => {
-    return deleteRequest(`/role/delAllByIds/${ids}`, params)
+    return deleteRequest(`/roles/delAllByIds/${ids}`, params)
 }
 
 
@@ -312,7 +312,7 @@ export const deleteData = (ids, params) => {
 }
 // 通过类型获取字典数据
 export const getDictDataByType = (type, params) => {
-    return getRequest(`/dictData/getByType/${type}`, params)
+    return getRequest(`/dictDetail/${type}`, params)
 }
 
 

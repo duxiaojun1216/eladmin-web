@@ -6,6 +6,9 @@
         <el-form-item label="字典名称" prop="name">
           <el-input v-model="form.name" style="width: 370px;" />
         </el-form-item>
+		<el-form-item label="类型" prop="type">
+            <el-input v-model="form.type" style="width: 370px;" />
+          </el-form-item>
         <el-form-item label="描述">
           <el-input v-model="form.remark" style="width: 370px;" />
         </el-form-item>
@@ -50,6 +53,7 @@
           <!--表格渲染-->
           <el-table v-loading="loading" :data="data" highlight-current-row style="width: 100%;" @current-change="handleCurrentChange">
             <el-table-column :show-overflow-tooltip="true" prop="name" label="名称" />
+			<el-table-column :show-overflow-tooltip="true" prop="type" label="类型" />
             <el-table-column :show-overflow-tooltip="true" prop="remark" label="描述" />
             <el-table-column v-if="checkPermission(['admin','dict:edit','dict:del'])" label="操作" width="130px" align="center" fixed="right">
               <template slot-scope="scope">
@@ -123,6 +127,9 @@ export default {
       rules: {
         name: [
           { required: true, message: '请输入名称', trigger: 'blur' }
+        ],
+		type: [
+          { required: true, message: '请输入类型', trigger: 'blur' }
         ]
       }
     }

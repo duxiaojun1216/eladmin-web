@@ -155,16 +155,16 @@
         </FormItem>
         <FormItem label="关联表单路由" prop="routeName">
           <Select v-model="form.routeName" placeholder="请选择关联业务表单前端路由名" clearable>
-            <Option v-for="(item, i) in dictForm" :key="i" :value="item.value" :label="item.title">
-              <span style="margin-right:10px;">{{ item.title }}</span>
+            <Option v-for="(item, i) in dictForm" :key="i" :value="item.value" :label="item.remark">
+              <span style="margin-right:10px;">{{ item.remark }}</span>
               <span style="color:#ccc;">{{ item.value }}</span>
             </Option>
           </Select>
         </FormItem>
         <FormItem label="关联业务表" prop="businessTable">
           <Select v-model="form.businessTable" placeholder="请选择关联数据库业务表" clearable>
-            <Option v-for="(item, i) in dictTable" :key="i" :value="item.value" :label="item.title">
-              <span style="margin-right:10px;">{{ item.title }}</span>
+            <Option v-for="(item, i) in dictTable" :key="i" :value="item.value" :label="item.remark">
+              <span style="margin-right:10px;">{{ item.remark }}</span>
               <span style="color:#ccc;">{{ item.value }}</span>
             </Option>
           </Select>
