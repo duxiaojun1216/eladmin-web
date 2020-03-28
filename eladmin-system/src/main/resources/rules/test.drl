@@ -1,0 +1,93 @@
+package me.zhengjie.config.drools
+global java.util.List myGlobalList;//全局变量
+
+//fcType  1标准厂房 2营业用房/自住住房  4一手车位
+
+rule "time1"
+when
+     message :Message((fcType == 1 || fcType == 2) && nowTime >= "01-03-2020" && nowTime <= "31-08-2020" && startTime <= nowTime && endTime >= nowTime)
+then
+    message.setResultMoney((message.getMoney() * 0.03) > 50000 ? 50000 : (message.getMoney() * 0.03));
+    update(message);
+    System.out.println("第一条规则补助 3%  补助金额为：" + message.getResultMoney());
+end
+
+rule "time2"
+when
+     message :Message((fcType == 1 || fcType == 2) && nowTime >= "01-09-2020" && nowTime <= "28-02-2021" && startTime <= nowTime && endTime >= nowTime)
+then
+    message.setResultMoney((message.getMoney() * 0.02) > 50000 ? 50000 : (message.getMoney() * 0.02));
+    update(message);
+    System.out.println("第二条规则补助 2%  补助金额为：" + message.getResultMoney());
+end
+
+rule "time3"
+when
+     message :Message((fcType == 1 || fcType == 2) && nowTime >= "01-03-2021" && nowTime <= "28-02-2022" && startTime <= nowTime && endTime >= nowTime)
+then
+    message.setResultMoney((message.getMoney() * 0.01) > 50000 ? 50000 : (message.getMoney() * 0.01));
+    update(message);
+    System.out.println("第三条规则补助 1%  补助金额为：" + message.getResultMoney());
+end
+
+rule "time4"
+when
+    message :Message(fcType == 4 && nowTime >= "01-03-2020" && nowTime <= "31-08-2020" && startTime <= nowTime && endTime >= nowTime)
+then
+    message.setResultMoney(3000.0);
+    update(message);
+    System.out.println("车位补助金额为：" + message.getResultMoney());
+end
+
+rule "time5"
+when
+    message :Message(fcType == 4 && nowTime >= "01-09-2020" && nowTime <= "28-02-2021" && startTime <= nowTime && endTime >= nowTime)
+then
+    message.setResultMoney(2000.0);
+    update(message);
+    System.out.println("车位补助金额为：" + message.getResultMoney());
+end
+
+rule "time6"
+when
+    message :Message(fcType == 4 && nowTime >= "01-03-2021" && nowTime <= "28-02-2022" && startTime <= nowTime && endTime >= nowTime)
+then
+    message.setResultMoney(1000.0);
+    update(message);
+    System.out.println("车位补助金额为：" + message.getResultMoney());
+end
+
+//rule "one"
+////    salience 200
+////    date-effective "01-March-2020"   //大于等于2020年3月1号
+////    date-expires "01-September-2020" //小于2022年9月1号 即到2021年8月30号
+//    when
+//        message :Message(startTime <= nowTime && endTime >= nowTime)
+//
+////       message: Message(money != null && money * 0.03 <= 50000)
+//    then
+//       //System.out.println("规则1第一条规则补助 3%  且小于5万通过");
+//
+//
+//
+//    end
+//
+//rule "two"
+////    salience 300
+//    date-effective "01-September-2020" //大于等于2020年9月1号
+//    date-expires "01-March-2021"       //小于2021年3月1号 即到2021年2月28号
+//    when
+//       message: Message(money != null && money * 0.02 <= 50000)
+//    then
+//     System.out.println("第二条规则补助 3%  且小于5万通过");
+//    end
+//
+//rule "three"
+////    salience 300
+//    date-effective "01-March-2021"  //大于等于2021年3月1号
+//    date-expires "01-March-2022"    //小于2022年3月1号 即到2022年2月28号
+//    when
+//       message: Message(money != null && money * 0.01 <= 50000)
+//    then
+//      System.out.println("第三条规则补助 3%  且小于5万通过");
+//    end

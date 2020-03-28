@@ -1,0 +1,13 @@
+package me.zhengjie.config.drools
+global java.util.List myGlobalList;//全局变量
+
+rule "one"
+//    salience 200
+    date-effective "01-March-2020"   //大于等于2020年3月1号
+    date-expires "01-September-2020" //小于2022年9月1号 即到2021年8月30号
+    when
+       message: Message(money != null && money * 0.03 <= 50000)
+    then
+       System.out.println("第一条规则补助 3%  且小于5万通过");
+    end
+

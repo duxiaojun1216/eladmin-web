@@ -4,13 +4,13 @@ server:
 spring:
   mvc:
   static-path-pattern: /**
-  
+
   thymeleaf:
   prefix: classpath:/static/
-  
+
   resources:
   static-locations: classpath:/static/
-  
+
   freemarker:
     check-template-location: false
   profiles:
@@ -69,7 +69,7 @@ rsa:
 # sm.ms 图床的 token
 smms:
   token: 1oOP3ykFDI0K6ifmtvU7c8Y1eTWZSlyl
-  
+
 #activiti配置
 activiti:
   check-process-definitions: false
