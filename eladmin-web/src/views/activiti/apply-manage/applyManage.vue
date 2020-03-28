@@ -695,7 +695,7 @@ export default {
       data: [], // 表单数据
       total: 0, // 表单数据总数
       assigneeList: [],
-      dictPriority: this.$store.state.dict.priority
+      dictPriority: [{title:'测试',value:'0'}]
     };
   },
   methods: {
@@ -873,7 +873,7 @@ export default {
         return;
       }
       this.processModalVisible = false;
-      let query = { type: 0, backRoute: this.$route.name, procDefId: v.id };
+      let query = { type: 0, backRoute:'apply-manage', procDefId: v.id };
       this.$router.push({
         name: v.routeName,
         query: query

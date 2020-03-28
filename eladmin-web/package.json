@@ -54,6 +54,7 @@
     "normalize.css": "7.0.0",
     "nprogress": "0.2.0",
     "path-to-regexp": "2.4.0",
+    "print-js": "^1.0.63",
     "qs": "^6.9.1",
     "screenfull": "4.2.0",
     "view-design": "^4.1.3",

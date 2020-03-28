@@ -12,10 +12,14 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
 
 import me.zhengjie.aop.log.Log;
+import me.zhengjie.common.utils.ResultUtil;
+import me.zhengjie.common.vo.Result;
 import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.system.domain.Role;
 import me.zhengjie.system.service.RoleService;
 import me.zhengjie.system.service.UserService;
+import me.zhengjie.system.service.dto.DictDetailDto;
+import me.zhengjie.system.service.dto.DictDetailQueryCriteria;
 import me.zhengjie.system.service.dto.RoleDto;
 import me.zhengjie.system.service.dto.RoleQueryCriteria;
 import me.zhengjie.system.service.dto.RoleSmallDto;
@@ -81,7 +85,15 @@ public class RoleController {
     public ResponseEntity<Object> getAll(@PageableDefault(value = 2000, sort = {"level"}, direction = Sort.Direction.ASC) Pageable pageable){
         return new ResponseEntity<>(roleService.queryAll(pageable),HttpStatus.OK);
     }
-
+    
+    @ApiOperation("返回全部的角色2")
+    @GetMapping(value = "/getAllList")
+    @PreAuthorize("@el.check('roles:list','user:add','user:edit')")
+    public Result<List<RoleDto>>  getAllList(@PageableDefault(value = 2000, sort = {"level"}, direction = Sort.Direction.ASC) Pageable pageable){
+    	List<RoleDto> list=(List<RoleDto>) roleService.queryAll(pageable);
+    	return new ResultUtil<List<RoleDto>>().setData(list);
+    }
+    
     @Log("查询角色")
     @ApiOperation("查询角色")
     @GetMapping

@@ -12,6 +12,8 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
 
 import me.zhengjie.aop.log.Log;
+import me.zhengjie.common.utils.ResultUtil;
+import me.zhengjie.common.vo.Result;
 import me.zhengjie.config.DataScope;
 import me.zhengjie.domain.VerificationCode;
 import me.zhengjie.exception.BadRequestException;
@@ -120,6 +122,44 @@ public class UserController {
         }
     }
 
+    @Log("查询用户")
+    @ApiOperation("查询用户")
+    @GetMapping(value = "/getAllUsers")
+    @PreAuthorize("@el.check('user:list')")
+    public Result<Object> getAllUsers(UserQueryCriteria criteria, Pageable pageable){
+        Set<Long> deptSet = new HashSet<>();
+        Set<Long> result = new HashSet<>();
+        if (!ObjectUtils.isEmpty(criteria.getDeptId())) {
+            deptSet.add(criteria.getDeptId());
+            deptSet.addAll(dataScope.getDeptChildren(deptService.findByPid(criteria.getDeptId())));
+        }
+        // 数据权限
+        Set<Long> deptIds = dataScope.getDeptIds();
+        // 查询条件不为空并且数据权限不为空则取交集
+        if (!CollectionUtils.isEmpty(deptIds) && !CollectionUtils.isEmpty(deptSet)){
+            // 取交集
+            result.addAll(deptSet);
+            result.retainAll(deptIds);
+            // 若无交集，则代表无数据权限
+            criteria.setDeptIds(result);
+            if(result.size() == 0){
+                return new ResultUtil<Object>().setData(userService.queryAll(criteria,pageable));
+                		//ResponseEntity<>(PageUtil.toPage(null,0),HttpStatus.OK);
+            } else {
+                return new ResultUtil<Object>().setData(userService.queryAll(criteria,pageable));
+                		//new ResponseEntity<>(userService.queryAll(criteria,pageable),HttpStatus.OK);
+            }
+        // 否则取并集
+        } else {
+            result.addAll(deptSet);
+            result.addAll(deptIds);
+            criteria.setDeptIds(result);
+            return new ResultUtil<Object>().setData(userService.queryAll(criteria,pageable));
+            		//new ResponseEntity<>(userService.queryAll(criteria,pageable),HttpStatus.OK);
+        }
+    }
+    
+    
     @Log("新增用户")
     @ApiOperation("新增用户")
     @PostMapping

@@ -11,12 +11,15 @@ import java.util.Set;
 import javax.servlet.http.HttpServletResponse;
 
 import me.zhengjie.aop.log.Log;
+import me.zhengjie.common.utils.ResultUtil;
+import me.zhengjie.common.vo.Result;
 import me.zhengjie.config.DataScope;
 import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.system.domain.Dept;
 import me.zhengjie.system.service.DeptService;
 import me.zhengjie.system.service.dto.DeptDto;
 import me.zhengjie.system.service.dto.DeptQueryCriteria;
+import me.zhengjie.system.service.dto.DictDetailDto;
 import me.zhengjie.utils.ThrowableUtil;
 
 import org.springframework.http.HttpStatus;
@@ -71,7 +74,20 @@ public class DeptController {
         List<DeptDto> deptDtos = deptService.queryAll(criteria);
         return new ResponseEntity<>(deptService.buildTree(deptDtos),HttpStatus.OK);
     }
-
+    
+    @Log("查询部门")
+    @ApiOperation("查询部门")
+    @GetMapping(value = "/getAllDpets")
+    @PreAuthorize("@el.check('user:list','dept:list')")
+    public  Result<Object> getAllDpets(DeptQueryCriteria criteria){
+        // 数据权限
+        criteria.setIds(dataScope.getDeptIds());
+        List<DeptDto> deptDtos = deptService.queryAll(criteria);
+        return new ResultUtil<Object>().setData(deptService.buildTree(deptDtos));
+        //return new ResponseEntity<>(deptService.buildTree(deptDtos),HttpStatus.OK);
+    }
+    
+    
     @Log("新增部门")
     @ApiOperation("新增部门")
     @PostMapping
