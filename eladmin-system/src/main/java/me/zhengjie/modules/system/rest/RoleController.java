@@ -1,19 +1,28 @@
 package me.zhengjie.modules.system.rest;
 
-import cn.hutool.core.lang.Dict;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletResponse;
+
 import me.zhengjie.aop.log.Log;
-import me.zhengjie.modules.system.domain.Role;
 import me.zhengjie.exception.BadRequestException;
-import me.zhengjie.modules.system.service.RoleService;
-import me.zhengjie.modules.system.service.UserService;
-import me.zhengjie.modules.system.service.dto.RoleDto;
-import me.zhengjie.modules.system.service.dto.RoleQueryCriteria;
-import me.zhengjie.modules.system.service.dto.RoleSmallDto;
-import me.zhengjie.modules.system.service.dto.UserDto;
+import me.zhengjie.system.domain.Role;
+import me.zhengjie.system.service.RoleService;
+import me.zhengjie.system.service.UserService;
+import me.zhengjie.system.service.dto.RoleDto;
+import me.zhengjie.system.service.dto.RoleQueryCriteria;
+import me.zhengjie.system.service.dto.RoleSmallDto;
+import me.zhengjie.system.service.dto.UserDto;
 import me.zhengjie.utils.SecurityUtils;
 import me.zhengjie.utils.ThrowableUtil;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -21,13 +30,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import cn.hutool.core.lang.Dict;
 
 /**
  * @author Zheng Jie

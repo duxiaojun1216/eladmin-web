@@ -1,26 +1,37 @@
 package me.zhengjie.modules.system.rest;
 
-import cn.hutool.core.collection.CollectionUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import me.zhengjie.aop.log.Log;
-import me.zhengjie.config.DataScope;
-import me.zhengjie.exception.BadRequestException;
-import me.zhengjie.modules.system.domain.Dept;
-import me.zhengjie.modules.system.service.DeptService;
-import me.zhengjie.modules.system.service.dto.DeptDto;
-import me.zhengjie.modules.system.service.dto.DeptQueryCriteria;
-import me.zhengjie.utils.ThrowableUtil;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import javax.servlet.http.HttpServletResponse;
+
+import me.zhengjie.aop.log.Log;
+import me.zhengjie.config.DataScope;
+import me.zhengjie.exception.BadRequestException;
+import me.zhengjie.system.domain.Dept;
+import me.zhengjie.system.service.DeptService;
+import me.zhengjie.system.service.dto.DeptDto;
+import me.zhengjie.system.service.dto.DeptQueryCriteria;
+import me.zhengjie.utils.ThrowableUtil;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import cn.hutool.core.collection.CollectionUtil;
 
 /**
 * @author Zheng Jie

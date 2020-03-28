@@ -1,16 +1,20 @@
 package me.zhengjie.modules.security.service;
 
+import java.util.Optional;
+
 import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.modules.security.security.vo.JwtUser;
-import me.zhengjie.modules.system.service.RoleService;
-import me.zhengjie.modules.system.service.UserService;
-import me.zhengjie.modules.system.service.dto.*;
+import me.zhengjie.system.service.RoleService;
+import me.zhengjie.system.service.UserService;
+import me.zhengjie.system.service.dto.DeptSmallDto;
+import me.zhengjie.system.service.dto.JobSmallDto;
+import me.zhengjie.system.service.dto.UserDto;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.Optional;
 
 /**
  * @author Zheng Jie

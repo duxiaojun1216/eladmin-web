@@ -1,23 +1,33 @@
 package me.zhengjie.modules.system.rest;
 
-import cn.hutool.crypto.asymmetric.KeyType;
-import cn.hutool.crypto.asymmetric.RSA;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+
+import java.io.IOException;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletResponse;
+
 import me.zhengjie.aop.log.Log;
 import me.zhengjie.config.DataScope;
 import me.zhengjie.domain.VerificationCode;
-import me.zhengjie.modules.system.domain.User;
 import me.zhengjie.exception.BadRequestException;
-import me.zhengjie.modules.system.domain.vo.UserPassVo;
-import me.zhengjie.modules.system.service.DeptService;
-import me.zhengjie.modules.system.service.RoleService;
-import me.zhengjie.modules.system.service.dto.RoleSmallDto;
-import me.zhengjie.modules.system.service.dto.UserDto;
-import me.zhengjie.modules.system.service.dto.UserQueryCriteria;
 import me.zhengjie.service.VerificationCodeService;
-import me.zhengjie.utils.*;
-import me.zhengjie.modules.system.service.UserService;
+import me.zhengjie.system.domain.User;
+import me.zhengjie.system.domain.vo.UserPassVo;
+import me.zhengjie.system.service.DeptService;
+import me.zhengjie.system.service.RoleService;
+import me.zhengjie.system.service.UserService;
+import me.zhengjie.system.service.dto.RoleSmallDto;
+import me.zhengjie.system.service.dto.UserDto;
+import me.zhengjie.system.service.dto.UserQueryCriteria;
+import me.zhengjie.utils.ElAdminConstant;
+import me.zhengjie.utils.PageUtil;
+import me.zhengjie.utils.SecurityUtils;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -27,12 +37,19 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.*;
-import java.util.stream.Collectors;
+
+import cn.hutool.crypto.asymmetric.KeyType;
+import cn.hutool.crypto.asymmetric.RSA;
 
 /**
  * @author Zheng Jie

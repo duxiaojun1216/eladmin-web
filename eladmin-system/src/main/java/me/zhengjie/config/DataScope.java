@@ -1,17 +1,19 @@
 package me.zhengjie.config;
 
-import me.zhengjie.modules.system.domain.Dept;
-import me.zhengjie.modules.system.service.DeptService;
-import me.zhengjie.modules.system.service.RoleService;
-import me.zhengjie.modules.system.service.UserService;
-import me.zhengjie.modules.system.service.dto.RoleSmallDto;
-import me.zhengjie.modules.system.service.dto.UserDto;
-import me.zhengjie.utils.SecurityUtils;
-import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import me.zhengjie.system.domain.Dept;
+import me.zhengjie.system.service.DeptService;
+import me.zhengjie.system.service.RoleService;
+import me.zhengjie.system.service.UserService;
+import me.zhengjie.system.service.dto.RoleSmallDto;
+import me.zhengjie.system.service.dto.UserDto;
+import me.zhengjie.utils.SecurityUtils;
+
+import org.springframework.stereotype.Component;
 
 /**
  * 数据权限配置
