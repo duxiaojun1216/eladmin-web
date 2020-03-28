@@ -1,5 +1,6 @@
 import { initData, download } from '@/api/data'
 import { parseTime, downloadFile } from '@/utils/index'
+import request from '@/utils/request'
 import Vue from 'vue'
 
 /**
@@ -44,6 +45,7 @@ function CRUD(options) {
       edit: true,
       del: true,
       download: true
+
     },
     // 自定义一些扩展属性
     props: {},
@@ -324,6 +326,29 @@ function CRUD(options) {
         crud.downloadLoading = false
       }).catch(() => {
         crud.downloadLoading = false
+      })
+    },
+    /**
+     *批次导出
+     */
+    Export() {
+      /*alert("生成批次号");*/
+     /* download(crud.url + '/download', crud.getQueryParams()).then(result => {
+        downloadFile(result, crud.title + '数据', 'xlsx')
+        crud.downloadLoading = false
+      }).catch(() => {
+        crud.downloadLoading = false
+      })*/
+     request({
+        url: 'api/tpici/pici',
+        method: 'get',
+        data
+      }).then(function (res) {
+        /*if(res.success){
+          that.sbxx.code=res.code;
+          that.sbxx.sqxxid=res.sqxxid;
+          alert("信息保存成功")
+        }*/
       })
     },
     /**

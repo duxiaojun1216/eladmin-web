@@ -64,6 +64,7 @@ public class DataScope {
                 for (Dept dept : depts) {
                     deptIds.add(dept.getId());
                     List<Dept> deptChildren = deptService.findByPid(dept.getId());
+
                     if (deptChildren != null && deptChildren.size() != 0) {
                         deptIds.addAll(getDeptChildren(deptChildren));
                     }
