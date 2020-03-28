@@ -13,7 +13,8 @@ const whiteList = ['/login']// no redirect whitelist
 
 router.beforeEach((to, from, next) => {
   if (to.meta.title) {
-    document.title = to.meta.title + ' - ' + Config.title
+    //document.title = to.meta.title + ' - ' + Config.title
+    document.title =  Config.title
   }
   NProgress.start()
   if (getToken()) {
