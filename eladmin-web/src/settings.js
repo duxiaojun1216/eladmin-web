@@ -2,7 +2,7 @@ module.exports = {
   /**
    * @description 网站标题
    */
-  title: 'EL-ADMIN',
+  title: '泸州市置业补助平台',
   /**
    * @description 是否显示 tagsView
    */

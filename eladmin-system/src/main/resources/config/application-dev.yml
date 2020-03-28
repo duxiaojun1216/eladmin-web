@@ -1,6 +1,10 @@
 #配置数据源
 spring:
   datasource:
+     bySearch:
+      testWhileIdle: true
+      validationQuery: SELECT 1
+      timeBestweenEvictionRunsMillis: 3600000 #每个小时确认连接是否可用
     druid:
       db-type: com.alibaba.druid.pool.DruidDataSource
       driverClassName: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
@@ -34,6 +38,7 @@ spring:
       web-stat-filter:
         url-pattern: /*
         exclusions: "*.js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico,/druid/*"
+        
 
   #配置 Jpa
   jpa:
