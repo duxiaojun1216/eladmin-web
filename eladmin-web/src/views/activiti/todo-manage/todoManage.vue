@@ -67,7 +67,7 @@
 
     <!-- 审批操作 -->
     <Modal :title="modalTaskTitle" v-model="modalTaskVisible" :mask-closable="false" :width="500">
-      <Form ref="form" :model="form" :label-width="150" :rules="formValidate">s
+      <Form ref="form" :model="form" :label-width="100" :rules="formValidate">
         <FormItem label="农民工">
           <RadioGroup v-model="form.border">
             <Radio label="是" ></Radio>
