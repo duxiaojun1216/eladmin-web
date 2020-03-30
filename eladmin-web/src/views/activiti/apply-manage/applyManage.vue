@@ -379,7 +379,7 @@ export default {
           title: "状态",
           key: "result",
           align: "center",
-          width: 200,
+          width: 180,
           sortable: true,
           render: (h, params) => {
             let text = "未知",

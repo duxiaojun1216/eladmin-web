@@ -46,7 +46,7 @@
     text-align: left;
     background: 0 0;
     font-weight: 500;
-    color: #0553f9;
+    color: #2d8cf0;;
     /* font-size: 18px; */
     font-weight: bold;
     /* margin: 16px 0; */
@@ -127,7 +127,7 @@
               style="width: 650px"
             ></Input>
           </FormItem>
-          <FormItem class="form_item" label="对象备注" prop="mark" style="width:950px">
+          <FormItem class="form_item" label="对象备注"  style="width:950px">
             <Input
               type="textarea"
               v-model="form.mark"
@@ -190,7 +190,7 @@
               style="width: 650px"
             />
           </FormItem>
-          <FormItem class="form_item" label="资产备注" prop="zcbz" style="width:950px">
+          <FormItem class="form_item" label="资产备注"  style="width:950px">
             <Input
               type="textarea"
               v-model="form.zcbz"
@@ -199,8 +199,7 @@
               style="width: 650px"
             />
           </FormItem>
-          <Divider orientation="left">②补贴核算</Divider>
-          <Divider orientation="left">③个人材料</Divider>
+          <Divider orientation="left">②个人材料</Divider>
           <FormItem class="m_table">
             <Table border :columns="columns1" :data="tableData" style="width: 760px">
               <template slot-scope="{ row, index }" slot="action">
@@ -242,7 +241,14 @@
             <Button type="primary" @click="centerDialogVisible = false">确 定</Button>
           </span>
           </Dialog>
-          <Divider orientation="left">④部门材料</Divider>
+          <Divider orientation="left">③补贴核算</Divider>
+          <FormItem class="form_item" label="补贴金额"  >
+            <Input v-model="form.btje" style="width:250px"/>
+          </FormItem>
+          <FormItem class="form_item" label="补贴比例"  >
+            <Input v-model="form.btbl" style="width:250px"/>
+          </FormItem>
+          <!-- <Divider orientation="left">④部门材料</Divider>-->
 
 
           <Form-item class="br" style="margin-right:50px;float:right">
@@ -374,7 +380,7 @@
           sqrlx: [{required: true, message: "申请人类型不能为空", trigger: "blur"}],
           phone: [{required: true, message: "电话不能为空", trigger: "blur"}],
           hjdz: [{required: true, message: "户籍地址不能为空", trigger: "blur"}],
-          mark: [{required: false, message: "对象备注不能为空", trigger: "blur"}],
+          //mark: [{required: false, message: "对象备注不能为空", trigger: "blur"}],
           fclx: [{required: true, message: "资产类型不能为空", trigger: "blur"}],
           jylx: [{required: true, message: "交易类型不能为空", trigger: "blur"}],
           gfrq: [{required: true, type: 'date',message: "购置时间不能为空", trigger: "change"}],
@@ -382,7 +388,7 @@
           fcmj: [{required: true, message: "购房面积不能为空", trigger: "blur"}],
           fcje: [{required: true, message: "发票总金额不能为空", trigger: "blur"}],
           scwz: [{required: true, message: "资产地址不能为空", trigger: "blur"}],
-          zcbz: [{required: true,type: 'string', message: "资产备注不能为空", trigger: "blur"}],
+         // zcbz: [{required: true,type: 'string', message: "资产备注不能为空", trigger: "blur"}],
         },
         errorMsg: "",
         submitLoading: false, // 添加或编辑提交状态
@@ -467,7 +473,7 @@
               method: 'post',
               data
             }).then(function (res) {
-              alert("baocunle")
+              alert("保存成功")
               /*if(res.success){
                 that.sbxx.code=res.code;
                 that.sbxx.sqxxid=res.sqxxid;
