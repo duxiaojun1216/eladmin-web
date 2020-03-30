@@ -18,7 +18,7 @@
 		</dependency>
 		<dependency>
 			<groupId>me.zhengjie</groupId>
-			<artifactId>eladmin-core</artifactId>
+			<artifactId>eladmin-activiti</artifactId>
 			<version>2.5.SNAPSHOT</version>
 			<exclusions>
 				<exclusion>
