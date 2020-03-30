@@ -1,13 +1,13 @@
 <template>
   <Card :padding="0">
     <div class="info-card-con">
-      <Col class="info-card-icon-con" :style="{backgroundColor: color, color: 'white'}" span="8" />
+      <Col class="info-card-icon-con" :style="{backgroundColor: color, color: 'white'}" span="8">
       <Row class="height-100" type="flex" align="middle" justify="center">
         <!--<Icon :type="iconType" :size="iconSize"></Icon>-->
         <img :src="iconType" class="icon">
       </Row>
       </Col>
-      <Col span="16" class="height-100" />
+      <Col span="16" class="height-100">
       <Row type="flex" align="middle" justify="center" class="height-100">
         <count-up
           class="info-card-count user-created-count"
