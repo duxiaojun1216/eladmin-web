@@ -66,6 +66,14 @@ public class THouse implements Serializable {
     @Column(name = "scwz")
     private String scwz;
 
+    /** 交易类型 */
+    @Column(name = "jylx")
+    private String jylx;
+
+    /** 资产备注 */
+    @Column(name = "zcbz")
+    private String zcbz;
+
     /** 创建人 */
     @Column(name = "create_id")
     private String createId;

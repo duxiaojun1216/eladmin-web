@@ -81,6 +81,10 @@ public class TPersonnel implements Serializable {
     @Column(name = "update_time",nullable = false)
     private Timestamp updateTime;
 
+    //户籍地址
+    @Column(name = "hjdz")
+    private  String hjdz;
+
     public void copy(TPersonnel source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
     }

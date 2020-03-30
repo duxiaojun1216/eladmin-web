@@ -1,6 +1,8 @@
 package me.zhengjie.service.dto;
 
 import lombok.Data;
+
+import javax.persistence.Column;
 import java.sql.Timestamp;
 import java.io.Serializable;
 
@@ -53,4 +55,8 @@ public class TPersonnelDto implements Serializable {
     private String updateId;
 
     private Timestamp updateTime;
+
+    //户籍地址
+    private  String hjdz;
+
 }

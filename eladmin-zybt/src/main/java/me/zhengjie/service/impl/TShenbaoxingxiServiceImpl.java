@@ -164,7 +164,10 @@ public class TShenbaoxingxiServiceImpl implements TShenbaoxingxiService {
                 TFjxx fjxx = new TFjxx();
                 //TODO  流程id  申请信息id
                 fjxx.setLcid("test");
-                fjxx.setSbxxid(sbxxId);
+                fjxx.setSbxxid("test");
+                if (null!=sbxxId){
+                    fjxx.setSbxxid(sbxxId);
+                }
                 fjxx.setFjmc(fileNameStr);
                 fjxx.setCfwz(dirPath);
                 fjxx.setFjdx(fileSize);

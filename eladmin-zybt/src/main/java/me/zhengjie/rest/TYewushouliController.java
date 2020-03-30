@@ -1,3 +1,4 @@
+/*
 package me.zhengjie.rest;
 
 import me.zhengjie.aop.log.Log;
@@ -22,12 +23,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
+*/
 /**
  * @author zengjian
  * @date 2020-03-23
- */
+ *//*
+
 @Api(tags = "申报信息管理")
 @RestController
 @RequestMapping("/api/yewushouli")
@@ -94,9 +98,11 @@ public class TYewushouliController {
             TShenbaoxingxiDto tShenbaoxingxiDto = tShenbaoxingxiService.create(tShenbaoxingxi);
 
 
-            result.setSqxxid(tShenbaoxingxiDto.getId());
+            result.setSbxxid(tShenbaoxingxiDto.getId());
             result.setCode(tShenbaoxingxiDto.getPch());
             result.setSuccess(true);
+
+
 
 
         } catch (Exception e) {
@@ -152,8 +158,11 @@ public class TYewushouliController {
     @Log("上传附件信息")
     @ApiOperation("上传附件")
 //    @PreAuthorize("@el.check('yewushouli:uploadFj')")
-    @PostMapping(value = "/uploadFj", consumes = "multipart/*", headers = "content-type=multipart/form-data")
-    public ResponseEntity<Object> uploadFj( MultipartFile[] file,   String sbxxId) throws IOException{
+//    @PostMapping(value = "/uploadFj", consumes = "multipart/*", headers = "content-type=multipart/form-data")
+    @RequestMapping(value = "/uploadFj", method = RequestMethod.POST)
+    public ResponseEntity<Object> uploadFj(@RequestParam("file") MultipartFile[] file,
+                                           @RequestParam Map<String,String> map) throws IOException{
+        String sbxxId = map.get("sbxxId");
         tShenbaoxingxiService.uploadFj(file,sbxxId);
         return new ResponseEntity<>(null,HttpStatus.CREATED);
     }
@@ -190,4 +199,4 @@ public class TYewushouliController {
         tShenbaoxingxi.setSqrlx(shxxHz.getSqrlx());
 
     }
-}
+}*/

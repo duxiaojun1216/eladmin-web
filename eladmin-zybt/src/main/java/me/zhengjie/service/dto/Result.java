@@ -7,6 +7,6 @@ public class Result {
 
     private Boolean success=false;
     private String code;
-    private long sqxxid;
+    private long sbxxid;
     private String message;
 }

@@ -27,11 +27,11 @@
                 style="width: 200px"
               ></DatePicker>
             </Form-item>
-         
+
           <Form-item style="margin-left:-35px;" class="br">
             <Button @click="handleSearch" type="primary" icon="ios-search">搜索</Button>
             <Button @click="handleReset">重置</Button>
-            
+
           </Form-item>
         </Form>
       </Row>
@@ -348,38 +348,38 @@ export default {
         {
           title: "受理编号",
           key: "title",
-          minWidth: 120,
+          minWidth: 200,
           sortable: true
         },
         {
           title: "申请对象",
           key: "title",
-          minWidth: 120,
+          minWidth: 200,
           sortable: true
         },
         {
           title: "对象类型",
           key: "title",
-          minWidth: 120,
+          minWidth: 200,
           sortable: true
         },
         {
           title: "业务类型",
           key: "processName",
-          width: 150,
+          width: 200,
           tooltip: true
         },
         {
           title: "当前环节",
           key: "currTaskName",
-          width: 100,
+          width: 200,
           tooltip: true
         },
         {
           title: "状态",
           key: "result",
           align: "center",
-          width: 85,
+          width: 200,
           sortable: true,
           render: (h, params) => {
             let text = "未知",
@@ -841,6 +841,7 @@ export default {
         this.$Message.error("表单路由名为空");
         return;
       }
+
       let query = { type: 2, id: v.tableId, backRoute: this.$route.name };
       this.$router.push({
         name: v.routeName,

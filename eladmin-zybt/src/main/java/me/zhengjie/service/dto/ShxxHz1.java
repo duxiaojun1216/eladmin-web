@@ -2,12 +2,11 @@ package me.zhengjie.service.dto;
 
 import lombok.Data;
 
-import javax.persistence.Column;
 import java.sql.Timestamp;
 
 //审核信息汇总
 @Data
-public class ShxxHz {
+public class ShxxHz1 {
     //人员信息
     /** 电话 */
     private String phone;
@@ -57,13 +56,13 @@ public class ShxxHz {
     private Long fcid;
 
     /** 购房日期 */
-    private Timestamp gfrq;
+    private String gfrq;
 
     /**网签日期 */
-    private Timestamp wqrq;
+    private String wqrq;
 
     /** 完税日期 */
-    private Timestamp wsrq;
+    private String wsrq;
 
     /** 房产金额 */
     private String fcje;

@@ -217,6 +217,10 @@ export const updateLeave = (params) => {
     return putRequest('/leave/update', params)
 }
 
+// 获取单个请假数据
+export const getYeWuShouLiData = (id, params) => {
+  return getRequest(`/leave/getYeWuShouLiData/${id}`, params)
+}
 
 
 

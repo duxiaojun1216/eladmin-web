@@ -57,4 +57,10 @@ public class THouseDto implements Serializable {
 
     /** 修改时间 */
     private Timestamp updateTime;
+
+    /** 交易类型 */
+    private String jylx;
+
+    /** 资产备注 */
+    private String zcbz;
 }
