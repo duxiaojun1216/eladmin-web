@@ -148,43 +148,43 @@ export const getUserListData = (params) => {
 }
 // 通过用户名搜索
 export const searchUserByName = (username, params) => {
-    return getRequest('/user/searchByName/'+username, params)
+    return getRequest('/users/searchByName/'+username, params)
 }
 // 获取全部用户数据
 export const getAllUserData = (params) => {
-    return getRequest('/user/getAll', params)
+    return getRequest('/users/getAll', params)
 }
 // 通过部门获取全部用户数据
 export const getUserByDepartmentId = (id, params) => {
-    return getRequest(`/user/getByDepartmentId/${id}`, params)
+    return getRequest(`/users/getByDepartmentId/${id}`, params)
 }
 // 添加用户
 export const addUser = (params) => {
-    return postRequest('/user/admin/add', params)
+    return postRequest('/users/admin/add', params)
 }
 // 编辑用户
 export const editUser = (params) => {
-    return postRequest('/user/admin/edit', params)
+    return postRequest('/users/admin/edit', params)
 }
 // 启用用户
 export const enableUser = (id, params) => {
-    return postRequest(`/user/admin/enable/${id}`, params)
+    return postRequest(`/users/admin/enable/${id}`, params)
 }
 // 禁用用户
 export const disableUser = (id, params) => {
-    return postRequest(`/user/admin/disable/${id}`, params)
+    return postRequest(`/users/admin/disable/${id}`, params)
 }
 // 删除用户
 export const deleteUser = (ids, params) => {
-    return deleteRequest(`/user/delByIds/${ids}`, params)
+    return deleteRequest(`/users/delByIds/${ids}`, params)
 }
 // 导入用户
 export const importUserData = (params) => {
-    return importRequest('/user/importData', params)
+    return importRequest('/users/importData', params)
 }
 // 重置用户密码
 export const resetUserPass = (params) => {
-    return postRequest('/user/resetPass', params)
+    return postRequest('/users/resetPass', params)
 }
 
 

@@ -173,7 +173,7 @@ export default {
         getHighlightImg +
         this.id +
         "?accessToken=" +
-        this.getStore("accessToken") +
+        //this.getStore("accessToken") +
         "&time=" +
         new Date();
       this.getDataList();

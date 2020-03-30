@@ -1,93 +1,21 @@
 <style lang="less">
 @import "../../../styles/table-common.less";
-@import "./applyManage.less";
+@import "./businessHome.less";
 </style>
 <template>
   <div class="search">
-    <Card>
-      <Row v-show="openSearch" @keydown.enter.native="handleSearch">
-        <Form ref="searchForm" :model="searchForm" inline :label-width="70">
-          <Form-item label="申请对象" prop="title">
-            <Input
-              type="text"
-              v-model="searchForm.title"
-              placeholder="请输入申请对象姓名"
-              clearable
-              style="width: 200px"
-            />
-          </Form-item>
-            <Form-item label="创建时间">
-              <DatePicker
-                v-model="selectDate"
-                type="daterange"
-                format="yyyy-MM-dd"
-                clearable
-                @on-change="selectDateRange"
-                placeholder="选择起始时间"
-                style="width: 200px"
-              ></DatePicker>
-            </Form-item>
-         
-          <Form-item style="margin-left:-35px;" class="br">
-            <Button @click="handleSearch" type="primary" icon="ios-search">搜索</Button>
-            <Button @click="handleReset">重置</Button>
-            
-          </Form-item>
-        </Form>
-      </Row>
-      <Row class="operation">
-        <Button @click="add" type="primary" icon="md-add">新增申请</Button>
-        <Button @click="delAll" icon="md-trash">批量删除</Button>
-        <Button @click="getDataList" icon="md-refresh">刷新</Button>
-        <Button type="dashed" @click="openSearch=!openSearch">{{openSearch ? "关闭搜索" : "开启搜索"}}</Button>
-        <Button type="dashed" @click="openTip=!openTip">{{openTip ? "关闭提示" : "开启提示"}}</Button>
-      </Row>
-      <Row v-show="openTip">
-        <Alert show-icon>
-          已选择
-          <span class="select-count">{{selectCount}}</span> 项
-          <a class="select-clear" @click="clearSelectAll">清空</a>
-        </Alert>
-      </Row>
-      <Row>
-        <Table
-          :loading="loading"
-          border
-          :columns="columns"
-          :data="data"
-          sortable="custom"
-          @on-sort-change="changeSort"
-          @on-selection-change="showSelect"
-          ref="table"
-        ></Table>
-      </Row>
-      <Row type="flex" justify="end" class="page">
-        <Page
-          :current="searchForm.pageNumber"
-          :total="total"
-          :page-size="searchForm.pageSize"
-          @on-change="changePage"
-          @on-page-size-change="changePageSize"
-          :page-size-opts="[10,20,50]"
-          size="small"
-          show-total
-          show-elevator
-          show-sizer
-        ></Page>
-      </Row>
-    </Card>
-
-    <!-- Drawer抽屉式选择流程 -->
-    <Drawer title="选择业务类型" closable v-model="processModalVisible" width="818" draggable>
+ 
+    <!-- Drawer抽屉式选择流程draggable -->
+    <Drawer title="业务类型选择" closable v-model="processModalVisible" width="818" >
       <div class="apply-operation">
-        <div>
+        <!-- <div>
           <Form ref="searchProcessForm" :model="searchProcessForm" inline :label-width="70">
-            <Form-item label="业务类型" prop="name">
+            <Form-item label="流程名称" prop="name">
               <Input
                 type="text"
                 v-model="searchProcessForm.name"
                 clearable
-                placeholder="请输入业务"
+                placeholder="请输入流程名"
                 style="width: 140px"
               />
             </Form-item>
@@ -118,8 +46,8 @@
               </i-switch>
             </Form-item>
           </Form>
-        </div>
-        <div>
+        </div>-->
+        <div style="float:right">
           <RadioGroup v-model="showType" type="button">
             <Radio title="缩略图" label="thumb">
               <Icon type="ios-apps"></Icon>
@@ -151,52 +79,6 @@
         v-if="showType=='list'"
       ></Table>
     </Drawer>
-
-    <Modal title="提交申请" v-model="modalVisible" :mask-closable="false" :width="500">
-      <Form ref="form" :model="form" :label-width="85" :rules="formValidate">
-        <FormItem label="选择审批人" prop="assignees" v-show="showAssign" :error="error">
-          <Select
-            v-model="form.assignees"
-            placeholder="请选择或输入搜索"
-            filterable
-            clearable
-            multiple
-            :loading="userLoading"
-          >
-            <Option v-for="(item, i) in assigneeList" :key="i" :value="item.id">{{item.username}}</Option>
-          </Select>
-        </FormItem>
-        <FormItem label="下一审批人" v-show="isGateway">
-          <span>分支网关处暂不支持自定义选择下一审批人，将发送给下一节点所有人</span>
-        </FormItem>
-        <FormItem label="优先级" prop="priority">
-          <Select v-model="form.priority" placeholder="请选择" clearable>
-            <Option v-for="(item, i) in dictPriority" :key="i" :value="item.value">{{item.title}}</Option>
-          </Select>
-        </FormItem>
-        <FormItem label="消息通知">
-          <Checkbox v-model="form.sendMessage">站内消息通知</Checkbox>
-          <Checkbox v-model="form.sendSms">短信通知</Checkbox>
-          <Checkbox v-model="form.sendEmail">邮件通知</Checkbox>
-        </FormItem>
-      </Form>
-      <div slot="footer">
-        <Button type="text" @click="handelCancel">取消</Button>
-        <Button type="primary" :loading="submitLoading" @click="handelSubmit">提交</Button>
-      </div>
-    </Modal>
-
-    <Modal title="确认撤回" v-model="modalCancelVisible" :mask-closable="false" :width="500">
-      <Form ref="delForm" v-model="cancelForm" :label-width="70">
-        <FormItem label="撤回原因" prop="reason">
-          <Input type="textarea" v-model="cancelForm.reason" :rows="4" />
-        </FormItem>
-      </Form>
-      <div slot="footer">
-        <Button type="text" @click="modalCancelVisible=false">取消</Button>
-        <Button type="primary" :loading="submitLoading" @click="handelSubmitCancel">提交</Button>
-      </div>
-    </Modal>
   </div>
 </template>
 
@@ -218,7 +100,7 @@ export default {
       openSearch: true,
       openTip: true,
       loading: true, // 表单加载状态
-      processModalVisible: false,
+      processModalVisible: true,
       selectCat: [],
       category: [],
       error: "",
@@ -296,7 +178,7 @@ export default {
                     }
                   }
                 },
-                "选择该业务"
+                "选择该流程"
               )
             ]);
           }
@@ -346,40 +228,68 @@ export default {
           align: "center"
         },
         {
-          title: "受理编号",
+          type: "index",
+          width: 60,
+          align: "center"
+        },
+        {
+          title: "标题",
           key: "title",
-          minWidth: 120,
+          minWidth: 150,
           sortable: true
         },
         {
-          title: "申请对象",
-          key: "title",
-          minWidth: 120,
-          sortable: true
-        },
-        {
-          title: "对象类型",
-          key: "title",
-          minWidth: 120,
-          sortable: true
-        },
-        {
-          title: "业务类型",
+          title: "所属流程",
           key: "processName",
           width: 150,
           tooltip: true
         },
         {
-          title: "当前环节",
+          title: "当前审批环节",
           key: "currTaskName",
-          width: 100,
+          width: 150,
           tooltip: true
         },
         {
           title: "状态",
+          key: "status",
+          align: "center",
+          width: 120,
+          sortable: true,
+          render: (h, params) => {
+            let text = "未知",
+              color = "";
+            if (params.row.status == 0) {
+              text = "草稿";
+              color = "default";
+            } else if (params.row.status == 1) {
+              text = "处理中";
+              color = "orange";
+            } else if (params.row.status == 2) {
+              text = "已结束";
+              color = "blue";
+            } else if (params.row.status == 3) {
+              text = "已撤回";
+              color = "magenta";
+            }
+            return h("div", [
+              h(
+                "Tag",
+                {
+                  props: {
+                    color: color
+                  }
+                },
+                text
+              )
+            ]);
+          }
+        },
+        {
+          title: "结果",
           key: "result",
           align: "center",
-          width: 85,
+          width: 120,
           sortable: true,
           render: (h, params) => {
             let text = "未知",
@@ -409,12 +319,18 @@ export default {
               )
             ]);
           }
-        }
-		,
+        },
         {
-          title: "申请时间",
+          title: "创建时间",
+          key: "createTime",
+          width: 180,
+          sortType: "desc",
+          sortable: true
+        },
+        {
+          title: "提交申请时间",
           key: "applyTime",
-          width: 170,
+          width: 180,
           sortable: true
         },
         {

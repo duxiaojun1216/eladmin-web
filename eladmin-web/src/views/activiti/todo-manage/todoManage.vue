@@ -418,7 +418,7 @@ export default {
       ],
       data: [], // 表单数据
       total: 0, // 表单数据总数
-      dictPriority: [],
+      dictPriority: [{title:'测试',value:'0'}],
       isGateway: false
     };
   },
@@ -664,7 +664,7 @@ export default {
     history(v) {
       let query = { id: v.procInstId, backRoute: this.$route.name };
       this.$router.push({
-        name: "historic_detail",
+        name: 'historic_detail',
         query: query
       });
     },

@@ -1,14 +1,87 @@
 <style lang="less">
+.form_item{
+    margin-bottom: 24px;
+    vertical-align: top;
+    zoom: 1;
+    width: 350px;
+    float: left;
+	margin-right: 50px;
+}
+
+.ivu-form .ivu-form-item-label {
+    text-align: left;
+    vertical-align: middle;
+    float: left;
+    font-size: 14px;
+    color: #515a6e;
+    line-height: 1;
+    padding: 10px 12px 10px 0;
+    box-sizing: border-box;
+}
+.header_p{
+    display: inline-block;
+    width: 100%;
+    height: 40px!important;
+    line-height: 40px!important;
+	font-weight: bold!important;
+    font-size: 25px!important;
+    color: #17233d;
+    font-weight: bold;
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: center;
+}
+.ivu-divider-horizontal.ivu-divider-with-text-left:before {
+    top: 50%;
+    width: 0.01%;
+}
+.ivu-divider-inner-text{
+    display: table;
+    white-space: nowrap;
+    text-align: left;
+    background: 0 0;
+    font-weight: 500;
+    color: #0553f9;
+    /* font-size: 18px; */
+    font-weight: bold;
+    /* margin: 16px 0; */
+	padding: 0px;
+}
+.ivu-divider-horizontal {
+    display: block;
+    height: 1px;
+    width: 750px;
+    /* min-width: 100%; */
+    margin: 24px 0;
+    clear: both;
+}
+.ivu-picker-panel-body{
+   width:250px
+}
+.ivu-card-head {
+    border-bottom: 1px solid #e8eaec;
+    padding: 14px 16px;
+    line-height: 1;
+    padding-bottom: 2px;
+}
 </style>
 <template>
   <div class="search">
-    <Card>
-      <p slot="title">
-        <span v-if="type==0">新增请假申请</span>
-        <span v-else-if="type==1">编辑请假申请</span>
-        <span v-else>查看请假申请详情</span>
+    <Card style="width: 800px;margin: auto;">
+      <p slot="title" class="header_p">
+        <span v-if="type==0">泸州市置业补贴申请登记</span>
+        <span v-else-if="type==1">填报置业补贴申请表</span>
+        <span v-else>查看置业补贴申请</span>
       </p>
-      <Row>
+	  <p slot="title" style="text-align:left ;font-size:14px;width: 250px;">
+        <span v-if="type==0">编号：JYTY032020001</span>
+      </p>
+	  <p slot="title" style="text-align: right;font-size:14px;width: 250px;float:right;margin-right: 15px;">
+        <span v-if="type==0">日期：2020年4月3日</span>
+      </p>
+      <Row style="width: 800px;margin: auto;">
         <Form
           ref="form"
           :model="form"
@@ -16,38 +89,96 @@
           :rules="formValidate"
           style="position:relative"
         >
-          <FormItem label="请假申请人" prop="title" v-if="type!=0&&type!=1">{{form.createBy}}</FormItem>
-          <FormItem label="请假类型" prop="type">
-            <Select v-model="form.type" placeholder="请选择" style="width: 200px">
-              <Option v-for="(item, i) in dictType" :key="i" :value="item.value">{{item.title}}</Option>
-            </Select>
+		
+          <FormItem label="申请人" prop="title" v-if="type!=0&&type!=1">{{form.createBy}}</FormItem>
+          <FormItem class="form_item" label="申请人姓名" prop="title">
+            <Input v-model="form.title" style="width:250px" />
           </FormItem>
-          <FormItem label="标题" prop="title">
-            <Input v-model="form.title" style="width:550px" />
+		  <FormItem class="form_item" label="身份证号" prop="title">
+            <Input v-model="form.title" style="width:250px" />
           </FormItem>
-          <FormItem label="原因" prop="description">
+		  <FormItem class="form_item" label="申请人类型" prop="title">
+            <Input v-model="form.title" style="width:250px" />
+          </FormItem>
+		  <FormItem class="form_item" label="联系电话" prop="title">
+            <Input v-model="form.title" style="width:250px" />
+          </FormItem>
+		  <FormItem class="form_item" label="户籍地址" prop="description" style="width:950px">
+            <Input           
+              v-model="form.description"            
+              placeholder="请输入详细情况"
+              style="width: 650px"
+            />
+		  </FormItem>
+		   <FormItem class="form_item" label="对象备注" prop="description" style="width:950px">
             <Input
               type="textarea"
               v-model="form.description"
-              :rows="5"
+              :rows="3"
               placeholder="请输入详细情况"
-              style="width: 550px"
+              style="width: 650px"
             />
+		  </FormItem>
+		  <Divider orientation="left">①购置资产信息</Divider>
+		  <FormItem class="form_item" label="资产类别" prop="type">
+            <Select v-model="form.type" placeholder="请选择" style="width: 250px">
+              <Option v-for="(item, i) in dictType" :key="i" :value="item.value">{{item.title}}</Option>
+            </Select>		  
           </FormItem>
-          <FormItem label="请假时间范围" :error="errorMsg">
+         <FormItem class="form_item" label="交易类型" prop="title" >
+          <RadioGroup v-model="animal" style="width: 250px">
+            <Radio label="一手房产"></Radio>
+            <Radio label="二手房产"></Radio>
+           </RadioGroup>
+          </FormItem>
+		  <FormItem class="form_item" label="购置时间" :error="errorMsg" prop="type">
             <DatePicker
-              v-model="selectDate"
-              :options="options"
-              type="datetimerange"
+              v-model="selectDate"           
+              type="date"
               format="yyyy-MM-dd HH:mm"
-              clearable
-              @on-change="selectDateRange"
-              placeholder="选择起始时间"
-              style="width: 550px"
+              clearable            
+              placeholder="选择购置时间"
+              style="width: 250px"
             ></DatePicker>
           </FormItem>
-          <FormItem label="请假时长">{{form.duration}} 小时</FormItem>
-          <Form-item class="br">
+		  <FormItem class="form_item" label="备案时间" :error="errorMsg" prop="type">
+            <DatePicker
+              v-model="selectDate"           
+              type="date"
+              format="yyyy-MM-dd HH:mm"
+              clearable            
+              placeholder="选择购置时间"
+              style="width: 250px"
+            ></DatePicker>
+          </FormItem>
+		  <FormItem class="form_item" label="购房面积" prop="title">
+            <Input v-model="form.title" style="width:250px" />
+          </FormItem>
+		  <FormItem class="form_item" label="发票总金额" prop="type">
+            <Input v-model="form.title" style="width:250px" />
+          </FormItem>
+		  <FormItem class="form_item" label="资产地址" prop="description" style="width:950px">
+            <Input           
+              v-model="form.description"            
+              placeholder="示例：xx区xx路xx号xx栋xx单元xx号"
+              style="width: 650px"
+            />
+			</FormItem>
+          <FormItem class="form_item" label="资产备注" prop="description" style="width:950px">
+            <Input
+              type="textarea"
+              v-model="form.description"
+              :rows="3"
+              placeholder="请输入详细情况"
+              style="width: 650px"
+            />
+          </FormItem>
+		  <Divider orientation="left">②补贴核算</Divider>
+          <Divider orientation="left">③个人材料</Divider>
+		  <Divider orientation="left">④部门材料</Divider>
+		  
+		  
+          <Form-item class="br" style="margin-right:50px;float:right">
             <Button
               type="primary"
               :loading="submitLoading"

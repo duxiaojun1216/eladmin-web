@@ -4,14 +4,18 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletResponse;
 
 import me.zhengjie.aop.log.Log;
+import me.zhengjie.common.constant.CommonConstant;
 import me.zhengjie.common.utils.ResultUtil;
 import me.zhengjie.common.vo.Result;
 import me.zhengjie.config.DataScope;
@@ -46,6 +50,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -159,6 +164,23 @@ public class UserController {
         }
     }
     
+    /**
+     * 模糊查询匹配用户
+     * @param username
+     * @return
+     * @throws UnsupportedEncodingException
+     */
+    @Log("模糊查询用户")
+    @RequestMapping(value = "/searchByName/{username}", method = RequestMethod.GET)
+    @ApiOperation(value = "通过用户名搜索用户")
+    @PreAuthorize("@el.check('user:list')")
+    public Result<List<UserDto>> searchByName(@PathVariable String username) throws UnsupportedEncodingException {
+        List<UserDto> list = userService.findByUsernameLikeAndStatus("%"+ URLDecoder.decode(username, "utf-8")+"%", CommonConstant.STATUS_NORMAL);
+        list.forEach(u -> {
+            u.setPassword(null);
+        });
+        return new ResultUtil<List<UserDto>>().setData(list);
+    }
     
     @Log("新增用户")
     @ApiOperation("新增用户")

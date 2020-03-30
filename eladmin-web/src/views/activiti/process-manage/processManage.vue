@@ -155,16 +155,16 @@
         </FormItem>
         <FormItem label="关联表单路由" prop="routeName">
           <Select v-model="form.routeName" placeholder="请选择关联业务表单前端路由名" clearable>
-            <Option v-for="(item, i) in dictForm" :key="i" :value="item.value" :label="item.remark">
-              <span style="margin-right:10px;">{{ item.remark }}</span>
+            <Option v-for="(item, i) in dictForm" :key="i" :value="item.value" :label="item.label">
+              <span style="margin-right:10px;">{{ item.label }}</span>
               <span style="color:#ccc;">{{ item.value }}</span>
             </Option>
           </Select>
         </FormItem>
         <FormItem label="关联业务表" prop="businessTable">
           <Select v-model="form.businessTable" placeholder="请选择关联数据库业务表" clearable>
-            <Option v-for="(item, i) in dictTable" :key="i" :value="item.value" :label="item.remark">
-              <span style="margin-right:10px;">{{ item.remark }}</span>
+            <Option v-for="(item, i) in dictTable" :key="i" :value="item.value" :label="item.label">
+              <span style="margin-right:10px;">{{ item.label }}</span>
               <span style="color:#ccc;">{{ item.value }}</span>
             </Option>
           </Select>
@@ -344,7 +344,7 @@ export default {
             let re = "";
             this.dictForm.forEach(e => {
               if (e.value == params.row.routeName) {
-                re = `${e.title} (${e.value})`;
+                re = `${e.label} (${e.value})`;
               }
             });
             return h("div", re);
@@ -359,7 +359,7 @@ export default {
             let re = "";
             this.dictTable.forEach(e => {
               if (e.value == params.row.businessTable) {
-                re = `${e.title} (${e.value})`;
+                re = `${e.label} (${e.value})`;
               }
             });
             return h("div", re);

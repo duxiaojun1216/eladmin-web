@@ -67,10 +67,15 @@ export const constantRouterMap = [
       {
         path: 'leave',
         component: () => import('@/views/activiti/business/leave.vue'),
-		//component: () => import('@/views/yewushouli/yewushouli.vue'),
         name: 'leave',
         meta: { title: '业务受理' }
-      }
+      }, 
+  {
+    path: 'historic-detail',
+    component: () => import('@/views/activiti/historic-detail/historicDetail.vue'),
+	name: 'historic_detail',
+    meta: { title: '办理进度' },
+  }
     ]
   }
 ]

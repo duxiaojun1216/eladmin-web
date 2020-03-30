@@ -249,7 +249,7 @@ export default {
       data: [], // 表单数据
       total: 0, // 表单数据总数
       deleteId: "",
-      dictPriority: this.$store.state.dict.priority
+      dictPriority: [{title:'测试',value:'0'}]//this.$store.state.dict.priority
     };
   },
   methods: {
