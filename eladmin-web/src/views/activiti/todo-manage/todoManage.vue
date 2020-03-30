@@ -1,6 +1,7 @@
 <style lang="less">
-@import "../../../styles/table-common.less";
-@import "./todoManage.less";
+  @import "../../../styles/table-common.less";
+  @import "./todoManage.less";
+
 </style>
 <template>
   <div class="search">
@@ -66,10 +67,35 @@
 
     <!-- 审批操作 -->
     <Modal :title="modalTaskTitle" v-model="modalTaskVisible" :mask-closable="false" :width="500">
-      <Form ref="form" :model="form" :label-width="85" :rules="formValidate">
+      <Form ref="form" :model="form" :label-width="150" :rules="formValidate">s
+        <FormItem label="农民工">
+          <RadioGroup v-model="form.border">
+            <Radio label="是" ></Radio>
+            <Radio label="否" ></Radio>
+          </RadioGroup>
+        </FormItem>
+        <FormItem label="退役军人">
+          <RadioGroup v-model="form.soldier">
+            <Radio label="是"></Radio>
+            <Radio label="否"></Radio>
+          </RadioGroup>
+        </FormItem>
+        <FormItem label="高校毕业生">
+          <RadioGroup v-model="form.graduate">
+            <Radio label="是"></Radio>
+            <Radio label="否"></Radio>
+          </RadioGroup>
+        </FormItem>
+        <FormItem label="外来创业人员">
+          <RadioGroup v-model="form.foreign">
+            <Radio label="是"></Radio>
+            <Radio label="否"></Radio>
+          </RadioGroup>
+        </FormItem>
         <FormItem label="审批意见" prop="reason">
           <Input type="textarea" v-model="form.comment" :rows="4" />
         </FormItem>
+
         <FormItem label="下一审批人" prop="assignees" v-show="showAssign" :error="error">
           <Select
             v-model="form.assignees"
@@ -136,403 +162,449 @@
 </template>
 
 <script>
-import {
-  todoList,
-  pass,
-  back,
-  getBackList,
-  backToTask,
-  delegate,
-  getNextNode,
-  getNode,
-  passAll,
-  backAll,
-  deleteTask
-} from "@/api/activiti";
-import { searchUserByName, getDictDataByType } from "@/api/index";
-export default {
-  name: "todo-manage",
-  data() {
-    return {
-      openSearch: true,
-      openTip: true,
-      loading: true, // 表单加载状态
-      modalTaskVisible: false,
-      userLoading: false,
-      backLoading: false,
-      userList: [],
-      selectCount: 0, // 多选计数
-      selectList: [], // 多选数据
-      assigneeList: [],
-      backList: [
-        {
-          key: "-1",
-          name: "发起人"
-        }
-      ],
-      error: "",
-      showAssign: false,
-      searchForm: {
-        // 搜索框对应data对象
-        name: "",
-        pageNumber: 1, // 当前页数
-        pageSize: 10 // 页面大小
-      },
-      modalTaskTitle: "",
-      modalTitle: "", // 添加或编辑标题
-      form: {
-        id: "",
-        userId: "",
-        procInstId: "",
-        comment: "",
-        type: 0,
-        assignees: [],
-        backTaskKey: "-1",
-        sendMessage: true,
-        sendSms: true,
-        sendEmail: true
-      },
-      formValidate: {
-        // 表单验证规则
-      },
-      submitLoading: false, // 添加或编辑提交状态
-      columns: [
-        // 表头
-        {
-          type: "selection",
-          width: 60,
-          align: "center"
-        },
-        {
-          type: "index",
-          width: 60,
-          align: "center"
-        },
-        {
-          title: "任务名称",
-          key: "name",
-          minWidth: 160
-        },
-        {
-          title: "所属流程",
-          key: "processName",
-          width: 150
-        },
-        {
-          title: "委托代办人",
-          key: "owner",
-          width: 130
-        },
-        {
-          title: "流程发起人",
-          key: "applyer",
-          width: 130
-        },
-        {
-          title: "优先级",
-          key: "priority",
-          width: 100,
-          sortable: true,
-          render: (h, params) => {
-            let text = "无",
-              color = "";
-            if (params.row.priority == 0) {
-              color = "green";
-            } else if (params.row.priority == 1) {
-              color = "orange";
-            } else if (params.row.priority == 2) {
-              color = "red";
-            } else {
-              color = "default";
-            }
-            this.dictPriority.forEach(e => {
-              if (e.value == params.row.priority) {
-                text = e.title;
-              }
-            });
-            return h("div", [
-              h(
-                "Tag",
-                {
-                  props: {
-                    color: color
-                  }
-                },
-                text
-              )
-            ]);
+  import {
+    todoList,
+    pass,
+    back,
+    getBackList,
+    backToTask,
+    delegate,
+    getNextNode,
+    getNode,
+    passAll,
+    backAll,
+
+    deleteTask
+  } from "@/api/activiti";
+  import { searchUserByName, getDictDataByType } from "@/api/index";
+  export default {
+    name: "todo-manage",
+    data() {
+      return {
+        border: true,
+        soldier: true,
+        graduate: true,
+        foreign: true,
+        openSearch: true,
+        openTip: true,
+        loading: true, // 表单加载状态
+        modalTaskVisible: false,
+        userLoading: false,
+        backLoading: false,
+        userList: [],
+        selectCount: 0, // 多选计数
+        selectList: [], // 多选数据
+        assigneeList: [],
+        backList: [
+          {
+            key: "-1",
+            name: "发起人"
           }
+        ],
+        error: "",
+        showAssign: false,
+        searchForm: {
+          // 搜索框对应data对象
+          name: "",
+          pageNumber: 1, // 当前页数
+          pageSize: 10 // 页面大小
         },
-        {
-          title: "状态",
-          key: "isSuspended",
-          align: "center",
-          width: 110,
-          render: (h, params) => {
-            if (!params.row.isSuspended) {
+        modalTaskTitle: "",
+        modalTitle: "", // 添加或编辑标题
+        form: {
+          id: "",
+          userId: "",
+          procInstId: "",
+          comment: "",
+          type: 0,
+          assignees: [],
+          backTaskKey: "-1",
+          sendMessage: true,
+          sendSms: true,
+          sendEmail: true,
+          sendpeasant: true,
+          sendsoldier: true,
+          border: "",
+          soldier: "",
+          graduate: "",
+          foreign: ""
+        },
+        formValidate: {
+          // 表单验证规则
+        },
+        submitLoading: false, // 添加或编辑提交状态
+        columns: [
+          // 表头
+          {
+            type: "selection",
+            width: 60,
+            align: "center"
+          },
+          {
+            type: "index",
+            width: 60,
+            align: "center"
+          },
+          {
+            title: "任务名称",
+            key: "name",
+            minWidth: 160
+          },
+          {
+            title: "所属流程",
+            key: "processName",
+            width: 150
+          },
+          {
+            title: "委托代办人",
+            key: "owner",
+            width: 130
+          },
+          {
+            title: "流程发起人",
+            key: "applyer",
+            width: 130
+          },
+          {
+            title: "优先级",
+            key: "priority",
+            width: 100,
+            sortable: true,
+            render: (h, params) => {
+              let text = "无",
+                color = "";
+              if (params.row.priority == 0) {
+                color = "green";
+              } else if (params.row.priority == 1) {
+                color = "orange";
+              } else if (params.row.priority == 2) {
+                color = "red";
+              } else {
+                color = "default";
+              }
+              this.dictPriority.forEach(e => {
+                if (e.value == params.row.priority) {
+                  text = e.title;
+                }
+              });
               return h("div", [
-                h("Badge", {
-                  props: {
-                    status: "success",
-                    text: "已激活"
-                  }
-                })
-              ]);
-            } else if (params.row.isSuspended) {
-              return h("div", [
-                h("Badge", {
-                  props: {
-                    status: "error",
-                    text: "已挂起"
-                  }
-                })
+                h(
+                  "Tag",
+                  {
+                    props: {
+                      color: color
+                    }
+                  },
+                  text
+                )
               ]);
             }
           },
-          filters: [
-            {
-              label: "已激活",
-              value: false
+          {
+            title: "状态",
+            key: "isSuspended",
+            align: "center",
+            width: 110,
+            render: (h, params) => {
+              if (!params.row.isSuspended) {
+                return h("div", [
+                  h("Badge", {
+                    props: {
+                      status: "success",
+                      text: "已激活"
+                    }
+                  })
+                ]);
+              } else if (params.row.isSuspended) {
+                return h("div", [
+                  h("Badge", {
+                    props: {
+                      status: "error",
+                      text: "已挂起"
+                    }
+                  })
+                ]);
+              }
             },
-            {
-              label: "已挂起",
-              value: true
+            filters: [
+              {
+                label: "已激活",
+                value: false
+              },
+              {
+                label: "已挂起",
+                value: true
+              }
+            ],
+            filterMultiple: false,
+            filterMethod(value, row) {
+              if (value) {
+                return row.isSuspended == true;
+              } else if (!value) {
+                return row.isSuspended == false;
+              }
             }
-          ],
-          filterMultiple: false,
-          filterMethod(value, row) {
-            if (value) {
-              return row.isSuspended == true;
-            } else if (!value) {
-              return row.isSuspended == false;
+          },
+          {
+            title: "创建时间",
+            key: "createTime",
+            width: 180,
+            sortType: "desc",
+            sortable: true
+          },
+          {
+            title: "操作",
+            key: "action",
+            align: "center",
+            width: 320,
+            fixed: "right",
+            render: (h, params) => {
+              return h("div", [
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small"
+                    },
+                    style: {
+                      marginRight: "5px"
+                    },
+                    on: {
+                      click: () => {
+                        this.detail(params.row);
+                      }
+                    }
+                  },
+                  "申请详情"
+                ),
+                h(
+                  "Button",
+                  {
+                    props: {
+                      size: "small",
+                      type: "success"
+                    },
+                    style: {
+                      marginRight: "5px"
+                    },
+                    on: {
+                      click: () => {
+                        this.passTask(params.row);
+                      }
+                    }
+                  },
+                  "通过"
+                ),
+                h(
+                  "Button",
+                  {
+                    props: {
+                      size: "small",
+                      type: "warning"
+                    },
+                    style: {
+                      marginRight: "5px"
+                    },
+                    on: {
+                      click: () => {
+                        this.backTask(params.row);
+                      }
+                    }
+                  },
+                  "驳回"
+                ),
+                h(
+                  "Button",
+                  {
+                    props: {
+                      size: "small"
+                    },
+                    style: {
+                      marginRight: "5px"
+                    },
+                    on: {
+                      click: () => {
+                        this.delegateTask(params.row);
+                      }
+                    }
+                  },
+                  "委托"
+                ),
+                h(
+                  "Button",
+                  {
+                    props: {
+                      size: "small",
+                      type: "info"
+                    },
+                    style: {
+                      marginRight: "5px"
+                    },
+                    on: {
+                      click: () => {
+                        this.history(params.row);
+                      }
+                    }
+                  },
+                  "历史"
+                )
+              ]);
             }
           }
-        },
-        {
-          title: "创建时间",
-          key: "createTime",
-          width: 180,
-          sortType: "desc",
-          sortable: true
-        },
-        {
-          title: "操作",
-          key: "action",
-          align: "center",
-          width: 320,
-          fixed: "right",
-          render: (h, params) => {
-            return h("div", [
-              h(
-                "Button",
-                {
-                  props: {
-                    type: "primary",
-                    size: "small"
-                  },
-                  style: {
-                    marginRight: "5px"
-                  },
-                  on: {
-                    click: () => {
-                      this.detail(params.row);
-                    }
-                  }
-                },
-                "申请详情"
-              ),
-              h(
-                "Button",
-                {
-                  props: {
-                    size: "small",
-                    type: "success"
-                  },
-                  style: {
-                    marginRight: "5px"
-                  },
-                  on: {
-                    click: () => {
-                      this.passTask(params.row);
-                    }
-                  }
-                },
-                "通过"
-              ),
-              h(
-                "Button",
-                {
-                  props: {
-                    size: "small",
-                    type: "warning"
-                  },
-                  style: {
-                    marginRight: "5px"
-                  },
-                  on: {
-                    click: () => {
-                      this.backTask(params.row);
-                    }
-                  }
-                },
-                "驳回"
-              ),
-              h(
-                "Button",
-                {
-                  props: {
-                    size: "small"
-                  },
-                  style: {
-                    marginRight: "5px"
-                  },
-                  on: {
-                    click: () => {
-                      this.delegateTask(params.row);
-                    }
-                  }
-                },
-                "委托"
-              ),
-              h(
-                "Button",
-                {
-                  props: {
-                    size: "small",
-                    type: "info"
-                  },
-                  style: {
-                    marginRight: "5px"
-                  },
-                  on: {
-                    click: () => {
-                      this.history(params.row);
-                    }
-                  }
-                },
-                "历史"
-              )
-            ]);
-          }
-        }
-      ],
-      data: [], // 表单数据
-      total: 0, // 表单数据总数
-      dictPriority: [{title:'测试',value:'0'}],
-      isGateway: false
-    };
-  },
-  methods: {
-    init() {
-      this.getDictDataType();
-      this.getDataList();
+        ],
+        data: [], // 表单数据
+        total: 0, // 表单数据总数
+        dictPriority: [{title:'测试',value:'0'}],
+        isGateway: false
+      };
     },
-    getDictDataType() {
-      getDictDataByType("priority").then(res => {
-        if (res.success) {
-          this.dictPriority = res.result;
-        }
-      });
-    },
-    searchUser(v) {
-      if (!v) {
-        return;
-      }
-      this.userLoading = true;
-      searchUserByName(v).then(res => {
-        this.userLoading = false;
-        if (res.success) {
-          this.userList = res.result;
-        }
-      });
-    },
-    changeSort(e) {
-      this.searchForm.sort = e.key;
-      this.searchForm.order = e.order;
-      if (e.order == "normal") {
-        this.searchForm.order = "";
-      }
-      this.getDataList();
-    },
-    changePage(v) {
-      this.searchForm.pageNumber = v;
-      this.getDataList();
-      this.clearSelectAll();
-    },
-    changePageSize(v) {
-      this.searchForm.pageSize = v;
-      this.getDataList();
-    },
-    getDataList() {
-      this.loading = true;
-      todoList(this.searchForm).then(res => {
-        this.loading = false;
-        if (res.success) {
-          this.data = res.result.content;
-          this.total = res.result.totalElements;
-        }
-      });
-    },
-    handleSearch() {
-      this.searchForm.pageNumber = 1;
-      this.searchForm.pageSize = 10;
-      this.getDataList();
-    },
-    handleReset() {
-      this.$refs.searchForm.resetFields();
-      this.searchForm.pageNumber = 1;
-      this.searchForm.pageSize = 10;
-      // 重新加载数据
-      this.getDataList();
-    },
-    showSelect(e) {
-      this.selectList = e;
-      this.selectCount = e.length;
-    },
-    clearSelectAll() {
-      this.$refs.table.selectAll(false);
-    },
-    handelSubmit() {
-      this.submitLoading = true;
-      if (this.form.type == 0) {
-        // 通过
-        if (this.showAssign && this.form.assignees.length < 1) {
-          this.error = "请至少选择一个审批人";
-          this.submitLoading = false;
-          return;
-        } else {
-          this.error = "";
-        }
-        pass(this.form).then(res => {
-          this.submitLoading = false;
+    methods: {
+      init() {
+        this.getDictDataType();
+        this.getDataList();
+        this.gettingdata();
+      },
+      //获取用户部门
+      gettingdata(){
+
+      },
+      getDictDataType() {
+        getDictDataByType("priority").then(res => {
           if (res.success) {
-            this.$Message.success("操作成功");
-            this.modalTaskVisible = false;
-            this.getDataList();
+            this.dictPriority = res.result;
           }
         });
-      } else if (this.form.type == 1) {
-        // 驳回
-        if (this.form.backTaskKey == "-1") {
-          // 驳回至发起人
-          back(this.form).then(res => {
-            this.submitLoading = false;
-            if (res.success) {
-              this.$Message.success("操作成功");
-              this.modalTaskVisible = false;
-              this.getDataList();
-            }
-          });
-        } else {
-          // 自定义驳回
-          if (this.form.backTaskKey != "-1" && this.form.assignees.length < 1) {
+      },
+      searchUser(v) {
+        if (!v) {
+          return;
+        }
+        this.userLoading = true;
+        searchUserByName(v).then(res => {
+          this.userLoading = false;
+          if (res.success) {
+            this.userList = res.result;
+          }
+        });
+      },
+      changeSort(e) {
+        this.searchForm.sort = e.key;
+        this.searchForm.order = e.order;
+        if (e.order == "normal") {
+          this.searchForm.order = "";
+        }
+        this.getDataList();
+      },
+      changePage(v) {
+        this.searchForm.pageNumber = v;
+        this.getDataList();
+        this.clearSelectAll();
+      },
+      changePageSize(v) {
+        this.searchForm.pageSize = v;
+        this.getDataList();
+      },
+      getDataList() {
+        this.loading = true;
+        todoList(this.searchForm).then(res => {
+          this.loading = false;
+          if (res.success) {
+            this.data = res.result.content;
+            this.total = res.result.totalElements;
+          }
+        });
+      },
+      handleSearch() {
+        this.searchForm.pageNumber = 1;
+        this.searchForm.pageSize = 10;
+        this.getDataList();
+      },
+      handleReset() {
+        this.$refs.searchForm.resetFields();
+        this.searchForm.pageNumber = 1;
+        this.searchForm.pageSize = 10;
+        // 重新加载数据
+        this.getDataList();
+      },
+      showSelect(e) {
+        this.selectList = e;
+        this.selectCount = e.length;
+      },
+      clearSelectAll() {
+        this.$refs.table.selectAll(false);
+      },
+      handelSubmit() {
+        if(this.form.border == "是"){
+          this.form.comment="是农民工"
+        }
+        if(this.form.soldier == "是"){
+          this.form.comment='是退役军人'
+        }
+        if(this.form.graduate == "是"){
+          this.form.comment='是高校毕业生'
+        }
+        if(this.form.foreign == "是"){
+          this.form.comment='是外来创业人员'
+        }
+        this.submitLoading = true;
+        if (this.form.type == 0) {
+          // 通过
+          if (this.showAssign && this.form.assignees.length < 1) {
             this.error = "请至少选择一个审批人";
             this.submitLoading = false;
             return;
           } else {
             this.error = "";
           }
-          backToTask(this.form).then(res => {
+          pass(this.form).then(res => {
+            this.submitLoading = false;
+            if (res.success) {
+              this.$Message.success("操作成功");
+              this.modalTaskVisible = false;
+              this.getDataList();
+            }
+          });
+        } else if (this.form.type == 1) {
+          // 驳回
+          if (this.form.backTaskKey == "-1") {
+            // 驳回至发起人
+            back(this.form).then(res => {
+              this.submitLoading = false;
+              if (res.success) {
+                this.$Message.success("操作成功");
+                this.modalTaskVisible = false;
+                this.getDataList();
+              }
+            });
+          } else {
+            // 自定义驳回
+            if (this.form.backTaskKey != "-1" && this.form.assignees.length < 1) {
+              this.error = "请至少选择一个审批人";
+              this.submitLoading = false;
+              return;
+            } else {
+              this.error = "";
+            }
+            backToTask(this.form).then(res => {
+              this.submitLoading = false;
+              if (res.success) {
+                this.$Message.success("操作成功");
+                this.modalTaskVisible = false;
+                this.getDataList();
+              }
+            });
+          }
+        } else if (this.form.type == 2) {
+          // 委托
+          if (!this.form.userId) {
+            this.error = "请搜索选择一委托人";
+            this.submitLoading = false;
+            return;
+          } else {
+            this.error = "";
+          }
+          delegate(this.form).then(res => {
             this.submitLoading = false;
             if (res.success) {
               this.$Message.success("操作成功");
@@ -541,208 +613,190 @@ export default {
             }
           });
         }
-      } else if (this.form.type == 2) {
-        // 委托
-        if (!this.form.userId) {
-          this.error = "请搜索选择一委托人";
-          this.submitLoading = false;
-          return;
-        } else {
-          this.error = "";
-        }
-        delegate(this.form).then(res => {
-          this.submitLoading = false;
+      },
+      detail(v) {
+        let query = {
+          id: v.tableId,
+          type: 3,
+          backRoute: this.$route.name
+        };
+        this.$router.push({
+          name: v.routeName,
+          query: query
+        });
+      },
+      passTask(v) {
+        this.modalTaskTitle = "审批通过";
+        this.form.id = v.id;
+        this.form.procInstId = v.procInstId;
+        this.form.priority = v.priority;
+        this.form.type = 0;
+        this.modalTaskVisible = true;
+        this.userLoading = true;
+        getNextNode(v.procDefId, v.key).then(res => {
+          this.userLoading = false;
           if (res.success) {
-            this.$Message.success("操作成功");
-            this.modalTaskVisible = false;
-            this.getDataList();
+            if (res.result.type == 3 || res.result.type == 4) {
+              this.isGateway = true;
+              this.showAssign = false;
+              this.error = "";
+              return;
+            }
+            this.isGateway = false;
+            if (res.result.users && res.result.users.length > 0) {
+              this.error = "";
+              this.assigneeList = res.result.users;
+              // 默认勾选
+              let ids = [];
+              res.result.users.forEach(e => {
+                ids.push(e.id);
+              });
+              this.form.assignees = ids;
+              this.showAssign = true;
+            } else {
+              this.form.assignees = [];
+              this.showAssign = false;
+            }
+          }
+        });
+      },
+      changeBackTask(v) {
+        if (v == "-1") {
+          return;
+        }
+        this.userLoading = true;
+        getNode(v).then(res => {
+          this.userLoading = false;
+          if (res.success) {
+            if (res.result.users && res.result.users.length > 0) {
+              this.assigneeList = res.result.users;
+              // 默认勾选
+              let ids = [];
+              res.result.users.forEach(e => {
+                ids.push(e.id);
+              });
+              this.form.assignees = ids;
+            }
+          }
+        });
+      },
+      backTask(v) {
+        this.modalTaskTitle = "审批驳回";
+        this.form.id = v.id;
+        this.form.procInstId = v.procInstId;
+        this.form.procDefId = v.procDefId;
+        this.form.priority = v.priority;
+        this.form.type = 1;
+        this.showAssign = false;
+        this.modalTaskVisible = true;
+        // 获取可驳回节点
+        this.backList = [
+          {
+            key: "-1",
+            name: "发起人"
+          }
+        ];
+        this.form.backTaskKey = "-1";
+        this.backLoading = true;
+        getBackList(v.procInstId).then(res => {
+          this.backLoading = false;
+          if (res.success) {
+            res.result.forEach(e => {
+              this.backList.push(e);
+            });
+          }
+        });
+      },
+      delegateTask(v) {
+        this.modalTaskTitle = "委托他人代办";
+        this.form.id = v.id;
+        this.form.procInstId = v.procInstId;
+        this.form.type = 2;
+        this.showAssign = false;
+        this.modalTaskVisible = true;
+      },
+      history(v) {
+        let query = { id: v.procInstId, backRoute: this.$route.name };
+        this.$router.push({
+          name: 'historic_detail',
+          query: query
+        });
+      },
+      passAll() {
+        if (this.selectCount <= 0) {
+          this.$Message.warning("您还未选择要通过的数据");
+          return;
+        }
+        // 批量通过
+        this.modalVisible = true;
+        this.$Modal.confirm({
+          title: "确认通过",
+          content:
+            "您确认要通过所选的 " +
+            this.selectCount +
+            " 条数据? 注意：将默认分配给节点设定的所有可审批用户",
+          loading: true,
+          onOk: () => {
+            let ids = "";
+            this.selectList.forEach(function(e) {
+              ids += e.id + ",";
+            });
+            ids = ids.substring(0, ids.length - 1);
+            passAll(ids).then(res => {
+              this.$Modal.remove();
+              if (res.success) {
+                this.$Message.success("操作成功");
+                this.modalVisible = false;
+                this.clearSelectAll();
+                this.getDataList();
+              }
+            });
+          }
+        });
+      },
+      backAll() {
+        if (this.selectCount <= 0) {
+          this.$Message.warning("您还未选择要驳回的数据");
+          return;
+        }
+        // 批量驳回
+        this.modalVisible = true;
+        this.$Modal.confirm({
+          title: "确认驳回",
+          content:
+            "您确认要驳回所选的 " +
+            this.selectCount +
+            " 条数据? 注意：所有流程将驳回至发起人",
+          loading: true,
+          onOk: () => {
+            let procInstIds = "";
+            this.selectList.forEach(function(e) {
+              procInstIds += e.procInstId + ",";
+            });
+            procInstIds = procInstIds.substring(0, procInstIds.length - 1);
+            backAll(procInstIds).then(res => {
+              this.$Modal.remove();
+              if (res.success) {
+                this.$Message.success("操作成功");
+                this.modalVisible = false;
+                this.clearSelectAll();
+                this.getDataList();
+              }
+            });
           }
         });
       }
     },
-    detail(v) {
-      let query = {
-        id: v.tableId,
-        type: 3,
-        backRoute: this.$route.name
-      };
-      this.$router.push({
-        name: v.routeName,
-        query: query
-      });
+    mounted() {
+      this.init();
     },
-    passTask(v) {
-      this.modalTaskTitle = "审批通过";
-      this.form.id = v.id;
-      this.form.procInstId = v.procInstId;
-      this.form.priority = v.priority;
-      this.form.type = 0;
-      this.modalTaskVisible = true;
-      this.userLoading = true;
-      getNextNode(v.procDefId, v.key).then(res => {
-        this.userLoading = false;
-        if (res.success) {
-          if (res.result.type == 3 || res.result.type == 4) {
-            this.isGateway = true;
-            this.showAssign = false;
-            this.error = "";
-            return;
-          }
-          this.isGateway = false;
-          if (res.result.users && res.result.users.length > 0) {
-            this.error = "";
-            this.assigneeList = res.result.users;
-            // 默认勾选
-            let ids = [];
-            res.result.users.forEach(e => {
-              ids.push(e.id);
-            });
-            this.form.assignees = ids;
-            this.showAssign = true;
-          } else {
-            this.form.assignees = [];
-            this.showAssign = false;
-          }
+    watch: {
+      // 监听路由变化
+      $route(to, from) {
+        if (to.name == "todo-manage") {
+          this.getDataList();
         }
-      });
-    },
-    changeBackTask(v) {
-      if (v == "-1") {
-        return;
-      }
-      this.userLoading = true;
-      getNode(v).then(res => {
-        this.userLoading = false;
-        if (res.success) {
-          if (res.result.users && res.result.users.length > 0) {
-            this.assigneeList = res.result.users;
-            // 默认勾选
-            let ids = [];
-            res.result.users.forEach(e => {
-              ids.push(e.id);
-            });
-            this.form.assignees = ids;
-          }
-        }
-      });
-    },
-    backTask(v) {
-      this.modalTaskTitle = "审批驳回";
-      this.form.id = v.id;
-      this.form.procInstId = v.procInstId;
-      this.form.procDefId = v.procDefId;
-      this.form.priority = v.priority;
-      this.form.type = 1;
-      this.showAssign = false;
-      this.modalTaskVisible = true;
-      // 获取可驳回节点
-      this.backList = [
-        {
-          key: "-1",
-          name: "发起人"
-        }
-      ];
-      this.form.backTaskKey = "-1";
-      this.backLoading = true;
-      getBackList(v.procInstId).then(res => {
-        this.backLoading = false;
-        if (res.success) {
-          res.result.forEach(e => {
-            this.backList.push(e);
-          });
-        }
-      });
-    },
-    delegateTask(v) {
-      this.modalTaskTitle = "委托他人代办";
-      this.form.id = v.id;
-      this.form.procInstId = v.procInstId;
-      this.form.type = 2;
-      this.showAssign = false;
-      this.modalTaskVisible = true;
-    },
-    history(v) {
-      let query = { id: v.procInstId, backRoute: this.$route.name };
-      this.$router.push({
-        name: 'historic_detail',
-        query: query
-      });
-    },
-    passAll() {
-      if (this.selectCount <= 0) {
-        this.$Message.warning("您还未选择要通过的数据");
-        return;
-      }
-      // 批量通过
-      this.modalVisible = true;
-      this.$Modal.confirm({
-        title: "确认通过",
-        content:
-          "您确认要通过所选的 " +
-          this.selectCount +
-          " 条数据? 注意：将默认分配给节点设定的所有可审批用户",
-        loading: true,
-        onOk: () => {
-          let ids = "";
-          this.selectList.forEach(function(e) {
-            ids += e.id + ",";
-          });
-          ids = ids.substring(0, ids.length - 1);
-          passAll(ids).then(res => {
-            this.$Modal.remove();
-            if (res.success) {
-              this.$Message.success("操作成功");
-              this.modalVisible = false;
-              this.clearSelectAll();
-              this.getDataList();
-            }
-          });
-        }
-      });
-    },
-    backAll() {
-      if (this.selectCount <= 0) {
-        this.$Message.warning("您还未选择要驳回的数据");
-        return;
-      }
-      // 批量驳回
-      this.modalVisible = true;
-      this.$Modal.confirm({
-        title: "确认驳回",
-        content:
-          "您确认要驳回所选的 " +
-          this.selectCount +
-          " 条数据? 注意：所有流程将驳回至发起人",
-        loading: true,
-        onOk: () => {
-          let procInstIds = "";
-          this.selectList.forEach(function(e) {
-            procInstIds += e.procInstId + ",";
-          });
-          procInstIds = procInstIds.substring(0, procInstIds.length - 1);
-          backAll(procInstIds).then(res => {
-            this.$Modal.remove();
-            if (res.success) {
-              this.$Message.success("操作成功");
-              this.modalVisible = false;
-              this.clearSelectAll();
-              this.getDataList();
-            }
-          });
-        }
-      });
-    }
-  },
-  mounted() {
-    this.init();
-  },
-  watch: {
-    // 监听路由变化
-    $route(to, from) {
-      if (to.name == "todo-manage") {
-        this.getDataList();
       }
     }
-  }
-};
+  };
 </script>
