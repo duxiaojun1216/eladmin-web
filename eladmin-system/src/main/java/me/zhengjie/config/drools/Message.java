@@ -1,8 +1,9 @@
 package me.zhengjie.config.drools;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Message {
+public class Message implements Serializable {
     public static final Integer HELLO = 0;
     public static final Integer GOODBYE = 1;
 
@@ -12,6 +13,16 @@ public class Message {
     private double money;
 
     private Double resultMoney;
+
+    public String getResultType() {
+        return resultType;
+    }
+
+    public void setResultType(String resultType) {
+        this.resultType = resultType;
+    }
+
+    private String resultType;
 
     private int fcType;
 
