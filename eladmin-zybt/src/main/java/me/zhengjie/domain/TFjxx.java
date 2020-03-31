@@ -6,6 +6,7 @@ import cn.hutool.core.bean.copier.CopyOptions;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 /**
 * @author zengjian
@@ -62,6 +63,22 @@ public class TFjxx implements Serializable {
     /** 备用字段 */
     @Column(name = "bak3")
     private String bak3;
+
+    /** 创建人 */
+    @Column(name = "create_id")
+    private String createId;
+
+    /** 创建时间 */
+    @Column(name = "create_time")
+    private Timestamp createTime;
+
+    /** 修改人 */
+    @Column(name = "update_id")
+    private String updateId;
+
+    /** 修改时间 */
+    @Column(name = "update_time")
+    private Timestamp updateTime;
 
     public void copy(TFjxx source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

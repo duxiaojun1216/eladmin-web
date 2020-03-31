@@ -1,7 +1,7 @@
-/*
 package me.zhengjie.rest;
 
 import me.zhengjie.aop.log.Log;
+import me.zhengjie.common.utils.SecurityUtil;
 import me.zhengjie.service.dto.*;
 import me.zhengjie.utils.SecurityUtils;
 import me.zhengjie.domain.THouse;
@@ -15,7 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
@@ -23,15 +22,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
-*/
 /**
  * @author zengjian
  * @date 2020-03-23
- *//*
-
+ */
 @Api(tags = "申报信息管理")
 @RestController
 @RequestMapping("/api/yewushouli")
@@ -157,14 +155,17 @@ public class TYewushouliController {
 
     @Log("上传附件信息")
     @ApiOperation("上传附件")
-//    @PreAuthorize("@el.check('yewushouli:uploadFj')")
+//    @PreAuthorize("@   .check('yewushouli:uploadFj')")
 //    @PostMapping(value = "/uploadFj", consumes = "multipart/*", headers = "content-type=multipart/form-data")
     @RequestMapping(value = "/uploadFj", method = RequestMethod.POST)
-    public ResponseEntity<Object> uploadFj(@RequestParam("file") MultipartFile[] file,
-                                           @RequestParam Map<String,String> map) throws IOException{
-        String sbxxId = map.get("sbxxId");
-        tShenbaoxingxiService.uploadFj(file,sbxxId);
-        return new ResponseEntity<>(null,HttpStatus.CREATED);
+    public ResponseEntity<Object> uploadFj(@RequestParam("file") MultipartFile[] file) throws IOException{
+     //   SecurityUtil securityUtil = new SecurityUtil();
+//        String userId = securityUtil.getCurrUser().getId().toString();
+        //String userId = SecurityUtils.getUsername();
+        String userId="TEST";
+        List<TFjxxDto> fjxxDtos = tShenbaoxingxiService.uploadFj(file,userId);
+        System.out.println(fjxxDtos);
+        return new ResponseEntity<>(fjxxDtos,HttpStatus.CREATED);
     }
 
 
@@ -199,4 +200,4 @@ public class TYewushouliController {
         tShenbaoxingxi.setSqrlx(shxxHz.getSqrlx());
 
     }
-}*/
+}

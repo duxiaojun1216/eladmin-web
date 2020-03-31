@@ -3,6 +3,7 @@ package me.zhengjie.service.impl;
 import me.zhengjie.domain.TFjxx;
 import me.zhengjie.domain.TShenbaoxingxi;
 import me.zhengjie.service.TFjxxService;
+import me.zhengjie.service.dto.TFjxxDto;
 import me.zhengjie.utils.*;
 import me.zhengjie.repository.TShenbaoxingxiRepository;
 import me.zhengjie.service.TShenbaoxingxiService;
@@ -21,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.io.IOException;
@@ -126,8 +128,8 @@ public class TShenbaoxingxiServiceImpl implements TShenbaoxingxiService {
     }
 
     @Override
-    public void uploadFj(MultipartFile[] files,String sbxxId) throws IOException{
-
+    public List<TFjxxDto> uploadFj(MultipartFile[] files , String userId ) throws IOException{
+        List<TFjxxDto> rest=new ArrayList<>();
         if(files !=null && files.length>0){
             for (MultipartFile file :files) {
                 //获取文件名
@@ -165,18 +167,18 @@ public class TShenbaoxingxiServiceImpl implements TShenbaoxingxiService {
                 //TODO  流程id  申请信息id
                 fjxx.setLcid("test");
                 fjxx.setSbxxid("test");
-                if (null!=sbxxId){
-                    fjxx.setSbxxid(sbxxId);
-                }
                 fjxx.setFjmc(fileNameStr);
                 fjxx.setCfwz(dirPath);
                 fjxx.setFjdx(fileSize);
                 fjxx.setUrl(path);
                 fjxx.setFjhz(fileType);
-                fjxxService.create(fjxx);
-
+                fjxx.setCreateId(userId);
+                fjxx.setCreateTime(new Timestamp(System.currentTimeMillis()));
+                TFjxxDto tFjxxDto = fjxxService.create(fjxx);
+                rest.add(tFjxxDto);
             }
         }
+        return rest;
     }
     //时间戳
     public String getDateStr() {

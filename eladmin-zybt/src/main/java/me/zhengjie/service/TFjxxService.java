@@ -63,4 +63,13 @@ public interface TFjxxService {
     * @throws IOException /
     */
     void download(List<TFjxxDto> all, HttpServletResponse response) throws IOException;
+
+    /**
+     *
+     * @param sbxxid 申报信息id
+     * @param id 附件id
+     * @return
+     */
+
+    int updateSbxxIdById(String sbxxid,long id);
 }
