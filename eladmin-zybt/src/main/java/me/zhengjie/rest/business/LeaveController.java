@@ -14,16 +14,13 @@ import me.zhengjie.entity.ActBusiness;
 import me.zhengjie.entity.business.Leave;
 import me.zhengjie.service.*;
 import me.zhengjie.service.business.LeaveService;
-
 import me.zhengjie.service.dto.*;
+import me.zhengjie.system.service.dto.DeptSmallDto;
 import me.zhengjie.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 
@@ -32,8 +29,6 @@ import java.text.SimpleDateFormat;
  */
 @Slf4j
 @RestController
-@Api(description = "请假申请接口")
-@Transactional
 @RequestMapping(value = "/api/leave")
 public class LeaveController extends XbootBaseController<Leave, String> {
 
@@ -213,5 +208,17 @@ public class LeaveController extends XbootBaseController<Leave, String> {
 
 
 
+    }
+    /**
+     * 获取当前用户的权限
+     */
+    @RequestMapping(value = "/getPer")
+    @GetMapping
+    @ResponseBody
+    public String jurisdiction(){
+        DeptSmallDto dept = securityUtil.getCurrUser().getDept();
+        //将部门转换为拼音首字母并返回
+        String batch =me.zhengjie.utils.CodeUtlis.toFirstChar(dept.getName());
+        return batch;
     }
 }

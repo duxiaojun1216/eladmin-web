@@ -16,17 +16,19 @@ public class TPiCiController {
 
     @Autowired
     private TPiCiService tPiCiService;
+
     @Autowired
     private UserService userService;
 
     @GetMapping(value = "/pici")
     public String PiCi(){
-        SecurityUtil securityUtil = new SecurityUtil();
+        ///SecurityUtil securityUtil = new SecurityUtil();
         //获取当前用户id
        // UserDto user =  securityUtil.getCurrUser();
-        UserDto user = this.userService.findByName(SecurityUtils.getUsername());
+        //UserDto user = userService.findByName(SecurityUtils.getUsername());
+        Long id = userService.findByName(SecurityUtils.getUsername()).getDept().getId();
         //根据id查询生成时间区域批次字符串
-        return tPiCiService.selectPiCi(user.getDept().getId());
+        return tPiCiService.selectPiCi(id);
     }
 
 }

@@ -68,25 +68,25 @@
     <!-- 审批操作 -->
     <Modal :title="modalTaskTitle" v-model="modalTaskVisible" :mask-closable="false" :width="500">
       <Form ref="form" :model="form" :label-width="100" :rules="formValidate">
-        <FormItem label="农民工">
+        <FormItem label="农民工" v-if="isborder">
           <RadioGroup v-model="form.border">
             <Radio label="是"></Radio>
             <Radio label="否"></Radio>
           </RadioGroup>
         </FormItem>
-        <FormItem label="退役军人">
+        <FormItem label="退役军人" v-if="issoldier">
           <RadioGroup v-model="form.soldier">
             <Radio label="是"></Radio>
             <Radio label="否"></Radio>
           </RadioGroup>
         </FormItem>
-        <FormItem label="高校毕业生">
+        <FormItem label="高校毕业生" v-if="isgraduate">
           <RadioGroup v-model="form.graduate">
             <Radio label="是"></Radio>
             <Radio label="否"></Radio>
           </RadioGroup>
         </FormItem>
-        <FormItem label="外来创业人员">
+        <FormItem label="外来创业人员" v-if="isforeign">
           <RadioGroup v-model="form.foreign">
             <Radio label="是"></Radio>
             <Radio label="否"></Radio>
@@ -176,12 +176,17 @@
 
     deleteTask
   } from '@/api/activiti';
+  import request from '@/utils/request'
   import { searchUserByName, getDictDataByType } from '@/api/index';
 
   export default {
     name: 'todo-manage',
     data() {
       return {
+        isborder: false,
+        issoldier: false,
+        isgraduate: false,
+        isforeign: false,
         border: true,
         soldier: true,
         graduate: true,
@@ -244,11 +249,18 @@
           },
           {
             title: '编号',
-            width: 130,
+            width: 140,
 			key:'priority',
             align: 'center',
 			render: (h, params) => {            
-              return 'JTLM20200331';
+			  return h('div', [
+                h(
+                  'div',
+                  {
+                  },
+                  'JTLM20200331'
+                )
+              ]);
             }
           },
           {
@@ -467,27 +479,46 @@
     },
     methods: {
       init() {
+        this.showDetails();
         this.getDictDataType();
         this.getDataList();
-        this.showDetails();
 
       },
-     /* showDetails:function(){
-        this.$http.get('/api/leave/getPer').then((response) => {
-          console.log(response);
-          alert(response.data);
-        },function() {
-          alert('请求失败！');
-
-        });
-      },*/
+      /*你是get请求，你也可以直接使用$.getJSON(路径，参数，回调函数)*/
+      showDetails() {
+        var _this= this;
+        //alert(0)
+        request({
+          url: '/api/leave/getPer',
+          method: 'get'
+        }).then(function(res) {
+          //console.debug(res)
+          if (res == 'gaj') {
+            _this.isborder = true;   //农民
+          }else if(res == 'zjbm'){
+            _this.isgraduate = true;
+            _this.isforeign = true;
+          }else if(res == 'rs'){
+            _this.isborder = true;
+          }else if(res == 'ty'){
+            _this.issoldier = true;
+          }
+          /*isborder: false,
+            issoldier: false,
+            isgraduate: false,
+            isforeign: false,*/
+          console.debug(_this.isgraduate)
+        })
+      },
       getDictDataType() {
+
         getDictDataByType('priority').then(res => {
           if (res.success) {
             this.dictPriority = res.result;
           }
         });
       },
+
       searchUser(v) {
         if (!v) {
           return;
