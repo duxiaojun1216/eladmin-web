@@ -228,7 +228,8 @@
           border: '',
           soldier: '',
           graduate: '',
-          foreign: ''
+          foreign: '',
+		  variables:{}
         },
         formValidate: {
           // 表单验证规则
@@ -242,9 +243,13 @@
             align: 'center'
           },
           {
-            type: 'index',
-            width: 60,
-            align: 'center'
+            title: '编号',
+            width: 130,
+			key:'priority',
+            align: 'center',
+			render: (h, params) => {            
+              return 'JTLM20200331';
+            }
           },
           {
             title: '任务名称',
