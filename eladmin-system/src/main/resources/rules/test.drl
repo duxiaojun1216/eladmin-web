@@ -5,54 +5,60 @@ global java.util.List myGlobalList;//全局变量
 
 rule "time1"
 when
-     message :Message((fcType == 1 || fcType == 2) && nowTime >= "01-03-2020" && nowTime <= "31-08-2020" && startTime <= nowTime && endTime >= nowTime)
+    message :Message((fcType == 1 || fcType == 2) && nowTime >= "01-03-2020" && nowTime <= "31-08-2020")
 then
     message.setResultMoney((message.getMoney() * 0.03) > 50000 ? 50000 : (message.getMoney() * 0.03));
+    message.setResultType("3%");
     update(message);
     System.out.println("第一条规则补助 3%  补助金额为：" + message.getResultMoney());
 end
 
 rule "time2"
 when
-     message :Message((fcType == 1 || fcType == 2) && nowTime >= "01-09-2020" && nowTime <= "28-02-2021" && startTime <= nowTime && endTime >= nowTime)
+    message :Message((fcType == 1 || fcType == 2) && nowTime >= "01-09-2020" && nowTime <= "28-02-2021")
 then
     message.setResultMoney((message.getMoney() * 0.02) > 50000 ? 50000 : (message.getMoney() * 0.02));
+    message.setResultType("2%");
     update(message);
     System.out.println("第二条规则补助 2%  补助金额为：" + message.getResultMoney());
 end
 
 rule "time3"
 when
-     message :Message((fcType == 1 || fcType == 2) && nowTime >= "01-03-2021" && nowTime <= "28-02-2022" && startTime <= nowTime && endTime >= nowTime)
+    message :Message((fcType == 1 || fcType == 2) && nowTime >= "01-03-2021" && nowTime <= "28-02-2022")
 then
     message.setResultMoney((message.getMoney() * 0.01) > 50000 ? 50000 : (message.getMoney() * 0.01));
+    message.setResultType("1%");
     update(message);
     System.out.println("第三条规则补助 1%  补助金额为：" + message.getResultMoney());
 end
 
 rule "time4"
 when
-    message :Message(fcType == 4 && nowTime >= "01-03-2020" && nowTime <= "31-08-2020" && startTime <= nowTime && endTime >= nowTime)
+    message :Message(fcType == 4 && nowTime >= "01-03-2020" && nowTime <= "31-08-2020")
 then
     message.setResultMoney(3000.0);
+    message.setResultType("3000");
     update(message);
     System.out.println("车位补助金额为：" + message.getResultMoney());
 end
 
 rule "time5"
 when
-    message :Message(fcType == 4 && nowTime >= "01-09-2020" && nowTime <= "28-02-2021" && startTime <= nowTime && endTime >= nowTime)
+    message :Message(fcType == 4 && nowTime >= "01-09-2020" && nowTime <= "28-02-2021")
 then
     message.setResultMoney(2000.0);
+    message.setResultType("2000");
     update(message);
     System.out.println("车位补助金额为：" + message.getResultMoney());
 end
 
 rule "time6"
 when
-    message :Message(fcType == 4 && nowTime >= "01-03-2021" && nowTime <= "28-02-2022" && startTime <= nowTime && endTime >= nowTime)
+    message :Message(fcType == 4 && nowTime >= "01-03-2021" && nowTime <= "28-02-2022")
 then
     message.setResultMoney(1000.0);
+    message.setResultType("1000");
     update(message);
     System.out.println("车位补助金额为：" + message.getResultMoney());
 end
