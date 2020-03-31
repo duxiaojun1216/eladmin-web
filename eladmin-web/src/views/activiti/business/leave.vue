@@ -99,6 +99,13 @@
           style="position:relative"
         >
 
+          <FormItem class="form_item1" label="是否委托开发商代办" label-width="150" width="100%" >
+            <RadioGroup v-model="form.hxlx"   size="medium" style="width: 250px;"  @on-change="changeFromWT">
+              <Radio :label="1">是</Radio>
+              <Radio :label="0">否</Radio>
+            </RadioGroup>
+          </FormItem>
+
          <!--<FormItem label="申请人" prop="name" v-if="type!=0&&type!=1">{{form.createBy}}</FormItem>-->
           <FormItem class="form_item" label="申请人姓名" prop="name">
             <Input v-model="form.tname" style="width:250px"></Input>
@@ -107,27 +114,33 @@
           <FormItem class="form_item" label="身份证号" prop="cardId">
             <Input v-model="form.cardId" style="width:250px"></Input>
           </FormItem>
-          <FormItem class="form_item" label="申请人类型" prop="sqrlx">
+          <FormItem class="form_item1" label="补贴对象类型" prop="sqrlx" width="100%" label-width="150">
             <!--<Input v-model="form.title" style="width:250px" />-->
-            <Select v-model="form.sqrlx" filterable placeholder="请选择" style="width: 250px;" @on-change="changeFromRY">
+            <!--<Select v-model="form.sqrlx" filterable placeholder="请选择" style="width: 250px;" @on-change="changeFromRY">
               <Option
                 v-for="item in dict.peoson_type"
                 :key="item.id"
                 :label="item.label"
                 :value="item.value"/>
-            </Select>
+            </Select>-->
+            <RadioGroup v-model="form.sqrlx" filterable placeholder="请选择"   size="medium"  @on-change="changeFromRY">
+              <Radio
+                v-for="item in dict.peoson_type"
+                :key="item.id"
+                :label="item.value">{{item.label}}</Radio>
+            </RadioGroup>
           </FormItem>
           <FormItem class="form_item" label="联系电话" prop="phone">
             <Input v-model="form.phone" style="width:250px"></Input>
           </FormItem>
-          <FormItem class="form_item" label="户籍地址" prop="hjdz" style="width:950px">
+          <FormItem class="form_item" label="身份证地址" prop="hjdz" style="width:950px">
             <Input
               v-model="form.hjdz"
               placeholder="请输入详细情况"
               style="width: 650px"
             ></Input>
           </FormItem>
-          <FormItem class="form_item" label="对象备注"  style="width:950px">
+          <FormItem class="form_item" label="备注"  style="width:950px">
             <Input
               type="textarea"
               v-model="form.mark"
@@ -137,27 +150,44 @@
             ></Input>
           </FormItem>
           <Divider orientation="left">①购置资产信息</Divider>
-          <FormItem class="form_item" label="资产类别" prop="fclx">
-            <Select v-model="form.fclx" placeholder="请选择" style="width: 250px" @on-change="changeFromFC">
-              <!--<Option v-for="(item, i) in dictType" :key="i" :value="item.value">{{item.title}}</Option>-->
+          <FormItem class="form_item1" label="申请补助类别" prop="fclx" width="100%" label-width="150">
+            <!--<Select v-model="form.fclx" placeholder="请选择" style="width: 250px" @on-change="changeFromFC">
+              &lt;!&ndash;<Option v-for="(item, i) in dictType" :key="i" :value="item.value">{{item.title}}</Option>&ndash;&gt;
               <Option
                 v-for="item in dict.house_type"
                 :key="item.id"
                 :label="item.label"
                 :value="item.value"/>
-            </Select>
+            </Select>-->
+            <RadioGroup v-model="form.fclx" filterable placeholder="请选择"   size="medium"   @on-change="changeFromFC">
+              <Radio
+                v-for="item in dict.house_type"
+                :key="item.id"
+                :label="item.value">{{item.label}}</Radio>
+
+            </RadioGroup>
           </FormItem>
-          <FormItem class="form_item" label="交易类型" prop="jylx">
+          <!--新增-->
+          <FormItem class="form_item1" label="户型类别" prop="fclx">
+            <RadioGroup v-model="form.hxlx" filterable placeholder="请选择"   size="medium"   @on-change="changeFromHX">
+              <Radio
+                v-for="item in dict.apartment_type"
+                :key="item.id"
+                :label="item.value">{{item.label}}</Radio>
+
+            </RadioGroup>
+          </FormItem>
+          <!--<FormItem class="form_item" label="交易类型" prop="jylx">
             <RadioGroup v-model="form.jylx" style="width: 250px">
               <Radio label="1" value="1" >一手房产</Radio>
               <Radio label="2" value="2" >二手房产</Radio>
-              <!--<Radio
+              &lt;!&ndash;<Radio
                 v-for="item in dict.house_type"
                 :key="item.id"
-                :label="item.value">{{item.label}}</Radio>-->
+                :label="item.value">{{item.label}}</Radio>&ndash;&gt;
             </RadioGroup>
-          </FormItem>
-          <FormItem class="form_item" label="购置时间"  prop="gfrq">
+          </FormItem>-->
+          <FormItem class="form_item" label="签订合同时间"  prop="gfrq">
             <DatePicker
               v-model="form.gfrq"
               type="date"
@@ -167,7 +197,7 @@
               style="width: 250px"
             ></DatePicker>
           </FormItem>
-          <FormItem class="form_item" label="备案时间"  prop="wqrq">
+          <FormItem class="form_item" label="网签备案时间"  prop="wqrq">
             <DatePicker
               v-model="form.wqrq"
               type="date"
@@ -177,20 +207,33 @@
               style="width: 250px"
             ></DatePicker>
           </FormItem>
-          <FormItem class="form_item" label="购房面积" prop="fcmj">
+          <!--新增-->
+          <FormItem class="form_item" label="发票时间"  prop="wqrq" v-if="form.fclx==5 || form.fclx==6">
+            <DatePicker
+              v-model="form.wqrq"
+              type="date"
+              format="yyyy-MM-dd"
+              clearable
+              placeholder="选择发票时间"
+              style="width: 250px"
+            ></DatePicker>
+          </FormItem>
+
+
+          <FormItem class="form_item" label="建筑面积" prop="fcmj">
             <Input v-model="form.fcmj" style="width:250px"/>
           </FormItem>
-          <FormItem class="form_item" label="发票总金额" prop="fcje">
+          <FormItem class="form_item" label="购房款总额" prop="fcje">
             <Input v-model="form.fcje" style="width:250px"/>
           </FormItem>
-          <FormItem class="form_item" label="资产地址" prop="scwz" style="width:950px">
+          <FormItem class="form_item" label="房屋坐落地址" prop="scwz" style="width:950px">
             <Input
               v-model="form.scwz"
               placeholder="示例：xx区xx路xx号xx栋xx单元xx号"
               style="width: 650px"
             />
           </FormItem>
-          <FormItem class="form_item" label="资产备注"  style="width:950px">
+          <FormItem class="form_item" label="备注"  style="width:950px">
             <Input
               type="textarea"
               v-model="form.zcbz"
@@ -285,7 +328,7 @@
 
   export default {
     name: "leave-notcache",
-    dicts: ['house_type', 'peoson_type'],
+    dicts: ['house_type', 'peoson_type','apartment_type'],
     data() {
       return {
         type: 0,
@@ -314,50 +357,47 @@
           }
         ],
         tableData:[],
-        tableData1: [{
+        tableData1:{
           name: '申请人身份证明（验原件，收复印件）'
-        }, {
+        },
+        tableData2:{
           name: '增值税普通（或专用）发票（验原件，收复印件）'
-        }, {
-          name: '不动产权证（验原件，收复印件）'
-        }, {
-          name: '农民工务工材料（农民工提供，原件）'
-        }, {
-          name: '学历证明（高校毕业生提供，验原件，收复印件）'
-        }],
-
-        //新建营业房、自住房、一手车位
-        tableData2:[{
-          name: '申请人身份证明（验原件，收复印件）'
-        }, {
-          name: '《商品房买卖合同》（验原件，收复印件）'
-        }, {
-          name: '增值税普通（或专用）发票（验原件，收复印件）'
-        }, {
-          name: '农民工务工材料（农民工提供，原件）'
-        }, {
-          name: '学历证明（高校毕业生提供，验原件，收复印件）'
-        }],
-
-        //标准化厂房
-        tableData3:[{
-          name: '申请人身份证明（验原件，收复印件）'
-        }, {
-          name: '营业执照、公司章程、出资材料（领办企业提供、验原件、收复印件）'
-        }, {
+        },
+        tableData3:{
           name: '不动产属相关资料（验原件，收复印件）'
-        }, {
-          name: '增值税普通（或专用）发票（验原件，收复印件）'
-        }, {
+        },
+        tableData4:{
           name: '农民工务工材料（农民工提供，原件）'
-        }, {
+        },
+        tableData5:{
           name: '学历证明（高校毕业生提供，验原件，收复印件）'
-        }],
+        },
+        tableData6:{
+          name: '《商品房买卖合同》（验原件，收复印件）'
+        },
+        tableData7:{
+          name: '营业执照、公司章程、出资材料（领办企业提供、验原件、收复印件）'
+        },
+        tableData8:{
+          name: '其他材料'
+        },
+        tableData9:{
+          name: '不动产权证（验原件，收复印件）'
+        },
+        tableData10:{
+          name: '委托书'
+        },
+        tableData11:{
+          name: '委托人身份证'
+        },
+        tableData12:{
+          name: '承诺书'
+        },
+        tableData13:{
+          name: '营业执照'
+        },
 
-        //购买新建商品房且转为城镇户口
-        tableData4:[{
-          name: '申请人身份证明（验原件，收复印件）'
-        }],
+
 
         form: {
           // 添加或编辑表单对象初始化数据
@@ -493,6 +533,14 @@
               data
             }).then(function (res) {
               alert("保存成功")
+              request({
+                url: '/api/message/getSubsidyMoney',
+                method: 'get',
+                data1
+              }).then(function (res) {
+                  that.form.btje=res.resultMoney,
+                  that.form.btbl=res.resultType
+              })
               // ({
               //   url: 'api/leave/add',
               //   method: 'get',
@@ -521,52 +569,251 @@
       //改变房产类型触发
       changeFromFC(){
         //alert(this.form.type)
-        var _this= this;
-        if(this.form.fclx=='1'){
 
-          _this.tableData=_this.tableData3;
-          return;
-        }
-        if(this.form.fclx=='2'){
+        var fclx= this.form.fclx;
+        var sqrlx= this.form.sqrlx;
+        this.tableData=[];
+        //alert(fclx+sqrlx);
+        //  alert(this.form.hxlx);
+        if(this.form.sqrlx){
+          if(this.form.hxlx=='1'){
+            //委托材料
+            this.tableData.push(this.tableData10);
+            this.tableData.push(this.tableData11);
+            this.tableData.push(this.tableData12);
+            this.tableData.push(this.tableData13);
+          }
+          //标准厂房提供材料
+          if(this.form.fclx=='1'){
+            //通用材料
+            this.tableData.push(this.tableData1);
+            this.tableData.push(this.tableData2);
+            this.tableData.push(this.tableData3);
+            //农民工提供材料
+            if(this.form.sqrlx=='1'){
+              this.tableData.push(this.tableData4);
+              this.tableData.push(this.tableData8);
+              return;
+            }
+            //毕业生提供材料
+            if(this.form.sqrlx=='3'){
+              this.tableData.push(this.tableData5);
+              this.tableData.push(this.tableData8);
+              return;
+            }
+            //领办企业提供材料
+            if(this.form.sqrlx=='5'){
+              this.tableData.push(this.tableData7);
+              this.tableData.push(this.tableData8);
+              return;
+            }
+          }
+          //新建营业用房、新建自住用房、一手车位 提供材料
+          if(this.form.fclx=='2'||this.form.fclx=='3'||this.form.fclx=='4'){
+            //通用材料
+            this.tableData.push(this.tableData1);
+            this.tableData.push(this.tableData2);
+            this.tableData.push(this.tableData6);
+            //农民工提供材料
+            if(this.form.sqrlx=='1'){
+              this.tableData.push(this.tableData4);
+              this.tableData.push(this.tableData8);
+              return;
+            }
+            //毕业生提供材料
+            if(this.form.sqrlx=='3'){
+              this.tableData.push(this.tableData5);
+              this.tableData.push(this.tableData8);
+              return;
+            }
+          }
+          //二手营业用房、二手住房
+          if(this.form.fclx=='5'||this.form.fclx=='6'){
+            //通用材料
+            this.tableData.push(this.tableData1);
+            this.tableData.push(this.tableData2);
+            this.tableData.push(this.tableData8);
+            //农民工提供材料
+            if(this.form.sqrlx=='1'){
+              this.tableData.push(this.tableData4);
+              this.tableData.push(this.tableData8);
+              return;
+            }
+            //毕业生提供材料
+            if(this.form.sqrlx=='3'){
+              this.tableData.push(this.tableData5);
+              this.tableData.push(this.tableData8);
+              return;
+            }
+            //新建商品房且转为城镇户口 还没判断
 
-          _this.tableData=_this.tableData2;
-          return;
+          }
         }
-        if(this.form.fclx=='3'){
 
-          _this.tableData=_this.tableData1;
-          return;
-        }
-        if(this.form.fclx=='4'){
-
-          _this.tableData=_this.tableData4;
-          return;
-        }
 
       },
-     /* //改变申请人类型触发
+      //改变申请人类型触发
       changeFromRY(){
-          var a= this.form.animal;
-          alert(a);
-
-          if(this.form.type=='1'){
-
-            this.tableData=this.tableData3;
+          this.tableData=[];
+          if(this.form.fclx){
+            if(this.form.hxlx=='1'){
+              //委托材料
+              this.tableData.push(this.tableData10);
+              this.tableData.push(this.tableData11);
+              this.tableData.push(this.tableData12);
+              this.tableData.push(this.tableData13);
+            }
+            //标准厂房提供材料
+            if(this.form.fclx=='1'){
+              //通用材料
+              this.tableData.push(this.tableData1);
+              this.tableData.push(this.tableData2);
+              this.tableData.push(this.tableData3);
+              //农民工提供材料
+              if(this.form.sqrlx=='1'){
+                this.tableData.push(this.tableData4);
+                this.tableData.push(this.tableData8);
+                return;
+              }
+              //毕业生提供材料
+              if(this.form.sqrlx=='3'){
+                this.tableData.push(this.tableData5);
+                this.tableData.push(this.tableData8);
+                return;
+              }
+              //领办企业提供材料
+              if(this.form.sqrlx=='5'){
+                this.tableData.push(this.tableData7);
+                this.tableData.push(this.tableData8);
+                return;
+              }
+            }
+            //新建营业用房、新建自住用房、一手车位 提供材料
+            if(this.form.fclx=='2'||this.form.fclx=='3'||this.form.fclx=='4'){
+              //通用材料
+              this.tableData.push(this.tableData1);
+              this.tableData.push(this.tableData2);
+              this.tableData.push(this.tableData6);
+              //农民工提供材料
+              if(this.form.sqrlx=='1'){
+                this.tableData.push(this.tableData4);
+                this.tableData.push(this.tableData8);
+                return;
+              }
+              //毕业生提供材料
+              if(this.form.sqrlx=='3'){
+                this.tableData.push(this.tableData5);
+                this.tableData.push(this.tableData8);
+                return;
+              }
+            }
+            //二手营业用房、二手住房
+            if(this.form.fclx=='5'||this.form.fclx=='6'){
+              //通用材料
+              this.tableData.push(this.tableData1);
+              this.tableData.push(this.tableData2);
+              this.tableData.push(this.tableData8);
+              //农民工提供材料
+              if(this.form.sqrlx=='1'){
+                this.tableData.push(this.tableData4);
+                this.tableData.push(this.tableData8);
+                return;
+              }
+              //毕业生提供材料
+              if(this.form.sqrlx=='3'){
+                this.tableData.push(this.tableData5);
+                this.tableData.push(this.tableData8);
+                return;
+              }
+              //新建商品房且转为城镇户口 还没判断
+            }
           }
-          if(this.form.type=='2'){
+      },
+      //改变 是否改变委托 触发
+      changeFromWT(){
+          this.tableData=[];
+          if(this.form.fclx || this.form.sqrlx){
+            if(this.form.hxlx=='1'){
+              //委托材料
+              this.tableData.push(this.tableData10);
+              this.tableData.push(this.tableData11);
+              this.tableData.push(this.tableData12);
+              this.tableData.push(this.tableData13);
+            }
+            if(this.form.hxlx=='0'){
+              //委托材料
+              this.tableData.splice(this.tableData.indexOf(this.tableData10),1);
+              this.tableData.splice(this.tableData.indexOf(this.tableData11),1);
+              this.tableData.splice(this.tableData.indexOf(this.tableData12),1);
+              this.tableData.splice(this.tableData.indexOf(this.tableData13),1);
+            }
+            //标准厂房提供材料
+            if(this.form.fclx=='1'){
+              //通用材料
+              this.tableData.push(this.tableData1);
+              this.tableData.push(this.tableData2);
+              this.tableData.push(this.tableData3);
+              //农民工提供材料
+              if(this.form.sqrlx=='1'){
+                this.tableData.push(this.tableData4);
+                this.tableData.push(this.tableData8);
+                return;
+              }
+              //毕业生提供材料
+              if(this.form.sqrlx=='3'){
+                this.tableData.push(this.tableData5);
+                this.tableData.push(this.tableData8);
+                return;
+              }
+              //领办企业提供材料
+              if(this.form.sqrlx=='5'){
+                this.tableData.push(this.tableData7);
+                this.tableData.push(this.tableData8);
+                return;
+              }
+            }
+            //新建营业用房、新建自住用房、一手车位 提供材料
+            if(this.form.fclx=='2'||this.form.fclx=='3'||this.form.fclx=='4'){
+              //通用材料
+              this.tableData.push(this.tableData1);
+              this.tableData.push(this.tableData2);
+              this.tableData.push(this.tableData6);
+              //农民工提供材料
+              if(this.form.sqrlx=='1'){
+                this.tableData.push(this.tableData4);
+                this.tableData.push(this.tableData8);
+                return;
+              }
+              //毕业生提供材料
+              if(this.form.sqrlx=='3'){
+                this.tableData.push(this.tableData5);
+                this.tableData.push(this.tableData8);
+                return;
+              }
+            }
+            //二手营业用房、二手住房
+            if(this.form.fclx=='5'||this.form.fclx=='6'){
+              //通用材料
+              this.tableData.push(this.tableData1);
+              this.tableData.push(this.tableData2);
+              this.tableData.push(this.tableData8);
+              //农民工提供材料
+              if(this.form.sqrlx=='1'){
+                this.tableData.push(this.tableData4);
+                this.tableData.push(this.tableData8);
+                return;
+              }
+              //毕业生提供材料
+              if(this.form.sqrlx=='3'){
+                this.tableData.push(this.tableData5);
+                this.tableData.push(this.tableData8);
+                return;
+              }
+              //新建商品房且转为城镇户口 还没判断
+            }
 
-            this.tableData=this.tableData2;
           }
-          if(this.form.type=='3'){
-
-            this.tableData=this.tableData1;
-          }
-          if(this.form.type=='4'){
-
-            this.tableData=this.tableData4;
-          }
-
-      },*/
+      },
       init() {
         this.type = this.$route.query.type;
         this.backRoute = this.$route.query.backRoute;
