@@ -13,21 +13,28 @@
           <Col :lg="12" :xl="24" :style="{marginBottom: '10px'}">
           <Card>
             <Row type="flex" class="user-info">
-              <Col span="8">
-              <!-- <Row class-name="made-child-con-middle" type="flex" align="middle">
-                <img class="avator-img" :src="avatarPath">
-              </Row> -->
+               <Col span="8">
+                    <Row class-name="made-child-con-middle" type="flex" align="middle">
+                      <img class="avator-img" :src="user.avatar ? baseApi + '/avatar/' + user.avatar : Avatar" />
+                    </Row>
               </Col>
               <Col span="16" style="padding-left:6px;">
               <Row class-name="made-child-con-middle" type="flex" align="middle">
                 <div>
-                  <b class="card-user-info-name">{{ username }}</b>
-                  <p>置业补助平台欢迎您使用</p>
+                  <b class="card-user-info-name">{{username}}</b>
+                  <p>泸州市置业补助平台欢迎您使用</p>
+				  <p>2020年3月31日</p>
                 </div>
               </Row>
               </Col>
             </Row>
             <div class="line-gray" />
+                <Row class="margin-top-8">
+                  <Col span="8">
+                    <p class="notwrap">:</p>
+                  </Col>
+                  <Col span="16" class="padding-left-8"></Col>
+                </Row>
           </Card>
           </Col>
         </Row>
@@ -36,18 +43,18 @@
         <Row :gutter="5">
           <Col :sm="24" :md="12" :lg="6" :style="{marginBottom: '10px'}">
           <info-card id-name="user_created_count" :end-val="count.createUser" :icon-type="sbdx" color="#2d8cf0"
-            intro-text="申报对象总量" />
+            intro-text="申报对象总量(人次)" />
           </Col>
           <Col :sm="24" :md="12" :lg="6" :style="{marginBottom: '10px'}">
           <info-card id-name="visit_count" :end-val="count.visit" :icon-type="fc" color="#64d572" :icon-size="50"
-            intro-text="申报资产总量" />
+            intro-text="申报资产总量(件/套)" />
           </Col>
           <Col :sm="24" :md="12" :lg="6" :style="{marginBottom: '10px'}">
           <info-card id-name="collection_count" :end-val="count.collection" :icon-type="sbzj" color="#ffd572"
-            intro-text="申请资金总量(元)" />
+            intro-text="申请资金总量(万元)" />
           </Col>
           <Col :sm="24" :md="12" :lg="6" :style="{marginBottom: '10px'}">
-          <info-card id-name="transfer_count" :end-val="count.transfer" :icon-type="ffzj" color="#f25e43" intro-text="补贴发放总量(元)" />
+          <info-card id-name="transfer_count" :end-val="count.transfer" :icon-type="ffzj" color="#f25e43" intro-text="补贴发放总量(万元)" />
           </Col>
         </Row>
 
@@ -89,7 +96,7 @@
   import ffzj from './img/ffzj.png';
   import sbzj from './img/sbzj.png';
   import fc from './img/fc.png';
-
+  import { mapGetters } from 'vuex';
   export default {
     name: 'Home',
     components: {
@@ -108,37 +115,48 @@
         count: {
           createUser: 496,
           visit: 500,
-          collection: 2439305,
-          transfer: 1903498
+          collection: 105,
+          transfer: 58
         },
-        city: '',
-        username: '',
+        city: '泸州',
+        username: '测试账号',
         sbdx: sbdx,
         ffzj: ffzj,
         sbzj: sbzj,
         fc: fc
       };
     },
-    computed: {
-      currNav() {
-        return this.$store.state.app.currNav;
+  computed: {
+    ...mapGetters([
+      'sidebar',
+      'device',
+      'user',
+      'baseApi'
+    ]),
+    show: {
+      get() {
+        return this.$store.state.settings.showSettings
       },
-      avatarPath() {
-        return localStorage.avatorImgPath;
+      set(val) {
+        this.$store.dispatch('settings/changeSetting', {
+          key: 'showSettings',
+          value: val
+        })
       }
-    },
+    }
+  },
     mounted() {
       this.init();
     },
     methods: {
       init() {
-        //				let userInfo = JSON.parse(Cookies.get('userInfo'));
-        //				this.username = userInfo.username;
-        //				ipInfo().then(res => {
-        //					if(res.success) {
-        //						this.city = res.result;
-        //					}
-        //				});
+        				let userInfo = JSON.parse(Cookies.get('userInfo'));
+        				this.username = userInfo.username;
+        				ipInfo().then(res => {
+        					if(res.success) {
+        						this.city = res.result;
+        					}
+        				});
       }
     }
   };
