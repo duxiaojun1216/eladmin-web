@@ -27,8 +27,8 @@
         <Button @click="passAll" icon="md-checkmark-circle-outline">批量通过</Button>
         <Button @click="backAll" icon="md-close">批量驳回</Button>
         <Button @click="getDataList" icon="md-refresh">刷新</Button>
-        <Button type="dashed" @click="openSearch=!openSearch">{{openSearch ? "关闭搜索" : "开启搜索"}}</Button>
-        <Button type="dashed" @click="openTip=!openTip">{{openTip ? "关闭提示" : "开启提示"}}</Button>
+        <Button type="dashed" @click="openSearch=!openSearch">{{openSearch ? '关闭搜索' : '开启搜索'}}</Button>
+        <Button type="dashed" @click="openTip=!openTip">{{openTip ? '关闭提示' : '开启提示'}}</Button>
       </Row>
       <Row v-show="openTip">
         <Alert show-icon>
@@ -70,8 +70,8 @@
       <Form ref="form" :model="form" :label-width="100" :rules="formValidate">
         <FormItem label="农民工">
           <RadioGroup v-model="form.border">
-            <Radio label="是" ></Radio>
-            <Radio label="否" ></Radio>
+            <Radio label="是"></Radio>
+            <Radio label="否"></Radio>
           </RadioGroup>
         </FormItem>
         <FormItem label="退役军人">
@@ -93,7 +93,7 @@
           </RadioGroup>
         </FormItem>
         <FormItem label="审批意见" prop="reason">
-          <Input type="textarea" v-model="form.comment" :rows="4" />
+          <Input type="textarea" v-model="form.comment" :rows="4"/>
         </FormItem>
 
         <FormItem label="下一审批人" prop="assignees" v-show="showAssign" :error="error">
@@ -175,10 +175,11 @@
     backAll,
 
     deleteTask
-  } from "@/api/activiti";
-  import { searchUserByName, getDictDataByType } from "@/api/index";
+  } from '@/api/activiti';
+  import { searchUserByName, getDictDataByType } from '@/api/index';
+
   export default {
-    name: "todo-manage",
+    name: 'todo-manage',
     data() {
       return {
         border: true,
@@ -197,37 +198,37 @@
         assigneeList: [],
         backList: [
           {
-            key: "-1",
-            name: "发起人"
+            key: '-1',
+            name: '发起人'
           }
         ],
-        error: "",
+        error: '',
         showAssign: false,
         searchForm: {
           // 搜索框对应data对象
-          name: "",
+          name: '',
           pageNumber: 1, // 当前页数
           pageSize: 10 // 页面大小
         },
-        modalTaskTitle: "",
-        modalTitle: "", // 添加或编辑标题
+        modalTaskTitle: '',
+        modalTitle: '', // 添加或编辑标题
         form: {
-          id: "",
-          userId: "",
-          procInstId: "",
-          comment: "",
+          id: '',
+          userId: '',
+          procInstId: '',
+          comment: '',
           type: 0,
           assignees: [],
-          backTaskKey: "-1",
+          backTaskKey: '-1',
           sendMessage: true,
           sendSms: true,
           sendEmail: true,
           sendpeasant: true,
           sendsoldier: true,
-          border: "",
-          soldier: "",
-          graduate: "",
-          foreign: ""
+          border: '',
+          soldier: '',
+          graduate: '',
+          foreign: ''
         },
         formValidate: {
           // 表单验证规则
@@ -236,60 +237,60 @@
         columns: [
           // 表头
           {
-            type: "selection",
+            type: 'selection',
             width: 60,
-            align: "center"
+            align: 'center'
           },
           {
-            type: "index",
+            type: 'index',
             width: 60,
-            align: "center"
+            align: 'center'
           },
           {
-            title: "任务名称",
-            key: "name",
+            title: '任务名称',
+            key: 'name',
             minWidth: 160
           },
           {
-            title: "所属流程",
-            key: "processName",
+            title: '申请类型',
+            key: 'processName',
             width: 150
           },
+          /*{
+            title: '委托代办人',
+            key: 'owner',
+            width: 130
+          },*/
           {
-            title: "委托代办人",
-            key: "owner",
+            title: '申请人',
+            key: 'applyer',
             width: 130
           },
           {
-            title: "流程发起人",
-            key: "applyer",
-            width: 130
-          },
-          {
-            title: "优先级",
-            key: "priority",
+            title: '优先级',
+            key: 'priority',
             width: 100,
             sortable: true,
             render: (h, params) => {
-              let text = "无",
-                color = "";
+              let text = '无',
+                color = '';
               if (params.row.priority == 0) {
-                color = "green";
+                color = 'green';
               } else if (params.row.priority == 1) {
-                color = "orange";
+                color = 'orange';
               } else if (params.row.priority == 2) {
-                color = "red";
+                color = 'red';
               } else {
-                color = "default";
+                color = 'default';
               }
               this.dictPriority.forEach(e => {
                 if (e.value == params.row.priority) {
                   text = e.title;
                 }
               });
-              return h("div", [
+              return h('div', [
                 h(
-                  "Tag",
+                  'Tag',
                   {
                     props: {
                       color: color
@@ -301,26 +302,26 @@
             }
           },
           {
-            title: "状态",
-            key: "isSuspended",
-            align: "center",
+            title: '状态',
+            key: 'isSuspended',
+            align: 'center',
             width: 110,
             render: (h, params) => {
               if (!params.row.isSuspended) {
-                return h("div", [
-                  h("Badge", {
+                return h('div', [
+                  h('Badge', {
                     props: {
-                      status: "success",
-                      text: "已激活"
+                      status: 'success',
+                      text: '已激活'
                     }
                   })
                 ]);
               } else if (params.row.isSuspended) {
-                return h("div", [
-                  h("Badge", {
+                return h('div', [
+                  h('Badge', {
                     props: {
-                      status: "error",
-                      text: "已挂起"
+                      status: 'error',
+                      text: '已挂起'
                     }
                   })
                 ]);
@@ -328,11 +329,11 @@
             },
             filters: [
               {
-                label: "已激活",
+                label: '已激活',
                 value: false
               },
               {
-                label: "已挂起",
+                label: '已挂起',
                 value: true
               }
             ],
@@ -346,29 +347,29 @@
             }
           },
           {
-            title: "创建时间",
-            key: "createTime",
+            title: '创建时间',
+            key: 'createTime',
             width: 180,
-            sortType: "desc",
+            sortType: 'desc',
             sortable: true
           },
           {
-            title: "操作",
-            key: "action",
-            align: "center",
+            title: '操作',
+            key: 'action',
+            align: 'center',
             width: 320,
-            fixed: "right",
+            fixed: 'right',
             render: (h, params) => {
-              return h("div", [
+              return h('div', [
                 h(
-                  "Button",
+                  'Button',
                   {
                     props: {
-                      type: "primary",
-                      size: "small"
+                      type: 'primary',
+                      size: 'small'
                     },
                     style: {
-                      marginRight: "5px"
+                      marginRight: '5px'
                     },
                     on: {
                       click: () => {
@@ -376,17 +377,17 @@
                       }
                     }
                   },
-                  "申请详情"
+                  '申请详情'
                 ),
                 h(
-                  "Button",
+                  'Button',
                   {
                     props: {
-                      size: "small",
-                      type: "success"
+                      size: 'small',
+                      type: 'success'
                     },
                     style: {
-                      marginRight: "5px"
+                      marginRight: '5px'
                     },
                     on: {
                       click: () => {
@@ -394,17 +395,17 @@
                       }
                     }
                   },
-                  "通过"
+                  '通过'
                 ),
                 h(
-                  "Button",
+                  'Button',
                   {
                     props: {
-                      size: "small",
-                      type: "warning"
+                      size: 'small',
+                      type: 'warning'
                     },
                     style: {
-                      marginRight: "5px"
+                      marginRight: '5px'
                     },
                     on: {
                       click: () => {
@@ -412,16 +413,16 @@
                       }
                     }
                   },
-                  "驳回"
+                  '驳回'
                 ),
                 h(
-                  "Button",
+                  'Button',
                   {
                     props: {
-                      size: "small"
+                      size: 'small'
                     },
                     style: {
-                      marginRight: "5px"
+                      marginRight: '5px'
                     },
                     on: {
                       click: () => {
@@ -429,17 +430,17 @@
                       }
                     }
                   },
-                  "委托"
+                  '委托'
                 ),
                 h(
-                  "Button",
+                  'Button',
                   {
                     props: {
-                      size: "small",
-                      type: "info"
+                      size: 'small',
+                      type: 'info'
                     },
                     style: {
-                      marginRight: "5px"
+                      marginRight: '5px'
                     },
                     on: {
                       click: () => {
@@ -447,7 +448,7 @@
                       }
                     }
                   },
-                  "历史"
+                  '历史'
                 )
               ]);
             }
@@ -455,7 +456,7 @@
         ],
         data: [], // 表单数据
         total: 0, // 表单数据总数
-        dictPriority: [{title:'测试',value:'0'}],
+        dictPriority: [{ title: '测试', value: '0' }],
         isGateway: false
       };
     },
@@ -463,14 +464,20 @@
       init() {
         this.getDictDataType();
         this.getDataList();
-        this.gettingdata();
-      },
-      //获取用户部门
-      gettingdata(){
+        this.showDetails();
 
       },
+     /* showDetails:function(){
+        this.$http.get('/api/leave/getPer').then((response) => {
+          console.log(response);
+          alert(response.data);
+        },function() {
+          alert('请求失败！');
+
+        });
+      },*/
       getDictDataType() {
-        getDictDataByType("priority").then(res => {
+        getDictDataByType('priority').then(res => {
           if (res.success) {
             this.dictPriority = res.result;
           }
@@ -491,8 +498,8 @@
       changeSort(e) {
         this.searchForm.sort = e.key;
         this.searchForm.order = e.order;
-        if (e.order == "normal") {
-          this.searchForm.order = "";
+        if (e.order == 'normal') {
+          this.searchForm.order = '';
         }
         this.getDataList();
       },
@@ -535,61 +542,61 @@
         this.$refs.table.selectAll(false);
       },
       handelSubmit() {
-        if(this.form.border == "是"){
-          this.form.comment="是农民工"
+        if (this.form.border == '是') {
+          this.form.comment = '是农民工'
         }
-        if(this.form.soldier == "是"){
-          this.form.comment='是退役军人'
+        if (this.form.soldier == '是') {
+          this.form.comment = '是退役军人'
         }
-        if(this.form.graduate == "是"){
-          this.form.comment='是高校毕业生'
+        if (this.form.graduate == '是') {
+          this.form.comment = '是高校毕业生'
         }
-        if(this.form.foreign == "是"){
-          this.form.comment='是外来创业人员'
+        if (this.form.foreign == '是') {
+          this.form.comment = '是外来创业人员'
         }
         this.submitLoading = true;
         if (this.form.type == 0) {
           // 通过
           if (this.showAssign && this.form.assignees.length < 1) {
-            this.error = "请至少选择一个审批人";
+            this.error = '请至少选择一个审批人';
             this.submitLoading = false;
             return;
           } else {
-            this.error = "";
+            this.error = '';
           }
           pass(this.form).then(res => {
             this.submitLoading = false;
             if (res.success) {
-              this.$Message.success("操作成功");
+              this.$Message.success('操作成功');
               this.modalTaskVisible = false;
               this.getDataList();
             }
           });
         } else if (this.form.type == 1) {
           // 驳回
-          if (this.form.backTaskKey == "-1") {
+          if (this.form.backTaskKey == '-1') {
             // 驳回至发起人
             back(this.form).then(res => {
               this.submitLoading = false;
               if (res.success) {
-                this.$Message.success("操作成功");
+                this.$Message.success('操作成功');
                 this.modalTaskVisible = false;
                 this.getDataList();
               }
             });
           } else {
             // 自定义驳回
-            if (this.form.backTaskKey != "-1" && this.form.assignees.length < 1) {
-              this.error = "请至少选择一个审批人";
+            if (this.form.backTaskKey != '-1' && this.form.assignees.length < 1) {
+              this.error = '请至少选择一个审批人';
               this.submitLoading = false;
               return;
             } else {
-              this.error = "";
+              this.error = '';
             }
             backToTask(this.form).then(res => {
               this.submitLoading = false;
               if (res.success) {
-                this.$Message.success("操作成功");
+                this.$Message.success('操作成功');
                 this.modalTaskVisible = false;
                 this.getDataList();
               }
@@ -598,16 +605,16 @@
         } else if (this.form.type == 2) {
           // 委托
           if (!this.form.userId) {
-            this.error = "请搜索选择一委托人";
+            this.error = '请搜索选择一委托人';
             this.submitLoading = false;
             return;
           } else {
-            this.error = "";
+            this.error = '';
           }
           delegate(this.form).then(res => {
             this.submitLoading = false;
             if (res.success) {
-              this.$Message.success("操作成功");
+              this.$Message.success('操作成功');
               this.modalTaskVisible = false;
               this.getDataList();
             }
@@ -626,7 +633,7 @@
         });
       },
       passTask(v) {
-        this.modalTaskTitle = "审批通过";
+        this.modalTaskTitle = '审批通过';
         this.form.id = v.id;
         this.form.procInstId = v.procInstId;
         this.form.priority = v.priority;
@@ -639,12 +646,12 @@
             if (res.result.type == 3 || res.result.type == 4) {
               this.isGateway = true;
               this.showAssign = false;
-              this.error = "";
+              this.error = '';
               return;
             }
             this.isGateway = false;
             if (res.result.users && res.result.users.length > 0) {
-              this.error = "";
+              this.error = '';
               this.assigneeList = res.result.users;
               // 默认勾选
               let ids = [];
@@ -661,7 +668,7 @@
         });
       },
       changeBackTask(v) {
-        if (v == "-1") {
+        if (v == '-1') {
           return;
         }
         this.userLoading = true;
@@ -681,7 +688,7 @@
         });
       },
       backTask(v) {
-        this.modalTaskTitle = "审批驳回";
+        this.modalTaskTitle = '审批驳回';
         this.form.id = v.id;
         this.form.procInstId = v.procInstId;
         this.form.procDefId = v.procDefId;
@@ -692,11 +699,11 @@
         // 获取可驳回节点
         this.backList = [
           {
-            key: "-1",
-            name: "发起人"
+            key: '-1',
+            name: '发起人'
           }
         ];
-        this.form.backTaskKey = "-1";
+        this.form.backTaskKey = '-1';
         this.backLoading = true;
         getBackList(v.procInstId).then(res => {
           this.backLoading = false;
@@ -708,7 +715,7 @@
         });
       },
       delegateTask(v) {
-        this.modalTaskTitle = "委托他人代办";
+        this.modalTaskTitle = '委托他人代办';
         this.form.id = v.id;
         this.form.procInstId = v.procInstId;
         this.form.type = 2;
@@ -724,28 +731,28 @@
       },
       passAll() {
         if (this.selectCount <= 0) {
-          this.$Message.warning("您还未选择要通过的数据");
+          this.$Message.warning('您还未选择要通过的数据');
           return;
         }
         // 批量通过
         this.modalVisible = true;
         this.$Modal.confirm({
-          title: "确认通过",
+          title: '确认通过',
           content:
-            "您确认要通过所选的 " +
+            '您确认要通过所选的 ' +
             this.selectCount +
-            " 条数据? 注意：将默认分配给节点设定的所有可审批用户",
+            ' 条数据? 注意：将默认分配给节点设定的所有可审批用户',
           loading: true,
           onOk: () => {
-            let ids = "";
+            let ids = '';
             this.selectList.forEach(function(e) {
-              ids += e.id + ",";
+              ids += e.id + ',';
             });
             ids = ids.substring(0, ids.length - 1);
             passAll(ids).then(res => {
               this.$Modal.remove();
               if (res.success) {
-                this.$Message.success("操作成功");
+                this.$Message.success('操作成功');
                 this.modalVisible = false;
                 this.clearSelectAll();
                 this.getDataList();
@@ -756,28 +763,28 @@
       },
       backAll() {
         if (this.selectCount <= 0) {
-          this.$Message.warning("您还未选择要驳回的数据");
+          this.$Message.warning('您还未选择要驳回的数据');
           return;
         }
         // 批量驳回
         this.modalVisible = true;
         this.$Modal.confirm({
-          title: "确认驳回",
+          title: '确认驳回',
           content:
-            "您确认要驳回所选的 " +
+            '您确认要驳回所选的 ' +
             this.selectCount +
-            " 条数据? 注意：所有流程将驳回至发起人",
+            ' 条数据? 注意：所有流程将驳回至发起人',
           loading: true,
           onOk: () => {
-            let procInstIds = "";
+            let procInstIds = '';
             this.selectList.forEach(function(e) {
-              procInstIds += e.procInstId + ",";
+              procInstIds += e.procInstId + ',';
             });
             procInstIds = procInstIds.substring(0, procInstIds.length - 1);
             backAll(procInstIds).then(res => {
               this.$Modal.remove();
               if (res.success) {
-                this.$Message.success("操作成功");
+                this.$Message.success('操作成功');
                 this.modalVisible = false;
                 this.clearSelectAll();
                 this.getDataList();
@@ -789,11 +796,12 @@
     },
     mounted() {
       this.init();
+
     },
     watch: {
       // 监听路由变化
       $route(to, from) {
-        if (to.name == "todo-manage") {
+        if (to.name == 'todo-manage') {
           this.getDataList();
         }
       }
