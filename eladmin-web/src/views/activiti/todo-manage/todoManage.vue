@@ -249,11 +249,18 @@
           },
           {
             title: '编号',
-            width: 130,
+            width: 140,
 			key:'priority',
             align: 'center',
 			render: (h, params) => {            
-              return 'JTLM20200331';
+			  return h('div', [
+                h(
+                  'div',
+                  {
+                  },
+                  'JTLM20200331'
+                )
+              ]);
             }
           },
           {
