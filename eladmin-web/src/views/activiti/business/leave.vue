@@ -75,10 +75,16 @@
   .m_table .ivu-form-item-content{
     margin-left: 0px!important;
   }
+  #hxlxRedio{
+    margin-left: 38px;
+  }
+  #fclxRedio{
+    margin-left: 10px;
+  }
 </style>
 <template>
   <div class="search">
-    <Card style="width: 800px;margin: auto;">
+    <Card style="width: 820px;margin: auto;">
       <p slot="title" class="header_p">
         <span v-if="type==0">泸州市置业补贴申请登记</span>
         <span v-else-if="type==1">填报置业补贴申请表</span>
@@ -90,11 +96,11 @@
       <p slot="title" style="text-align: right;font-size:14px;width: 250px;float:right;margin-right: 15px;">
         <span v-if="type==0">日期：2020年4月3日</span>
       </p>
-      <Row style="width: 800px;margin: auto;">
+      <Row style="width: 900px;margin: auto;">
         <Form
           ref="form"
           :model="form"
-          :label-width="100"
+          :label-width="120"
           :rules="formValidate"
           style="position:relative"
         >
@@ -114,15 +120,7 @@
           <FormItem class="form_item" label="身份证号" prop="cardId">
             <Input v-model="form.cardId" style="width:250px"></Input>
           </FormItem>
-          <FormItem class="form_item1" label="补贴对象类型" prop="sqrlx" width="100%" label-width="150">
-            <!--<Input v-model="form.title" style="width:250px" />-->
-            <!--<Select v-model="form.sqrlx" filterable placeholder="请选择" style="width: 250px;" @on-change="changeFromRY">
-              <Option
-                v-for="item in dict.peoson_type"
-                :key="item.id"
-                :label="item.label"
-                :value="item.value"/>
-            </Select>-->
+          <FormItem class="form_item1" label="补贴对象类型" prop="sqrlx"label-width="150"  width="100%">
             <RadioGroup v-model="form.sqrlx" filterable placeholder="请选择"   size="medium"  @on-change="changeFromRY">
               <Radio
                 v-for="item in dict.peoson_type"
@@ -133,14 +131,14 @@
           <FormItem class="form_item" label="联系电话" prop="phone">
             <Input v-model="form.phone" style="width:250px"></Input>
           </FormItem>
-          <FormItem class="form_item" label="身份证地址" prop="hjdz" style="width:950px">
+          <FormItem class="form_item" label="身份证地址" prop="hjdz" style="width:100%">
             <Input
               v-model="form.hjdz"
               placeholder="请输入详细情况"
               style="width: 650px"
             ></Input>
           </FormItem>
-          <FormItem class="form_item" label="备注"  style="width:950px">
+          <FormItem class="form_item" label="备注"  style="width:100%">
             <Input
               type="textarea"
               v-model="form.mark"
@@ -150,16 +148,8 @@
             ></Input>
           </FormItem>
           <Divider orientation="left">①购置资产信息</Divider>
-          <FormItem class="form_item1" label="申请补助类别" prop="fclx" width="100%" label-width="150">
-            <!--<Select v-model="form.fclx" placeholder="请选择" style="width: 250px" @on-change="changeFromFC">
-              &lt;!&ndash;<Option v-for="(item, i) in dictType" :key="i" :value="item.value">{{item.title}}</Option>&ndash;&gt;
-              <Option
-                v-for="item in dict.house_type"
-                :key="item.id"
-                :label="item.label"
-                :value="item.value"/>
-            </Select>-->
-            <RadioGroup v-model="form.fclx" filterable placeholder="请选择"   size="medium"   @on-change="changeFromFC">
+          <FormItem class="form_item1" label="申请补助类别" prop="fclx"  width="100%" label-width="130px">
+            <RadioGroup v-model="form.fclx" filterable placeholder="请选择"   size="medium"   @on-change="changeFromFC" id="fclxRedio">
               <Radio
                 v-for="item in dict.house_type"
                 :key="item.id"
@@ -168,8 +158,8 @@
             </RadioGroup>
           </FormItem>
           <!--新增-->
-          <FormItem class="form_item1" label="户型类别" prop="fclx">
-            <RadioGroup v-model="form.hxlx" filterable placeholder="请选择"   size="medium"   @on-change="changeFromHX">
+          <FormItem class="form_item1" label="户型类别" prop="fclx" width="100%" label-width="100px">
+            <RadioGroup v-model="form.hxlx" filterable placeholder="请选择"   size="medium"   @on-change="changeFromHX" id="hxlxRedio">
               <Radio
                 v-for="item in dict.apartment_type"
                 :key="item.id"
@@ -177,17 +167,7 @@
 
             </RadioGroup>
           </FormItem>
-          <!--<FormItem class="form_item" label="交易类型" prop="jylx">
-            <RadioGroup v-model="form.jylx" style="width: 250px">
-              <Radio label="1" value="1" >一手房产</Radio>
-              <Radio label="2" value="2" >二手房产</Radio>
-              &lt;!&ndash;<Radio
-                v-for="item in dict.house_type"
-                :key="item.id"
-                :label="item.value">{{item.label}}</Radio>&ndash;&gt;
-            </RadioGroup>
-          </FormItem>-->
-          <FormItem class="form_item" label="签订合同时间"  prop="gfrq">
+          <FormItem class="form_item" label="签订合同时间"  prop="gfrq" v-if="form.fclx!=5 && form.fclx!=6">
             <DatePicker
               v-model="form.gfrq"
               type="date"
@@ -197,7 +177,7 @@
               style="width: 250px"
             ></DatePicker>
           </FormItem>
-          <FormItem class="form_item" label="网签备案时间"  prop="wqrq">
+          <FormItem class="form_item" label="网签备案时间"  prop="wqrq" v-if="form.fclx!=5 && form.fclx!=6">
             <DatePicker
               v-model="form.wqrq"
               type="date"
@@ -295,7 +275,7 @@
           <!-- <Divider orientation="left">④部门材料</Divider>-->
 
 
-          <Form-item class="br" style="margin-right:50px;float:right">
+          <Form-item class="br" style="margin-right:140px;float:right">
             <Button
               type="primary"
               :loading="submitLoading"
@@ -636,13 +616,13 @@
             //农民工提供材料
             if(this.form.sqrlx=='1'){
               this.tableData.push(this.tableData4);
-              this.tableData.push(this.tableData8);
+              this.tableData.push(this.tableData9);
               return;
             }
             //毕业生提供材料
             if(this.form.sqrlx=='3'){
               this.tableData.push(this.tableData5);
-              this.tableData.push(this.tableData8);
+              this.tableData.push(this.tableData9);
               return;
             }
             //新建商品房且转为城镇户口 还没判断
