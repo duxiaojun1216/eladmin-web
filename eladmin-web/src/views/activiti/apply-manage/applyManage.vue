@@ -347,19 +347,19 @@ export default {
         },
         {
           title: "受理编号",
-          key: "title",
+          key: "code",
           minWidth: 200,
           sortable: true
         },
         {
-          title: "申请对象",
-          key: "title",
+          title:"申请对象",
+          key: "person",
           minWidth: 200,
           sortable: true
         },
         {
           title: "对象类型",
-          key: "title",
+          key: "personType",
           minWidth: 200,
           sortable: true
         },
