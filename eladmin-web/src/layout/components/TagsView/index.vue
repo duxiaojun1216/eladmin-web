@@ -283,4 +283,19 @@ export default {
     }
   }
 }
+.tags-view-container .tags-view-wrapper .tags-view-item.active[data-v-fac8ca64]::before {
+    content: '';
+    background: #1682e6;
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    position: relative;
+    margin-right: 2px;
+}
+.tags-view-container .tags-view-wrapper .tags-view-item.active[data-v-fac8ca64] {
+    background-color: #ffffff;
+    color: #008ffb;
+    border-color: #008ffb;
+}
 </style>
