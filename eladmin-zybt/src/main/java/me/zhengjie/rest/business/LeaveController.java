@@ -12,10 +12,7 @@ import me.zhengjie.domain.TPersonnel;
 import me.zhengjie.domain.TShenbaoxingxi;
 import me.zhengjie.entity.ActBusiness;
 import me.zhengjie.entity.business.Leave;
-import me.zhengjie.service.ActBusinessService;
-import me.zhengjie.service.THouseService;
-import me.zhengjie.service.TPersonnelService;
-import me.zhengjie.service.TShenbaoxingxiService;
+import me.zhengjie.service.*;
 import me.zhengjie.service.business.LeaveService;
 
 import me.zhengjie.service.dto.*;
@@ -46,6 +43,9 @@ public class LeaveController extends XbootBaseController<Leave, String> {
     private TPersonnelService tPersonnelService;
     @Autowired
     private THouseService tHouseService;
+
+    @Autowired
+    private TFjxxService fjxxService;
 
     @Autowired
     private LeaveService leaveService;
@@ -87,16 +87,23 @@ public class LeaveController extends XbootBaseController<Leave, String> {
         copy(tHouse,tPersonnel,tShenbaoxingxi,shxxHz);
         String str=new SimpleDateFormat("yyyy-MM-dd").format(shxxHz.getWqrq());
         try {
-            THouseDto tHouseDto = tHouseService.create(tHouse);
-            tShenbaoxingxi.setFcid(tHouseDto.getId());
-
+            //申报人员 信息
             TPersonnelDto tPersonnelDto = tPersonnelService.create(tPersonnel);
             tShenbaoxingxi.setSbrid(tPersonnelDto.getId());
 
-            //批次号
+            //申报房产信息
+            THouseDto tHouseDto = tHouseService.create(tHouse);
+            tShenbaoxingxi.setFcid(tHouseDto.getId());
+
+            //批次号 申报表单信息
             String pch = CodeUtlis.sNumber(tShenbaoxingxi.getSqrlx(), tShenbaoxingxi.getFclx());
             tShenbaoxingxi.setPch(pch);
             TShenbaoxingxiDto tShenbaoxingxiDto = tShenbaoxingxiService.create(tShenbaoxingxi);
+
+            //附件信息
+            for(long id :shxxHz.getFjids()){
+                fjxxService.updateSbxxIdById(tShenbaoxingxiDto.getId().toString(),id);
+            }
 
             result.setSbxxid(tShenbaoxingxiDto.getId());
             result.setCode(tShenbaoxingxiDto.getPch());

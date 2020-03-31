@@ -78,4 +78,10 @@ public class ShxxHz {
     //流程 模型 id
     private  String procDefId;
 
+
+    //附件id
+    private long[]  fjids;
+
+
+
 }

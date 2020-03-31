@@ -210,6 +210,7 @@
                   multiple
                   :limit="1"
                   :on-exceed="handleExceed"
+                  :on-success="uploadSuccess"
                   :file-list="fileList">
                   <el-button
                     size="mini"
@@ -369,6 +370,7 @@
           jylx:"1",
           type:'',
           procDefId:'',
+          fjids:[],
 
         },
         formValidate: {
@@ -447,16 +449,21 @@
       };
     },
     methods: {
+      //附件上传成功 回调
+      uploadSuccess(res){
+        alert('上传成功'),
+        console.debug(res),
+        console.debug(res[0].id)
+        for (var i=0;i<res.length;i++  ){
+          this.form.fjids.push(res[i].id)
+        }
+        console.debug(this.form.fjids)
+
+      },
+
       /**
        * 提交表单
        */
-      /* submitForm() {
-         var that= this;
-         var data= that.form;
-         data.fclx=that.radio1;
-         console.debug(that.form);
-
-       },*/
       submitForm(form) {
         var that= this;
         var data= that.form;
@@ -464,7 +471,19 @@
         //alert(url.procDefId)
         //console.debug(url);
         data.procDefId=url.procDefId;
+        data.fjids= that.form.fjids;
         console.debug(that.form);
+
+        var data1={
+          nowTime:'',
+          fcType:'',
+          money:''
+        } ;
+        data1.fcType=that.form.fclx;
+        data1.money=that.form.fcje;
+        data1.nowTime=that.form;
+        console.debug(data1)
+
 
        this.$refs['form'].validate((valid) => {
           if (valid) {
@@ -474,15 +493,19 @@
               data
             }).then(function (res) {
               alert("保存成功")
-              /*if(res.success){
-                that.sbxx.code=res.code;
-                that.sbxx.sqxxid=res.sqxxid;
-                alert("信息保存成功")
-                console.debug(that.sbxx)
-              }*/
+              // ({
+              //   url: 'api/leave/add',
+              //   method: 'get',
+              //   data
+              // }).then(function (res) {
+              //   thus
+              //
+              // })
+
             })
           } else {
             console.log('error submit!!');
+
             return false;
           }
         })

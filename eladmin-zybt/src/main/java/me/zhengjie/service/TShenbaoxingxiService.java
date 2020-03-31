@@ -1,6 +1,7 @@
 package me.zhengjie.service;
 
 import me.zhengjie.domain.TShenbaoxingxi;
+import me.zhengjie.service.dto.TFjxxDto;
 import me.zhengjie.service.dto.TShenbaoxingxiDto;
 import me.zhengjie.service.dto.TShenbaoxingxiQueryCriteria;
 import org.springframework.data.domain.Pageable;
@@ -70,5 +71,5 @@ public interface TShenbaoxingxiService {
      * sha
      * @param file 上传的文件
      */
-    void uploadFj(MultipartFile[] file,String sbxxId) throws IOException;
+    List<TFjxxDto> uploadFj(MultipartFile[] file,String userId ) throws IOException;
 }
