@@ -190,6 +190,8 @@ public class UserController {
         checkLevel(resources);
         // 默认密码 123456
         resources.setPassword(passwordEncoder.encode("123456"));
+        Long region = deptService.findById(resources.getDept().getId()).getPid();
+        resources.setRegion(region);
         return new ResponseEntity<>(userService.create(resources),HttpStatus.CREATED);
     }
 

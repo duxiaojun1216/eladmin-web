@@ -25,7 +25,7 @@ export default {
   },
   data() {
     return {
-      title: '泸州市置业补贴平台',
+      title: '泸州市置业补助平台',
       logo: Logo
     }
   }
