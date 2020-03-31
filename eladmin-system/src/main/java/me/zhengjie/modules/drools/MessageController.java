@@ -57,22 +57,21 @@ public class MessageController {
         return new ResultUtil<Object>().setData(message);
     }
 
-    @Autowired
-    private QueueProducer queueProducer;
-    //注入存放消息的队列，用于下列方法一
-
-    @GetMapping(value = "/testQueue", produces = "text/html;charset=UTF-8;")
-    public String testQueue() {
-        String queueName = "QUEUE_RECEIVE_ADD_FIREND"; //自定义队列名称
-
-        for (int i = 0; i < 10; i++) {
-            Message message = new Message();
-            message.setStatus(1);
-            message.setMessage("小明" + i);
-            queueProducer.sendObjectMessage(queueName, message);   //发送到MQS
-        }
-        return "消息已经发送";
-    }
+//    @Autowired
+//    private QueueProducer queueProducer;
+//    //注入存放消息的队列，用于下列方法一
+//    @GetMapping(value = "/testQueue", produces = "text/html;charset=UTF-8;")
+//    public String testQueue() {
+//        String queueName = "QUEUE_RECEIVE_ADD_FIREND"; //自定义队列名称
+//
+//        for (int i = 0; i < 10; i++) {
+//            Message message = new Message();
+//            message.setStatus(1);
+//            message.setMessage("小明" + i);
+//            queueProducer.sendObjectMessage(queueName, message);   //发送到MQS
+//        }
+//        return "消息已经发送";
+//    }
 
     @GetMapping(value = "/testExportExcel", produces = "text/html;charset=UTF-8;")
     public void testExportExcel(HttpServletRequest request, HttpServletResponse response) throws Exception {
