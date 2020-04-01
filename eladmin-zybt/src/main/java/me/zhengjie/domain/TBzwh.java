@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 /**
 * @author dengjie
-* @date 2020-03-26
+* @date 2020-04-01
 */
 @Entity
 @Data
@@ -35,14 +35,6 @@ public class TBzwh implements Serializable {
     @Column(name = "zzsj")
     private Timestamp zzsj;
 
-    /** 比例 */
-    @Column(name = "bl")
-    private String bl;
-
-    /** 备用 */
-    @Column(name = "bak3")
-    private String bak3;
-
     /** 备用 */
     @Column(name = "bak4")
     private String bak4;
@@ -66,6 +58,14 @@ public class TBzwh implements Serializable {
     /** 修改时间 */
     @Column(name = "update_time")
     private Timestamp updateTime;
+
+    /** 所属区域 */
+    @Column(name = "ssqy")
+    private String ssqy;
+
+    /** 标准 */
+    @Column(name = "bz")
+    private String bz;
 
     public void copy(TBzwh source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 /**
 * @author dengjie
-* @date 2020-03-26
+* @date 2020-04-01
 */
 @Data
 public class TBzwhDto implements Serializable {
@@ -22,12 +22,6 @@ public class TBzwhDto implements Serializable {
 
     /** 终止时间 */
     private Timestamp zzsj;
-
-    /** 比例 */
-    private String bl;
-
-    /** 备用 */
-    private String bak3;
 
     /** 备用 */
     private String bak4;
@@ -46,4 +40,10 @@ public class TBzwhDto implements Serializable {
 
     /** 修改时间 */
     private Timestamp updateTime;
+
+    /** 所属区域 */
+    private String ssqy;
+
+    /** 标准 */
+    private String bz;
 }

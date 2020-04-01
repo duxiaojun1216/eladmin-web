@@ -98,14 +98,14 @@ public class TBzwhServiceImpl implements TBzwhService {
             map.put("资产类型", tBzwh.getZclx());
             map.put("起始时间", tBzwh.getQssj());
             map.put("终止时间", tBzwh.getZzsj());
-            map.put("比例", tBzwh.getBl());
-            map.put("备用", tBzwh.getBak3());
             map.put("备用", tBzwh.getBak4());
             map.put("备用", tBzwh.getBak5());
             map.put("创建人", tBzwh.getCreateId());
             map.put("创建时间", tBzwh.getCreateTime());
             map.put("修改人", tBzwh.getUpdateId());
             map.put("修改时间", tBzwh.getUpdateTime());
+            map.put("所属区域", tBzwh.getSsqy());
+            map.put("标准", tBzwh.getBz());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);
