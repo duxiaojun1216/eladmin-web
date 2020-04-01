@@ -3,15 +3,12 @@ package me.zhengjie.service.impl;
 import me.zhengjie.common.utils.ResultUtil;
 import me.zhengjie.common.utils.SecurityUtil;
 import me.zhengjie.common.vo.Result;
-import me.zhengjie.domain.TFjxx;
-import me.zhengjie.domain.THouse;
-import me.zhengjie.domain.TPersonnel;
-import me.zhengjie.domain.TShenbaoxingxi;
+import me.zhengjie.domain.*;
 import me.zhengjie.entity.ActBusiness;
 import me.zhengjie.service.*;
 import me.zhengjie.service.business.LeaveService;
 import me.zhengjie.service.dto.*;
-import me.zhengjie.service.dto.CodeUtlis;
+import me.zhengjie.system.service.dto.UserDto;
 import me.zhengjie.utils.*;
 import me.zhengjie.repository.TShenbaoxingxiRepository;
 import me.zhengjie.service.mapper.TShenbaoxingxiMapper;
@@ -61,6 +58,9 @@ public class TShenbaoxingxiServiceImpl implements TShenbaoxingxiService {
 
     @Autowired
     private SecurityUtil securityUtil;
+
+    @Autowired
+    private TEntrustService entrustService;
 
 
 
@@ -202,28 +202,44 @@ public class TShenbaoxingxiServiceImpl implements TShenbaoxingxiService {
     }
 
     @Override
-    public Result<Object> addShenBaoXinXi(ShxxHz shxxHz) {
+    public TShenbaoxingxiDto addShenBaoXinXi(ShxxHz shxxHz) {
         //房产信息
         THouse tHouse = new THouse();
         //申请人信息
         TPersonnel tPersonnel = new TPersonnel();
         //审核报表信息
         TShenbaoxingxi tShenbaoxingxi = new TShenbaoxingxi();
-        // 获取登录人 设置创建人 时间
-        String username = SecurityUtils.getUsername();
-        tPersonnel.setCreateid(username);
+        //委托信息
+        TEntrust entrust=null;
+        // 获取登录人信息 设置创建人 时间 区域
+        UserDto currUser = securityUtil.getCurrUser();
+        String userId = currUser.getId().toString();
+        //  Long region = currUser.getDept().getId(); todo 不能获取值
+        Long region =7l;
 
+
+
+        tPersonnel.setCreateid(userId);
         tPersonnel.setCreateTime(new Timestamp(System.currentTimeMillis()));
-        tHouse.setCreateId(username);
 
+        tHouse.setCreateId(userId);
         tHouse.setCreateTime(new Timestamp(System.currentTimeMillis()));
-        tShenbaoxingxi.setCreateId(username);
+
+
+        tShenbaoxingxi.setSsqy(region.toString());
+        tShenbaoxingxi.setCreateId(userId);
         tShenbaoxingxi.setCreateTime(new Timestamp(System.currentTimeMillis()));
 
-        me.zhengjie.service.dto.Result result = new me.zhengjie.service.dto.Result();
+        //委托信息
+        if("1".equals(shxxHz.getSfwt())){
+            entrust= new TEntrust();
+            entrust.setCardid(userId);
+            entrust.setCreateTime(new Timestamp(System.currentTimeMillis()));
+        }
 
-        copy(tHouse,tPersonnel,tShenbaoxingxi,shxxHz);
-        String str=new SimpleDateFormat("yyyy-MM-dd").format(shxxHz.getWqrq());
+        copy(tHouse,tPersonnel,tShenbaoxingxi,entrust,shxxHz);
+//        String str=new SimpleDateFormat("yyyy-MM-dd").format(shxxHz.getWqrq());
+        TShenbaoxingxiDto tShenbaoxingxiDto=null;
         try {
             //申报人员 信息
             TPersonnelDto tPersonnelDto = tPersonnelService.create(tPersonnel);
@@ -233,22 +249,42 @@ public class TShenbaoxingxiServiceImpl implements TShenbaoxingxiService {
             THouseDto tHouseDto = tHouseService.create(tHouse);
             tShenbaoxingxi.setFcid(tHouseDto.getId());
 
-            //批次号 申报表单信息
-            String pch = CodeUtlis.sNumber(tShenbaoxingxi.getSqrlx(), tShenbaoxingxi.getFclx());
-            tShenbaoxingxi.setPch(pch);
-            TShenbaoxingxiDto tShenbaoxingxiDto = create(tShenbaoxingxi);
+            //获取编号
+            String bh= getCode(tShenbaoxingxi.getSqrlx(), tShenbaoxingxi.getFclx());
 
+            TEntrustDto tEntrustDto = entrustService.create(entrust);
+            tShenbaoxingxi.setWtxxId(tEntrustDto.getId().toString());
+
+            //设置编号 是否委托
+            tShenbaoxingxi.setBh(bh);
+            tShenbaoxingxi.setSfwt(shxxHz.getSfwt());
+
+
+            tShenbaoxingxiDto = create(tShenbaoxingxi);
+
+            String idsStr="";
             //附件信息
-            for(long id :shxxHz.getFjids()){
-                fjxxService.updateSbxxIdById(tShenbaoxingxiDto.getId().toString(),id);
+            //拼接id 字符串
+            String[] fjids = shxxHz.getFjids();
+            for (int i = 0; i <fjids.length ; i++) {
+                if(shxxHz.getFjids().length==1){
+                    idsStr="("+fjids[0]+")";
+                }else{
+                    if(i==shxxHz.getFjids().length-1){
+                        idsStr=idsStr+fjids[i]+")";
+                    }else if(i==0){
+                        idsStr="("+idsStr+fjids[i]+",";
+                    }else {
+                        idsStr=idsStr+fjids[i]+",";
+                    }
+                }
+            }
+            if(fjids.length>0){
+                fjxxService.updateSbxxIdById(tShenbaoxingxiDto.getId().toString(),idsStr);
             }
 
-            result.setSbxxid(tShenbaoxingxiDto.getId());
-            result.setCode(tShenbaoxingxiDto.getPch());
-            result.setSuccess(true);
 
             // 保存至我的申请业务
-            String userId = securityUtil.getCurrUser().getId().toString();
             ActBusiness actBusiness = new ActBusiness();
             actBusiness.setUserId(userId);
             actBusiness.setTableId(tShenbaoxingxiDto.getId().toString());
@@ -259,17 +295,17 @@ public class TShenbaoxingxiServiceImpl implements TShenbaoxingxiService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return ResultUtil.data(result);
+        return tShenbaoxingxiDto;
     }
 
     @Override
-    public Result<ShxxHz> getYeWuShouLiData(Long id) {
+    public ShxxHz1 getYeWuShouLiData(Long id) {
         ShxxHz1 shxxHz = new ShxxHz1();
         TShenbaoxingxiDto shenbaoxingxiDto = findById(id);
         THouseDto houseDto = tHouseService.findById(shenbaoxingxiDto.getFcid());
         TPersonnelDto personnelDto = tPersonnelService.findById(shenbaoxingxiDto.getSbrid());
         assignment(houseDto,personnelDto,shenbaoxingxiDto,shxxHz);
-        return (new ResultUtil()).setData(shxxHz);
+        return shxxHz;
     }
 
     //时间戳
@@ -288,17 +324,14 @@ public class TShenbaoxingxiServiceImpl implements TShenbaoxingxiService {
      * @param tShenbaoxingxi
      * @param shxxHz
      */
-    public void copy(THouse house, TPersonnel personnel, TShenbaoxingxi tShenbaoxingxi, ShxxHz shxxHz){
+    public void copy(THouse house, TPersonnel personnel, TShenbaoxingxi tShenbaoxingxi,TEntrust entrust, ShxxHz shxxHz){
         //房产信息
         house.setId(shxxHz.getFcid());
         house.setJzlx(shxxHz.getFclx());
-//        house.setCqnx(shxxHz.getCqnx());
-//        house.setKfs(shxxHz.getKfs());
         house.setFcmj(shxxHz.getFcmj());
-//        house.setJcsj(shxxHz.getJcsj());
         house.setScwz(shxxHz.getScwz());
-        house.setJylx(shxxHz.getJylx());
         house.setZcbz(shxxHz.getZcbz());
+        house.setFwlx(shxxHz.getFwlx());
 
         //申请人信息
         personnel.setId(shxxHz.getSbrid());
@@ -312,7 +345,6 @@ public class TShenbaoxingxiServiceImpl implements TShenbaoxingxiService {
         //审核报表信息
         tShenbaoxingxi.setSbrid(shxxHz.getSbrid());
         tShenbaoxingxi.setFcid(shxxHz.getFcid());
-
         tShenbaoxingxi.setHtsj(shxxHz.getGfrq());
         tShenbaoxingxi.setWqsj(shxxHz.getGfrq());
         tShenbaoxingxi.setFclx(shxxHz.getFclx());
@@ -320,6 +352,13 @@ public class TShenbaoxingxiServiceImpl implements TShenbaoxingxiService {
         tShenbaoxingxi.setBtje(shxxHz.getBtje());
         tShenbaoxingxi.setBtye(shxxHz.getBtye());
         tShenbaoxingxi.setSqrlx(shxxHz.getSqrlx());
+
+        if(entrust!=null){
+            entrust.setEnterprisename(shxxHz.getEnterpriseName());
+            entrust.setPersonname(shxxHz.getPersonName());
+            entrust.setTelephone(shxxHz.getTelephone());
+            entrust.setCardid(shxxHz.getDbrcardID());
+        }
 
     }
 
@@ -349,6 +388,62 @@ public class TShenbaoxingxiServiceImpl implements TShenbaoxingxiService {
 
 
 
+    }
+
+    //获取编号
+    private String getCode(String sqrlx, String fclx) {
+        String sqrlxStr="";
+        switch (sqrlx){
+            case "7":
+                //农民工
+                sqrlxStr="农民";
+                break;
+            case "8":
+                //退役军人
+                sqrlxStr="退役";
+                break;
+            case "9":
+                //高校毕业生
+                sqrlxStr="高校";
+                break;
+            case "10":
+                //外地来泸人员
+                sqrlxStr="外来";
+                break;
+            case "11":
+                //领办企业
+                sqrlxStr="领办";
+                break;
+        }
+        String fclxStr="";
+        switch (fclx){
+            case "15":
+                //新建自住住房
+                fclxStr="新建自住";
+                break;
+            case "14":
+                //新建营业用房
+                fclxStr="新建营业";
+                break;
+            case "13":
+                //标准化厂房
+                fclxStr="标准化厂";
+                break;
+            case "29":
+                //二手自住住房
+                fclxStr="二手自住";
+                break;
+            case "16":
+                //一手车位
+                fclxStr="一手车位";
+                break;
+            case "28":
+                //二手营业用房
+                fclxStr="二手营业";
+                break;
+        }
+        String bh = CodeUtlis.sNumber(CodeUtlis.toFirstChar(sqrlxStr), CodeUtlis.toFirstChar(fclxStr));
+        return bh;
     }
 
     //    @Override

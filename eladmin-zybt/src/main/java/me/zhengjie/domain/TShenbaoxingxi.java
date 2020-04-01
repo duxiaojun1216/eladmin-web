@@ -103,9 +103,26 @@ public class TShenbaoxingxi implements Serializable {
     @Column(name = "dep_id")
     private Long  depId;
 
-    //部门id
+    //编号
+    @Column(name = "bh")
+    private String  bh;
+
+    //编号
     @Column(name = "pch")
     private String  pch;
+
+
+    //编号
+    @Column(name = "ssqy")
+    private String  ssqy;
+
+    //是否委托
+    @Column(name = "sfwt")
+    private String  sfwt;
+
+    //委托信息id
+    @Column(name = "wtxx_Id")
+    private String  wtxxId;
 
     public void copy(TShenbaoxingxi source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

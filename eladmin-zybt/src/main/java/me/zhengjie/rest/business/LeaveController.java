@@ -66,7 +66,8 @@ public class LeaveController extends XbootBaseController<Leave, String> {
     @ApiOperation(value = "添加申请草稿状态")
     public Result<Object> add(@Validated @RequestBody ShxxHz shxxHz){
 
-        return tShenbaoxingxiService.addShenBaoXinXi(shxxHz);
+        TShenbaoxingxiDto tShenbaoxingxiDto = tShenbaoxingxiService.addShenBaoXinXi(shxxHz);
+        return (new ResultUtil()).setData(tShenbaoxingxiDto);
     }
 
 
@@ -75,7 +76,8 @@ public class LeaveController extends XbootBaseController<Leave, String> {
     @ResponseBody
     @ApiOperation("通过id获取业务受理表单信息")
     public Result<ShxxHz> getYeWuShouLiData(@PathVariable Long id) {
-        return  tShenbaoxingxiService.getYeWuShouLiData(id);
+        ShxxHz1 yeWuShouLiData = tShenbaoxingxiService.getYeWuShouLiData(id);
+        return (new ResultUtil()).setData(yeWuShouLiData);
 
     }
 

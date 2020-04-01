@@ -1,8 +1,8 @@
 package me.zhengjie.service;
 
-import me.zhengjie.domain.TFjxx;
-import me.zhengjie.service.dto.TFjxxDto;
-import me.zhengjie.service.dto.TFjxxQueryCriteria;
+import me.zhengjie.domain.TEntrust;
+import me.zhengjie.service.dto.TEntrustDto;
+import me.zhengjie.service.dto.TEntrustQueryCriteria;
 import org.springframework.data.domain.Pageable;
 import java.util.Map;
 import java.util.List;
@@ -11,9 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
 * @author zengjian
-* @date 2020-03-27
+* @date 2020-04-01
 */
-public interface TFjxxService {
+public interface TEntrustService {
 
     /**
     * 查询数据分页
@@ -21,34 +21,34 @@ public interface TFjxxService {
     * @param pageable 分页参数
     * @return Map<String,Object>
     */
-    Map<String,Object> queryAll(TFjxxQueryCriteria criteria, Pageable pageable);
+    Map<String,Object> queryAll(TEntrustQueryCriteria criteria, Pageable pageable);
 
     /**
     * 查询所有数据不分页
     * @param criteria 条件参数
-    * @return List<TFjxxDto>
+    * @return List<TEntrustDto>
     */
-    List<TFjxxDto> queryAll(TFjxxQueryCriteria criteria);
+    List<TEntrustDto> queryAll(TEntrustQueryCriteria criteria);
 
     /**
      * 根据ID查询
      * @param id ID
-     * @return TFjxxDto
+     * @return TEntrustDto
      */
-    TFjxxDto findById(Long id);
+    TEntrustDto findById(Long id);
 
     /**
     * 创建
     * @param resources /
-    * @return TFjxxDto
+    * @return TEntrustDto
     */
-    TFjxxDto create(TFjxx resources);
+    TEntrustDto create(TEntrust resources);
 
     /**
     * 编辑
     * @param resources /
     */
-    void update(TFjxx resources);
+    void update(TEntrust resources);
 
     /**
     * 多选删除
@@ -62,14 +62,5 @@ public interface TFjxxService {
     * @param response /
     * @throws IOException /
     */
-    void download(List<TFjxxDto> all, HttpServletResponse response) throws IOException;
-
-    /**
-     *
-     * @param sbxxid 申报信息id
-     * @param idsStr 附件ids 字符串
-     * @return
-     */
-
-    int updateSbxxIdById(String sbxxid,String idsStr);
+    void download(List<TEntrustDto> all, HttpServletResponse response) throws IOException;
 }

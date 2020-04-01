@@ -117,11 +117,11 @@ public class TFjxxServiceImpl implements TFjxxService {
     /**
      *
      * @param sbxxid 申报信息id
-     * @param id 附件id
+     * @param idsStr 附件id
      * @return
      */
     @Override
-    public int updateSbxxIdById(String sbxxid, long id) {
-        return  tFjxxRepository.updateSbxxIdById(sbxxid, id);
+    public int updateSbxxIdById(String sbxxid, String idsStr) {
+        return  tFjxxRepository.updateSbxxIdById(sbxxid, idsStr);
     }
 }

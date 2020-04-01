@@ -8,7 +8,8 @@ import java.sql.Timestamp;
 //审核信息汇总
 @Data
 public class ShxxHz {
-    //人员信息
+    //申报对象信息
+
     /** 电话 */
     private String phone;
 
@@ -21,11 +22,9 @@ public class ShxxHz {
     /** 身份证号 */
     private String cardId;
 
-    //户籍地址
+    /**户籍地址*/
     private  String hjdz;
-
     //备注
-
     private String mark;
 
 
@@ -38,11 +37,11 @@ public class ShxxHz {
     /** 所处位置 */
     private String scwz;
 
-    //交易类型
-    private  String jylx;
 
     //资产备注
     private String zcbz;
+    //资产备注
+    private String fwlx;
 
 
 
@@ -62,8 +61,8 @@ public class ShxxHz {
     /**网签日期 */
     private Timestamp wqrq;
 
-    /** 完税日期 */
-    private Timestamp wsrq;
+    /** 发票日期  二手房申报所需*/
+    private Timestamp fprq;
 
     /** 房产金额 */
     private String fcje;
@@ -78,9 +77,21 @@ public class ShxxHz {
     //流程 模型 id
     private  String procDefId;
 
+    //附件ids
+    private String[]  fjids;
 
-    //附件id
-    private long[]  fjids;
+    //委托信息
+    //是否委托 0 否 1 是
+    private String sfwt;
+
+    //代办企业名称
+    private String enterpriseName;
+    //代办人姓名
+    private String personName;
+    //代办人电话
+    private String telephone;
+    //代办人身份证号
+    private String dbrcardID;
 
 
 

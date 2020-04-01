@@ -90,6 +90,10 @@ public class THouse implements Serializable {
     @Column(name = "update_time")
     private Timestamp updateTime;
 
+    //资产备注
+    @Column(name = "fwlx")
+    private String fwlx;
+
     public void copy(THouse source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
     }

@@ -3,6 +3,7 @@ package me.zhengjie.rest;
 import me.zhengjie.aop.log.Log;
 import me.zhengjie.common.utils.SecurityUtil;
 import me.zhengjie.service.dto.*;
+import me.zhengjie.utils.CodeUtlis;
 import me.zhengjie.utils.SecurityUtils;
 import me.zhengjie.domain.THouse;
 import me.zhengjie.domain.TPersonnel;
@@ -40,6 +41,9 @@ public class TYewushouliController {
     private  TPersonnelService tPersonnelService;
     @Autowired
     private  THouseService tHouseService;
+    @Autowired
+    private SecurityUtil securityUtil;
+
 
     @Log("导出数据")
     @ApiOperation("导出数据")
@@ -159,10 +163,8 @@ public class TYewushouliController {
 //    @PostMapping(value = "/uploadFj", consumes = "multipart/*", headers = "content-type=multipart/form-data")
     @RequestMapping(value = "/uploadFj", method = RequestMethod.POST)
     public ResponseEntity<Object> uploadFj(@RequestParam("file") MultipartFile[] file) throws IOException{
-     //   SecurityUtil securityUtil = new SecurityUtil();
-//        String userId = securityUtil.getCurrUser().getId().toString();
-        //String userId = SecurityUtils.getUsername();
-        String userId="TEST";
+
+        String userId= securityUtil.getCurrUser().getId().toString();
         List<TFjxxDto> fjxxDtos = tShenbaoxingxiService.uploadFj(file,userId);
         return new ResponseEntity<>(fjxxDtos,HttpStatus.CREATED);
     }
