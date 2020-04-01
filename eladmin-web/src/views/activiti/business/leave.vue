@@ -86,41 +86,58 @@
   <div class="search">
     <Card style="width: 820px;margin: auto;">
       <p slot="title" class="header_p">
-        <span v-if="type==0">泸州市置业补贴申请登记</span>
+        <span v-if="type==0">泸州市农民工进城置业补贴申请表</span>
         <span v-else-if="type==1">填报置业补贴申请表</span>
         <span v-else>查看置业补贴申请</span>
       </p>
-      <p slot="title" style="text-align:left ;font-size:14px;width: 250px;">
+      <p slot="title" style="text-align:left ;font-size:14px;width: 250px;margin-left: 30px;">
         <span v-if="type==0">编号：JYTY032020001</span>
       </p>
-      <p slot="title" style="text-align: right;font-size:14px;width: 250px;float:right;margin-right: 15px;">
+      <p slot="title" style="text-align: right;font-size:14px;width: 250px;float:right;margin-right: 30px;">
         <span v-if="type==0">日期：2020年4月3日</span>
       </p>
       <Row style="width: 900px;margin: auto;">
         <Form
           ref="form"
           :model="form"
-          :label-width="120"
+          :label-width="140"
           :rules="formValidate"
           style="position:relative"
         >
 
-          <FormItem class="form_item1" label="是否委托开发商代办" label-width="150" width="100%" >
-            <RadioGroup v-model="form.hxlx"   size="medium" style="width: 250px;"  @on-change="changeFromWT">
-              <Radio :label="1">是</Radio>
-              <Radio :label="0">否</Radio>
+          <FormItem class="form_item1" :label="label.name1" label-width="120" width="100%" >
+            <RadioGroup v-model="form.sfwt"   size="medium" style="width: 250px;"  @on-change="changeFromWT">
+              <Radio
+                v-for="item in isWT"
+                :label="item.value">{{item.label}}</Radio>
             </RadioGroup>
+          </FormItem>
+          <Divider orientation="left" v-if="form.sfwt=='1'">代办对象信息</Divider>
+          <FormItem class="form_item" label="代办企业" prop="cardId" v-if="form.sfwt=='1'">
+            <Input v-model="form.cardId" style="width:250px"></Input>
+          </FormItem>
+          <FormItem class="form_item" label="代办对象姓名" prop="tname" v-if="form.sfwt=='1'">
+            <Input v-model="form.tname" style="width:250px"></Input>
+          </FormItem>
+
+          <FormItem class="form_item" label="代办对象电话" prop="cardId" v-if="form.sfwt=='1'">
+            <Input v-model="form.cardId" style="width:250px"></Input>
+          </FormItem>
+
+          <FormItem class="form_item" label="代办对象身份证号" prop="phone"v-if="form.sfwt=='1'">
+            <Input v-model="form.phone" style="width:250px"></Input>
           </FormItem>
 
          <!--<FormItem label="申请人" prop="name" v-if="type!=0&&type!=1">{{form.createBy}}</FormItem>-->
-          <FormItem class="form_item" label="申请人姓名" prop="name">
+          <Divider orientation="left">补助对象信息</Divider>
+          <FormItem class="form_item" label="申请人姓名" prop="tname">
             <Input v-model="form.tname" style="width:250px"></Input>
           </FormItem>
 
           <FormItem class="form_item" label="身份证号" prop="cardId">
             <Input v-model="form.cardId" style="width:250px"></Input>
           </FormItem>
-          <FormItem class="form_item1" label="补贴对象类型" prop="sqrlx"label-width="150"  width="100%">
+          <FormItem class="form_item1" label="补贴对象类型" prop="sqrlx"label-width="120"  width="100%">
             <RadioGroup v-model="form.sqrlx" filterable placeholder="请选择"   size="medium"  @on-change="changeFromRY">
               <Radio
                 v-for="item in dict.peoson_type"
@@ -138,7 +155,7 @@
               style="width: 650px"
             ></Input>
           </FormItem>
-          <FormItem class="form_item" label="备注"  style="width:100%">
+          <FormItem class="form_item" :label="label.name"  style="width:100%">
             <Input
               type="textarea"
               v-model="form.mark"
@@ -147,7 +164,7 @@
               style="width: 650px"
             ></Input>
           </FormItem>
-          <Divider orientation="left">①购置资产信息</Divider>
+          <Divider orientation="left">购置资产信息</Divider>
           <FormItem class="form_item1" label="申请补助类别" prop="fclx"  width="100%" label-width="130px">
             <RadioGroup v-model="form.fclx" filterable placeholder="请选择"   size="medium"   @on-change="changeFromFC" id="fclxRedio">
               <Radio
@@ -158,7 +175,7 @@
             </RadioGroup>
           </FormItem>
           <!--新增-->
-          <FormItem class="form_item1" label="户型类别" prop="fclx" width="100%" label-width="100px">
+          <FormItem class="form_item1" label="房屋类型" prop="fclx" width="100%" label-width="100px">
             <RadioGroup v-model="form.hxlx" filterable placeholder="请选择"   size="medium"   @on-change="changeFromHX" id="hxlxRedio">
               <Radio
                 v-for="item in dict.apartment_type"
@@ -167,7 +184,7 @@
 
             </RadioGroup>
           </FormItem>
-          <FormItem class="form_item" label="签订合同时间"  prop="gfrq" v-if="form.fclx!=5 && form.fclx!=6">
+          <FormItem class="form_item" label="合同签订时间"  prop="gfrq" v-if="form.fclx!=5 && form.fclx!=6">
             <DatePicker
               v-model="form.gfrq"
               type="date"
@@ -213,7 +230,7 @@
               style="width: 650px"
             />
           </FormItem>
-          <FormItem class="form_item" label="备注"  style="width:950px">
+          <FormItem class="form_item" :label="label.name"  style="width:950px">
             <Input
               type="textarea"
               v-model="form.zcbz"
@@ -222,7 +239,7 @@
               style="width: 650px"
             />
           </FormItem>
-          <Divider orientation="left">②个人材料</Divider>
+          <Divider orientation="left">个人材料</Divider>
           <FormItem class="m_table">
             <Table border :columns="columns1" :data="tableData" style="width: 760px">
               <template slot-scope="{ row, index }" slot="action">
@@ -252,8 +269,26 @@
                   </div>-->
                 </Upload>
               </template>
+              <template slot-scope="{ row, index }" slot="zt">
+                <Icon type="ios-checkmark-circle-outline" color="#29d21f" size="20" style="margin-left: 30%;" />
+              </template>
             </Table>
           </FormItem>
+<!--          <Divider orientation="left">③补贴核算</Divider>-->
+<!--          <FormItem class="form_item" label="购房款总额" >-->
+<!--            <Input v-model="form.fcje" style="width:250px"  readonly="true"/>-->
+<!--          </FormItem>-->
+<!--          <FormItem class="form_item" label="补贴比例"  >-->
+<!--            <Input v-model="form.btbl" style="width:250px"  readonly="true"/>-->
+<!--          </FormItem>-->
+<!--          <FormItem  class="form_item" label="补贴余额"  >-->
+<!--            <Input v-model="form.btye" style="width:250px"  readonly="true"/>-->
+<!--          </FormItem>-->
+<!--          <FormItem class="form_item" label="补贴金额" >-->
+<!--            <Input v-model="form.btje" style="width:250px"  readonly="true" />-->
+<!--          </FormItem>-->
+
+          <!-- <Divider orientation="left">部门材料</Divider>-->
           <Dialog
             title="提示"
             :visible.sync="centerDialogVisible"
@@ -265,14 +300,7 @@
             <Button type="primary" @click="centerDialogVisible = false">确 定</Button>
           </span>
           </Dialog>
-          <Divider orientation="left">③补贴核算</Divider>
-          <FormItem class="form_item" label="补贴金额"  >
-            <Input v-model="form.btje" style="width:250px"/>
-          </FormItem>
-          <FormItem class="form_item" label="补贴比例"  >
-            <Input v-model="form.btbl" style="width:250px"/>
-          </FormItem>
-          <!-- <Divider orientation="left">④部门材料</Divider>-->
+
 
 
           <Form-item class="br" style="margin-right:140px;float:right">
@@ -311,6 +339,10 @@
     dicts: ['house_type', 'peoson_type','apartment_type'],
     data() {
       return {
+        label: {
+          name: '\xa0\xa0\xa0\xa0' + "备注",
+          name1:'\xa0\xa0' + "是否代办",
+        },
         type: 0,
         loading: false, // 表单加载状态
         modalVisible: false,
@@ -328,13 +360,19 @@
           {
             title: '资料名称',
             key: 'name'
+          },{
+            title: '状态',
+            key: 'address',
+            slot: 'zt',
+            width: 100,
           },
           {
             title: '操作',
             key: 'address',
             slot: 'action',
             width: 200,
-          }
+          },
+
         ],
         tableData:[],
         tableData1:{
@@ -377,10 +415,16 @@
           name: '营业执照'
         },
 
+        //是否委托开发商代办
+        isWT:[
+          {value:'0',label:'否'},
+          {value:'1',label:'是'},
+          ],
 
 
         form: {
           // 添加或编辑表单对象初始化数据
+          sfwt:"0",
           sqrlx: "1",
           title: "",
           description: "",
@@ -713,14 +757,14 @@
       changeFromWT(){
           this.tableData=[];
           if(this.form.fclx || this.form.sqrlx){
-            if(this.form.hxlx=='1'){
+            if(this.form.sfwt=='1'){
               //委托材料
               this.tableData.push(this.tableData10);
               this.tableData.push(this.tableData11);
               this.tableData.push(this.tableData12);
               this.tableData.push(this.tableData13);
             }
-            if(this.form.hxlx=='0'){
+            if(this.form.sfwt=='0'){
               //委托材料
               this.tableData.splice(this.tableData.indexOf(this.tableData10),1);
               this.tableData.splice(this.tableData.indexOf(this.tableData11),1);
