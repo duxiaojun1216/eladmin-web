@@ -1,27 +1,22 @@
 package me.zhengjie.repository;
 
-import me.zhengjie.domain.THouse;
 import me.zhengjie.domain.TShenbaoxingxi;
 import me.zhengjie.service.dto.BusinessTotal;
-import org.apache.poi.hssf.record.formula.functions.T;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author zengjian
  * @date 2020-03-25
  */
-public interface TShenbaoxingxiRepository extends JpaRepository<TShenbaoxingxi, Long>, JpaSpecificationExecutor<TShenbaoxingxi> {
+public interface TShenbaoxingxiTotalRepository extends JpaRepository<TShenbaoxingxi, BusinessTotal>, JpaSpecificationExecutor<TShenbaoxingxi> {
 
     @Transactional
-    @Modifying
     @Query(value = "\n" +
             "SELECT * FROM (\n" +
             "\n" +
@@ -119,6 +114,6 @@ public interface TShenbaoxingxiRepository extends JpaRepository<TShenbaoxingxi, 
             ",(SELECT SUM(fcmj) FROM t_house WHERE id IN (SELECT fcid FROM `t_shenbaoxingxi` WHERE create_id IN (SELECT id FROM `user` WHERE region =128) AND fclx = 16))  AS house_type6_area\n" +
             "FROM dict_detail WHERE dict_id = 6\n" +
             ") AS a  ", nativeQuery = true)
-    List<Map<String,String>> getBusinessTotalData(String startTime, String endTime, String type);
-//    List<BusinessTotal> getBusinessTotalData(String startTime, String endTime, String type);
+//    List<Map<String,String>> getBusinessTotalData(String startTime, String endTime, String type);
+    List<BusinessTotal> getBusinessTotalData(String startTime, String endTime, String type);
 }

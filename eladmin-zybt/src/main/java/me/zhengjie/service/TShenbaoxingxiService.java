@@ -88,4 +88,14 @@ public interface TShenbaoxingxiService {
      * @return
      */
     Result<ShxxHz> getYeWuShouLiData(Long id);
+
+    /**
+     * 获取申报统计数据
+     * @param startTime
+     * @param endTime
+     * @param type
+     * @return
+     */
+    List<Map<String,String>> getBusinessTotalData(String startTime, String endTime, String type);
+    //List<BusinessTotal> getBusinessTotalData(String startTime, String endTime, String type);
 }

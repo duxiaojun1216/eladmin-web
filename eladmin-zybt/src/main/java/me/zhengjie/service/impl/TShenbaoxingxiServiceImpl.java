@@ -351,4 +351,15 @@ public class TShenbaoxingxiServiceImpl implements TShenbaoxingxiService {
 
     }
 
+    //    @Override
+//    public List<BusinessTotal> getBusinessTotalData(String startTime, String endTime, String type) {
+//        return tShenbaoxingxiTotalRepository.getBusinessTotalData(startTime,endTime,type);
+//    }
+
+    @Override
+    public List<Map<String, String>> getBusinessTotalData(String startTime, String endTime, String type) {
+        return tShenbaoxingxiRepository.getBusinessTotalData(startTime,endTime,type);
+    }
+
+
 }

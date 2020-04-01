@@ -2,11 +2,14 @@ package me.zhengjie.rest.business;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import me.zhengjie.base.XbootBaseController;
 import me.zhengjie.common.utils.ResultUtil;
 import me.zhengjie.common.utils.SecurityUtil;
+import me.zhengjie.common.vo.PageVo;
 import me.zhengjie.common.vo.Result;
+import me.zhengjie.common.vo.SearchVo;
 import me.zhengjie.domain.THouse;
 import me.zhengjie.domain.TPersonnel;
 import me.zhengjie.domain.TShenbaoxingxi;
@@ -22,7 +25,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Exrickx
@@ -85,5 +91,21 @@ public class LeaveController extends XbootBaseController<Leave, String> {
         //将部门转换为拼音首字母并返回
         String batch =me.zhengjie.utils.CodeUtlis.toFirstChar(dept.getName());
         return batch;
+    }
+
+    @GetMapping("/getBusinessTotalData")
+    public Result<Object> getBusinessTotalData(@ApiParam("时间段") @RequestParam(required = false) String startTime
+            , @ApiParam("时间段") @RequestParam(required = false) String endTime
+            , @ApiParam("类型") @RequestParam(required = false) String type
+            , SearchVo searchVo, PageVo pageVo) throws ParseException {
+
+//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//        Date startParse = simpleDateFormat.parse(startTime);
+//        Date endParse = simpleDateFormat.parse(endTime);
+
+//        List<BusinessTotal> businessTotalData = tShenbaoxingxiService.getBusinessTotalData(startTime, endTime, type);
+
+        List<Map<String, String>> businessTotalData = tShenbaoxingxiService.getBusinessTotalData(startTime, endTime, type);
+        return new ResultUtil<>().setData(businessTotalData);
     }
 }

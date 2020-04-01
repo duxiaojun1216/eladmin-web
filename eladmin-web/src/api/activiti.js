@@ -294,4 +294,9 @@ export const getYeWuShouLiData = (id, params) => {
 }
 
 
+// 获取统计报表
+export const getBusinessTotalData = (params) => {
+  return getRequest(`/leave/getBusinessTotalData`, params)
+}
+
 
