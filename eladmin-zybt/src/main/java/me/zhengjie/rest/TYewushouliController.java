@@ -164,7 +164,6 @@ public class TYewushouliController {
         //String userId = SecurityUtils.getUsername();
         String userId="TEST";
         List<TFjxxDto> fjxxDtos = tShenbaoxingxiService.uploadFj(file,userId);
-        System.out.println(fjxxDtos);
         return new ResponseEntity<>(fjxxDtos,HttpStatus.CREATED);
     }
 
