@@ -190,7 +190,7 @@
               type="date"
               format="yyyy-MM-dd"
               clearable
-              placeholder="选择购置时间"
+              placeholder="选择合同签订时间"
               style="width: 250px"
             ></DatePicker>
           </FormItem>
@@ -200,7 +200,7 @@
               type="date"
               format="yyyy-MM-dd"
               clearable
-              placeholder="选择备案时间"
+              placeholder="选择网签备案时间"
               style="width: 250px"
             ></DatePicker>
           </FormItem>
@@ -270,7 +270,7 @@
                 </Upload>
               </template>
               <template slot-scope="{ row, index }" slot="zt">
-                <Icon type="ios-checkmark-circle-outline" color="#29d21f" size="20" style="margin-left: 30%;" />
+                <Icon type="ios-checkmark-circle-outline" color="#29d21f" size="20" style="margin-left: 30%;" v-if="form.sfwt=='1'" />
               </template>
             </Table>
           </FormItem>
