@@ -1,17 +1,24 @@
 package me.zhengjie.rest;
 
 import me.zhengjie.aop.log.Log;
+import me.zhengjie.common.vo.PageVo;
 import me.zhengjie.domain.TBzwh;
 import me.zhengjie.service.TBzwhService;
 import me.zhengjie.service.dto.TBzwhQueryCriteria;
+
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
 import io.swagger.annotations.*;
+
 import java.io.IOException;
+
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -37,13 +44,26 @@ public class TBzwhController {
         tBzwhService.download(tBzwhService.queryAll(criteria), response);
     }
 
-    @GetMapping
+    @GetMapping(value = "/getTBzwhs")
     @Log("查询t_bzwh")
     @ApiOperation("查询t_bzwh")
     @PreAuthorize("@el.check('tBzwh:list')")
     public ResponseEntity<Object> getTBzwhs(TBzwhQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity<>(tBzwhService.queryAll(criteria,pageable),HttpStatus.OK);
     }
+    
+    @RequestMapping(value = "/getTBzwhsBypage", method = RequestMethod.GET)
+    //@Log("查询t_bzwh")
+    @ApiOperation("查询t_bzwh")
+//    @PreAuthorize("@el.check('tBzwh:list')")
+    public ResponseEntity<Object> getTBzwhsBypage(TBzwhQueryCriteria criteria, PageVo pageVo){
+    	Sort s = new Sort(Sort.Direction.DESC, "id");
+  
+    	Pageable pagealeble =  PageRequest.of(pageVo.getPageNumber()-1,pageVo.getPageSize(),s);
+    	criteria  = new TBzwhQueryCriteria();
+        return new ResponseEntity<>(tBzwhService.queryAll(criteria,pagealeble),HttpStatus.OK);
+    }
+
 
     @PostMapping
     @Log("新增t_bzwh")

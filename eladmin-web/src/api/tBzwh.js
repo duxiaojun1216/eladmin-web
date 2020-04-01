@@ -1,4 +1,7 @@
 import request from '@/utils/request'
+// 统一请求路径前缀在libs/axios.js中修改
+import { getRequest, postRequest, putRequest, deleteRequest, importRequest, uploadFileRequest } from '@/libs/axios';
+
 
 export function add(data) {
   return request({
@@ -24,4 +27,11 @@ export function edit(data) {
   })
 }
 
-export default { add, edit, del }
+export function get(data) {
+  return getRequest(
+    '/tBzwh/getTBzwhsBypage',
+    data
+  );
+}
+
+export default { get,add, edit, del }
