@@ -102,54 +102,103 @@ export const delHistoricIns = (ids, params) => {
 }
 
 
+//
+//// 获取代办列表
+//export const todoList = (params) => {
+//  return getRequest('/actTask/todoList', params)
+//}
+//// 获取已办列表
+//export const doneList = (params) => {
+//  return getRequest('/actTask/doneList', params)
+//}
+//// 获取流程流转历史
+//export const historicFlow = (id, params) => {
+//  return getRequest(`/actTask/historicFlow/${id}`, params)
+//}
+//// 委托他人代办
+//export const delegate = (params) => {
+//  return postRequest('/actTask/delegate', params)
+//}
+//// 审批任务通过
+//export const pass = (params) => {
+//  return postRequest('/actTask/pass', params)
+//}
+//// 批量审批任务通过
+//export const passAll = (ids, params) => {
+//  return postRequest(`/actTask/passAll/${ids}`, params)
+//}
+//// 获取可返回的节点
+//export const getBackList = (id, params) => {
+//  return getRequest(`/actTask/getBackList/${id}`, params)
+//}
+//// 任务节点审批驳回至发起人
+//export const back = (params) => {
+//  return postRequest('/actTask/back', params)
+//}
+//// 批量驳回至发起人
+//export const backAll = (ids, params) => {
+//  return postRequest(`/actTask/backAll/${ids}`, params)
+//}
+//// 任务节点审批驳回至指定历史节点
+//export const backToTask = (params) => {
+//  return postRequest('/actTask/backToTask', params)
+//}
+//// 删除任务
+//export const deleteTask = (ids, params) => {
+//  return deleteRequest(`/actTask/delete/${ids}`, params)
+//}
+//// 删除历史任务
+//export const deleteHistoricTask = (ids, params) => {
+//  return deleteRequest(`/actTask/deleteHistoric/${ids}`, params)
+//}
 
 // 获取代办列表
 export const todoList = (params) => {
-    return getRequest('/actTask/todoList', params)
+    return getRequest('/actAplayTask/todoList', params)
 }
 // 获取已办列表
 export const doneList = (params) => {
-    return getRequest('/actTask/doneList', params)
+    return getRequest('/actAplayTask/doneList', params)
 }
 // 获取流程流转历史
 export const historicFlow = (id, params) => {
-    return getRequest(`/actTask/historicFlow/${id}`, params)
+    return getRequest(`/actAplayTask/historicFlow/${id}`, params)
 }
 // 委托他人代办
 export const delegate = (params) => {
-    return postRequest('/actTask/delegate', params)
+    return postRequest('/actAplayTask/delegate', params)
 }
 // 审批任务通过
 export const pass = (params) => {
-    return postRequest('/actTask/pass', params)
+    return postRequest('/actAplayTask/pass', params)
 }
 // 批量审批任务通过
 export const passAll = (ids, params) => {
-    return postRequest(`/actTask/passAll/${ids}`, params)
+    return postRequest(`/actAplayTask/passAll/${ids}`, params)
 }
 // 获取可返回的节点
 export const getBackList = (id, params) => {
-    return getRequest(`/actTask/getBackList/${id}`, params)
+    return getRequest(`/actAplayTask/getBackList/${id}`, params)
 }
 // 任务节点审批驳回至发起人
 export const back = (params) => {
-    return postRequest('/actTask/back', params)
+    return postRequest('/actAplayTask/back', params)
 }
 // 批量驳回至发起人
 export const backAll = (ids, params) => {
-    return postRequest(`/actTask/backAll/${ids}`, params)
+    return postRequest(`/actAplayTask/backAll/${ids}`, params)
 }
 // 任务节点审批驳回至指定历史节点
 export const backToTask = (params) => {
-    return postRequest('/actTask/backToTask', params)
+    return postRequest('/actAplayTask/backToTask', params)
 }
 // 删除任务
 export const deleteTask = (ids, params) => {
-    return deleteRequest(`/actTask/delete/${ids}`, params)
+    return deleteRequest(`/actAplayTask/delete/${ids}`, params)
 }
 // 删除历史任务
 export const deleteHistoricTask = (ids, params) => {
-    return deleteRequest(`/actTask/deleteHistoric/${ids}`, params)
+    return deleteRequest(`/actAplayTask/deleteHistoric/${ids}`, params)
 }
 
 
@@ -181,25 +230,47 @@ export const searchActCategory = (params) => {
 
 
 
+//// 获取申请数据
+//export const getBusinessDataList = (params) => {
+//  return getRequest('/actBusiness/getByCondition', params)
+//}
+//// 提交申请
+//export const applyBusiness = (params) => {
+//  return postRequest('/actBusiness/apply', params)
+//}
+//// 直接提交申请
+//export const startBusiness = (params) => {
+//  return postRequest('/actBusiness/start', params)
+//}
+//// 撤回申请
+//export const cancelApply = (params) => {
+//  return postRequest('/actBusiness/cancel', params)
+//}
+//// 删除申请
+//export const deleteBusiness = (ids, params) => {
+//  return deleteRequest(`/actBusiness/delByIds/${ids}`, params)
+//}
+
+
 // 获取申请数据
 export const getBusinessDataList = (params) => {
-    return getRequest('/actBusiness/getByCondition', params)
+    return getRequest('/actAplayBusiness/getByCondition', params)
 }
 // 提交申请
 export const applyBusiness = (params) => {
-    return postRequest('/actBusiness/apply', params)
+    return postRequest('/actAplayBusiness/apply', params)
 }
 // 直接提交申请
 export const startBusiness = (params) => {
-    return postRequest('/actBusiness/start', params)
+    return postRequest('/actAplayBusiness/start', params)
 }
 // 撤回申请
 export const cancelApply = (params) => {
-    return postRequest('/actBusiness/cancel', params)
+    return postRequest('/actAplayBusiness/cancel', params)
 }
 // 删除申请
 export const deleteBusiness = (ids, params) => {
-    return deleteRequest(`/actBusiness/delByIds/${ids}`, params)
+    return deleteRequest(`/actAplayBusiness/delByIds/${ids}`, params)
 }
 
 
