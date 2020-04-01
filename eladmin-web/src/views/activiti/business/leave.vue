@@ -17,6 +17,7 @@
     line-height: 1;
     padding: 10px 12px 10px 0;
     box-sizing: border-box;
+	width: 110px;
   }
 
   .header_p {
@@ -33,6 +34,7 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     text-align: center;
+	margin: 20px auto;
   }
 
   .ivu-divider-horizontal.ivu-divider-with-text-left:before {
@@ -56,7 +58,7 @@
   .ivu-divider-horizontal {
     display: block;
     height: 1px;
-    width: 750px;
+    width: 760px;
     /* min-width: 100%; */
     margin: 24px 0;
     clear: both;
@@ -68,76 +70,72 @@
 
   .ivu-card-head {
     border-bottom: 1px solid #e8eaec;
-    padding: 14px 16px;
+    padding: 15px 0 8px 8px!important;
     line-height: 1;
     padding-bottom: 2px;
+    width: 760px;
+    margin: auto;
   }
   .m_table .ivu-form-item-content{
     margin-left: 0px!important;
   }
-  #hxlxRedio{
-    margin-left: 38px;
-  }
-  #fclxRedio{
-    margin-left: 10px;
-  }
 </style>
 <template>
   <div class="search">
-    <Card style="width: 820px;margin: auto;">
+    <Card style="width: 970px;margin: auto;">
       <p slot="title" class="header_p">
         <span v-if="type==0">泸州市农民工进城置业补贴申请表</span>
         <span v-else-if="type==1">填报置业补贴申请表</span>
         <span v-else>查看置业补贴申请</span>
       </p>
-      <p slot="title" style="text-align:left ;font-size:14px;width: 250px;margin-left: 30px;">
-        <span v-if="type==0">编号：JYTY032020001</span>
+      <p slot="title" style="text-align:left ;font-size:14px;width: 250px;">
+        <span>编号：JYTY032020001</span>
       </p>
-      <p slot="title" style="text-align: right;font-size:14px;width: 250px;float:right;margin-right: 30px;">
-        <span v-if="type==0">日期：2020年4月3日</span>
+      <p slot="title" style="text-align: right;font-size:14px;width: 250px;float:right;">
+        <span>日期：2020年4月3日</span>
       </p>
-      <Row style="width: 900px;margin: auto;">
+      <Row style="width: 800px;margin: auto;">
         <Form
           ref="form"
           :model="form"
-          :label-width="140"
+          :label-width="110"
           :rules="formValidate"
           style="position:relative"
         >
 
-          <FormItem class="form_item1" :label="label.name1" label-width="120" width="100%" >
+          <FormItem class="form_item1" :label="label.name1"  width="100%" >
             <RadioGroup v-model="form.sfwt"   size="medium" style="width: 250px;"  @on-change="changeFromWT">
               <Radio
                 v-for="item in isWT"
                 :label="item.value">{{item.label}}</Radio>
             </RadioGroup>
           </FormItem>
-          <Divider orientation="left" v-if="form.sfwt=='1'">代办对象信息</Divider>
+          <Divider orientation="left" v-if="form.sfwt=='1'">①代办人信息</Divider>
           <FormItem class="form_item" label="代办企业" prop="cardId" v-if="form.sfwt=='1'">
             <Input v-model="form.cardId" style="width:250px"></Input>
           </FormItem>
-          <FormItem class="form_item" label="代办对象姓名" prop="tname" v-if="form.sfwt=='1'">
+          <FormItem class="form_item" label="代办人姓名" prop="tname" v-if="form.sfwt=='1'">
             <Input v-model="form.tname" style="width:250px"></Input>
           </FormItem>
 
-          <FormItem class="form_item" label="代办对象电话" prop="cardId" v-if="form.sfwt=='1'">
+          <FormItem class="form_item" label="代办人电话" prop="cardId" v-if="form.sfwt=='1'">
             <Input v-model="form.cardId" style="width:250px"></Input>
           </FormItem>
 
-          <FormItem class="form_item" label="代办对象身份证号" prop="phone"v-if="form.sfwt=='1'">
+          <FormItem class="form_item" label="代办人身份证号" prop="phone"v-if="form.sfwt=='1'">
             <Input v-model="form.phone" style="width:250px"></Input>
           </FormItem>
 
          <!--<FormItem label="申请人" prop="name" v-if="type!=0&&type!=1">{{form.createBy}}</FormItem>-->
-          <Divider orientation="left">补助对象信息</Divider>
-          <FormItem class="form_item" label="申请人姓名" prop="tname">
+          <Divider orientation="left">②补助对象信息</Divider>
+          <FormItem class="form_item" label="补助人姓名" prop="tname">
             <Input v-model="form.tname" style="width:250px"></Input>
           </FormItem>
 
           <FormItem class="form_item" label="身份证号" prop="cardId">
             <Input v-model="form.cardId" style="width:250px"></Input>
           </FormItem>
-          <FormItem class="form_item1" label="补贴对象类型" prop="sqrlx"label-width="120"  width="100%">
+          <FormItem class="form_item1" label="对象类型" prop="sqrlx" width="100%">
             <RadioGroup v-model="form.sqrlx" filterable placeholder="请选择"   size="medium"  @on-change="changeFromRY">
               <Radio
                 v-for="item in dict.peoson_type"
@@ -164,8 +162,8 @@
               style="width: 650px"
             ></Input>
           </FormItem>
-          <Divider orientation="left">购置资产信息</Divider>
-          <FormItem class="form_item1" label="申请补助类别" prop="fclx"  width="100%" label-width="130px">
+          <Divider orientation="left">③购置房产信息</Divider>
+          <FormItem class="form_item1" label="补助类别" prop="fclx"  width="100%" label-width="130px">
             <RadioGroup v-model="form.fclx" filterable placeholder="请选择"   size="medium"   @on-change="changeFromFC" id="fclxRedio">
               <Radio
                 v-for="item in dict.house_type"
@@ -239,7 +237,7 @@
               style="width: 650px"
             />
           </FormItem>
-          <Divider orientation="left">个人材料</Divider>
+          <Divider orientation="left">④个人材料</Divider>
           <FormItem class="m_table">
             <Table border :columns="columns1" :data="tableData" style="width: 760px">
               <template slot-scope="{ row, index }" slot="action">
@@ -340,8 +338,8 @@
     data() {
       return {
         label: {
-          name: '\xa0\xa0\xa0\xa0' + "备注",
-          name1:'\xa0\xa0' + "是否代办",
+          name: '\xa0\xa0\xa0\xa0' + "备&nbsp注",
+          name1:'\xa0\xa0' + "是否为代办",
         },
         type: 0,
         loading: false, // 表单加载状态
