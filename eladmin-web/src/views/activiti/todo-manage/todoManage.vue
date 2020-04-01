@@ -258,7 +258,7 @@
                   'div',
                   {
                   },
-                  'JTLM20200331'
+                  params.row.variables.YWcode
                 )
               ]);
             }
@@ -364,7 +364,7 @@
             }
           },
           {
-            title: '创建时间',
+            title: '申报时间',
             key: 'createTime',
             width: 180,
             sortType: 'desc',
