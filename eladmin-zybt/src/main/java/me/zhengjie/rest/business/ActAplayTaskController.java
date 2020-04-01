@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiParam;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -187,8 +188,11 @@ public class ActAplayTaskController {
 
             Map<String,Object> variables  =  actBusinessYewuService.findByIdOrderBySortOrder(actBusiness.getTableId());
 //    		act.getParams().putAll(map);;
-            //variables.put("YWcode", "JTLM20200331");
-            tv.setVariables(variables);
+            
+            HashMap<String,Object> map = new HashMap<String,Object>();
+            map.put("YWcode", "JTLM20200331");
+            map.putAll(variables);
+            tv.setVariables(map);
             if(actBusiness!=null){
                 tv.setTableId(actBusiness.getTableId());
             }
