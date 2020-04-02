@@ -1,85 +1,45 @@
 <style lang="less">
-  @import "../../../styles/table-common.less";
-  @import "./todoManage.less";
-
-
-  .demo-upload-list{
-    display: inline-block;
-    width: 100px;
-    height: 100px;
-    text-align: center;
-    line-height: 60px;
-    border: 1px solid transparent;
-    border-radius: 4px;
-    overflow: hidden;
-    background: #fff;
-    position: relative;
-    box-shadow: 0 1px 1px rgba(0,0,0,.2);
-    margin-right: 4px;
-  }
-  .demo-upload-list img{
-    width: 100%;
-    height: 100%;
-  }
-  .demo-upload-list-cover{
-    display: none;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(0,0,0,.6);
-  }
-  .demo-upload-list:hover .demo-upload-list-cover{
-    display: block;
-  }
-  .demo-upload-list-cover i{
-    color: #fff;
-    font-size: 20px;
-    cursor: pointer;
-    margin: 0 2px;
-  }
-
-
+  @import "../../styles/table-common.less";
+  @import "./index.less";
 </style>
 <template>
 
- <!-- <div>
-    <Row>
-      <Col span="6">
-        <Card >
-          <div class="demo-upload-list" v-for="item in file">
-            <img  :src="item.src" />
-            <div class="demo-upload-list-cover">
-              <Icon type="ios-eye-outline" @click="handleView(item)"></Icon>
-              <Icon type="ios-trash-outline" @click="handleRemove(item)"></Icon>
-            </div>
-          </div>
-        </Card>
-      </Col>
+  <!-- <div>
+     <Row>
+       <Col span="6">
+         <Card >
+           <div class="demo-upload-list" v-for="item in file">
+             <img  :src="item.src" />
+             <div class="demo-upload-list-cover">
+               <Icon type="ios-eye-outline" @click="handleView(item)"></Icon>
+               <Icon type="ios-trash-outline" @click="handleRemove(item)"></Icon>
+             </div>
+           </div>
+         </Card>
+       </Col>
 
-      <Col span="12" style="margin-top: 100px;">
-        <Upload
-          multiple
-          :before-upload="handleUpload"
-          :action = action
-          :format="['jpg','jpeg','png']"
-          :on-format-error="uploadFormatError"
-        >
-          <Button icon="ios-cloud-upload-outline">上传附件</Button>
-        </Upload>
-        <Button type="success" style="width: 100px;" @click="upload()">提交</Button>
-      </Col>
-    </Row>
+       <Col span="12" style="margin-top: 100px;">
+         <Upload
+           multiple
+           :before-upload="handleUpload"
+           :action = action
+           :format="['jpg','jpeg','png']"
+           :on-format-error="uploadFormatError"
+         >
+           <Button icon="ios-cloud-upload-outline">上传附件</Button>
+         </Upload>
+         <Button type="success" style="width: 100px;" @click="upload()">提交</Button>
+       </Col>
+     </Row>
 
 
-    <Modal title="View Image" width="50" v-model="viewModal" footer-hide>
-      <div>
-        <img :src="src" style="width: 100%"/>
-      </div>
-    </Modal>
+     <Modal title="View Image" width="50" v-model="viewModal" footer-hide>
+       <div>
+         <img :src="src" style="width: 100%"/>
+       </div>
+     </Modal>
 
-  </div>-->
+   </div>-->
 
 
   <div class="search">
@@ -105,7 +65,7 @@
         <Button @click="passAll" icon="md-checkmark-circle-outline">批量通过</Button>
         <Button @click="backAll" icon="md-close">批量驳回</Button>
         <Button @click="getDataList" icon="md-refresh">刷新</Button>
-<!--        <Button type="dashed" @click="openSearch=!openSearch">{{openSearch ? '关闭搜索' : '开启搜索'}}</Button>-->
+        <!--        <Button type="dashed" @click="openSearch=!openSearch">{{openSearch ? '关闭搜索' : '开启搜索'}}</Button>-->
         <Button type="dashed" @click="openTip=!openTip">{{openTip ? '关闭提示' : '开启提示'}}</Button>
       </Row>
       <Row v-show="openTip">
@@ -146,7 +106,7 @@
     <!-- 审批操作 -->
     <Modal :title="modalTaskTitle" v-model="modalTaskVisible" :mask-closable="false" :width="500">
       <Form ref="form" :model="form" :label-width="100" :rules="formValidate">
-        <FormItem label="农民工" v-if="isborder">
+       <!-- <FormItem label="农民工" v-if="isborder">
           <RadioGroup v-model="form.border">
             <Radio label="是"></Radio>
             <Radio label="否"></Radio>
@@ -169,35 +129,35 @@
             <Radio label="是"></Radio>
             <Radio label="否"></Radio>
           </RadioGroup>
-        </FormItem>
+        </FormItem>-->
         <FormItem label="审批意见" prop="reason">
           <Input type="textarea" v-model="form.comment" :rows="4"/>
         </FormItem>
 
-       <!-- <Col span="6">
-          <Card >
-            <div class="demo-upload-list" v-for="item in file">
-              <img  :src="item.src" />
-              <div class="demo-upload-list-cover">
-                <Icon type="ios-eye-outline" @click="handleView(item)"></Icon>
-                <Icon type="ios-trash-outline" @click="handleRemove(item)"></Icon>
-              </div>
-            </div>
-          </Card>
-        </Col>
+        <!-- <Col span="6">
+           <Card >
+             <div class="demo-upload-list" v-for="item in file">
+               <img  :src="item.src" />
+               <div class="demo-upload-list-cover">
+                 <Icon type="ios-eye-outline" @click="handleView(item)"></Icon>
+                 <Icon type="ios-trash-outline" @click="handleRemove(item)"></Icon>
+               </div>
+             </div>
+           </Card>
+         </Col>
 
-        <Col span="12" style="margin-top: 100px;">
-          <Upload
-            multiple
-            :before-upload="handleUpload"
-            :action = action
-            :format="['jpg','jpeg','png']"
-            :on-format-error="uploadFormatError"
-          >
-            <Button icon="ios-cloud-upload-outline">上传附件</Button>
-          </Upload>
-          <Button type="success" style="width: 100px;" @click="upload()">提交</Button>
-        </Col>-->
+         <Col span="12" style="margin-top: 100px;">
+           <Upload
+             multiple
+             :before-upload="handleUpload"
+             :action = action
+             :format="['jpg','jpeg','png']"
+             :on-format-error="uploadFormatError"
+           >
+             <Button icon="ios-cloud-upload-outline">上传附件</Button>
+           </Upload>
+           <Button type="success" style="width: 100px;" @click="upload()">提交</Button>
+         </Col>-->
         <!--<FormItem label="下一审批人" prop="assignees" v-show="showAssign" :error="error">
           <Select
             v-model="form.assignees"
@@ -464,7 +424,7 @@
         showAssign: false,
         searchForm: {
           // 搜索框对应data对象
-          name: '核实',
+          name: '补贴发放',
           pageNumber: 1, // 当前页数
           pageSize: 10 // 页面大小
         },
@@ -487,7 +447,7 @@
           soldier: '',
           graduate: '',
           foreign: '',
-		  variables:{}
+          variables:{}
         },
         formValidate: {
           // 表单验证规则
@@ -503,10 +463,10 @@
           {
             title: '编号',
             width: 210,
-						key:'priority',
+            key:'priority',
             align: 'center',
-						render: (h, params) => {
-						  return h('div', [
+            render: (h, params) => {
+              return h('div', [
                 h(
                   'div',
                   {
@@ -521,30 +481,30 @@
             key: 'processName',
             width: 150,
             render: (h, params) => {
-				  		return h('div', [
-		            h(
-		              'div',
-		              {
-		              },
-		              params.row.variables.fcType
-		            )
-		          ]);
-	          }
+              return h('div', [
+                h(
+                  'div',
+                  {
+                  },
+                  params.row.variables.fcType
+                )
+              ]);
+            }
           },
-           {
+          {
             title: '申请人',
             key: 'applyer',
             width: 130,
             render: (h, params) => {
-				  		return h('div', [
-		            h(
-		              'div',
-		              {
-		              },
-		              params.row.variables.tname
-		            )
-		          ]);
-	          }
+              return h('div', [
+                h(
+                  'div',
+                  {
+                  },
+                  params.row.variables.tname
+                )
+              ]);
+            }
           },
           {
             title: '任务名称',
@@ -810,11 +770,11 @@
         return false;
       },
 
-     /* /!**
-      *  方法作用:  上传
-      *  时间: 2018年11月26日 18:38:13
-      *  创建人:  Cr
-      **!/*/
+      /* /!**
+       *  方法作用:  上传
+       *  时间: 2018年11月26日 18:38:13
+       *  创建人:  Cr
+       **!/*/
       upload(){
         let that = this;
 
@@ -840,11 +800,11 @@
 
       },
 
-     /* **
-      *  方法作用:  转换成SRC显示在页面上
-      *  时间: 2018年11月26日 18:38:13
-      *  创建人:  Cr
-      ***/
+      /* **
+       *  方法作用:  转换成SRC显示在页面上
+       *  时间: 2018年11月26日 18:38:13
+       *  创建人:  Cr
+       ***/
       convertSrc(file) {
         return window.URL.createObjectURL(file);
       },
