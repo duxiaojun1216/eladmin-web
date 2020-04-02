@@ -3,8 +3,8 @@ package me.zhengjie.rest;
 import me.zhengjie.aop.log.Log;
 import me.zhengjie.common.utils.SecurityUtil;
 import me.zhengjie.service.dto.*;
+import me.zhengjie.system.service.dto.UserDto;
 import me.zhengjie.utils.CodeUtlis;
-import me.zhengjie.utils.SecurityUtils;
 import me.zhengjie.domain.THouse;
 import me.zhengjie.domain.TPersonnel;
 import me.zhengjie.domain.TShenbaoxingxi;
@@ -74,7 +74,7 @@ public class TYewushouliController {
         //审核报表信息
         TShenbaoxingxi tShenbaoxingxi = new TShenbaoxingxi();
         // 获取登录人 设置创建人 时间
-        String username = SecurityUtils.getUsername();
+        String username = securityUtil.getCurrUser().getUsername().toString();
         tPersonnel.setCreateid(username);
 
         tPersonnel.setCreateTime(new Timestamp(System.currentTimeMillis()));
@@ -127,7 +127,7 @@ public class TYewushouliController {
         TShenbaoxingxi tShenbaoxingxi = new TShenbaoxingxi();
 
         // 获取登录人 设置修改人 时间
-        String username = SecurityUtils.getUsername();
+        String username = securityUtil.getCurrUser().getUsername();
 
 
         tPersonnel.setUpdateId(username);
@@ -164,8 +164,15 @@ public class TYewushouliController {
     @RequestMapping(value = "/uploadFj", method = RequestMethod.POST)
     public ResponseEntity<Object> uploadFj(@RequestParam("file") MultipartFile[] file) throws IOException{
 
-        String userId= securityUtil.getCurrUser().getId().toString();
-        List<TFjxxDto> fjxxDtos = tShenbaoxingxiService.uploadFj(file,userId);
+//        UserDto currUser = securityUtil.getCurrUser();
+        String idStr=null;
+        if(securityUtil!=null){
+            //todo 先设置为 固定的 test
+            //idStr = securityUtil.getCurrUser().getId().toString();
+            idStr="4";
+        }
+
+        List<TFjxxDto> fjxxDtos = tShenbaoxingxiService.uploadFj(file,idStr);
         return new ResponseEntity<>(fjxxDtos,HttpStatus.CREATED);
     }
 

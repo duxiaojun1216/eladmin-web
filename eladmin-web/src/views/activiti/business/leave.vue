@@ -89,13 +89,15 @@
   <div class="search">
     <Card style="width: 970px;margin: auto;">
       <p slot="title" class="header_p">
-        <span >泸州市农民工进城置业补贴申请表</span>
+        <span v-if="type==0">泸州市农民工进城置业补贴申请表</span>
+        <span v-else-if="type==1">填报置业补贴申请表</span>
+        <span v-else>查看置业补贴申请</span>
       </p>
       <p slot="title" style="text-align:left ;font-size:14px;width: 250px;">
-        <span >编号：JYTY032020001</span>
+        <span v-show="type==0">编号：JYTY032020001</span>
       </p>
       <p slot="title" style="text-align: right;font-size:14px;width: 250px;float:right;">
-        <span >日期：2020年4月3日</span>
+        <span v-show="type==0">日期：2020年4月3日</span>
       </p>
       <Row style="width: 820px;margin: auto;">
         <Form
@@ -114,23 +116,23 @@
                 :label="item.value">{{item.label}}</Radio>
             </RadioGroup>
           </FormItem>
-          <Divider orientation="left" v-if="form.sfwt=='1'">代办对象信息</Divider>
-          <FormItem class="form_item" label="代办企业" prop="enterpriseName" v-if="form.sfwt=='1'">
+          <Divider orientation="left" v-show="form.sfwt=='1'">代办人信息</Divider>
+          <FormItem class="form_item" label="代办企业" prop="enterpriseName" v-show="form.sfwt=='1'">
             <Input v-model="form.enterpriseName" style="width:250px"></Input>
           </FormItem>
-          <FormItem class="form_item" label="代办人姓名" prop="personName" v-if="form.sfwt=='1'">
+          <FormItem class="form_item" label="代办人姓名" prop="personName" v-show="form.sfwt=='1'">
             <Input v-model="form.personName" style="width:250px"></Input>
           </FormItem>
 
-          <FormItem class="form_item" label="代办人电话" prop="telephone" v-if="form.sfwt=='1'">
+          <FormItem class="form_item" label="代办人电话" prop="telephone" v-show="form.sfwt=='1'">
             <Input v-model="form.telephone" style="width:250px"></Input>
           </FormItem>
 
-          <FormItem class="form_item" label="代办人身份证号" prop="dbrcardID" v-if="form.sfwt=='1'">
+          <FormItem class="form_item" label="代办人身份证号" prop="dbrcardID" v-show="form.sfwt=='1'">
             <Input v-model="form.dbrcardID" style="width:250px"></Input>
           </FormItem>
 
-         <!--<FormItem label="申请人" prop="name" v-if="type!=0&&type!=1">{{form.createBy}}</FormItem>-->
+         <!--<FormItem label="申请人" prop="name" v-show="type!=0&&type!=1">{{form.createBy}}</FormItem>-->
           <Divider orientation="left">补助对象信息</Divider>
 
           <FormItem class="form_item" label="补助人姓名" prop="tname">
@@ -142,7 +144,7 @@
           </FormItem>
 
 
-          <FormItem class="form_item1" :label="label.dxlx"     width="100%">
+          <FormItem class="form_item1" :label="label.dxlx" prop="sqrlx"   width="100%">
             <RadioGroup v-model="form.sqrlx" filterable placeholder="请选择" @on-change="changeFromRY">
               <Radio
                 v-for="item in dict.peoson_type"
@@ -174,7 +176,7 @@
           </FormItem>
 
           <Divider orientation="left">购置房产信息</Divider>
-          <FormItem class="form_item1" :label="label.bzlx"   width="100%">
+          <FormItem class="form_item1" :label="label.bzlx" prop="fclx"  width="100%">
             <RadioGroup v-model="form.fclx" filterable placeholder="请选择" @on-change="changeFromFC" id="fclxRedio">
               <Radio
                 v-for="item in dict.house_type"
@@ -185,7 +187,7 @@
           </FormItem>
 
           <!--新增-->
-          <FormItem class="form_item1" :label="label.fwlx"   width="100%">
+          <FormItem class="form_item1" :label="label.fwlx" prop="fwlx" width="100%">
             <RadioGroup v-model="form.fwlx" filterable placeholder="请选择" id="hxlxRedio">
               <Radio
                 v-for="item in dict.apartment_type"
@@ -218,7 +220,7 @@
           </FormItem>
 
           <!--新增-->
-          <FormItem class="form_item" label="发票时间"  prop="fpsj" v-if="form.fclx==28 || form.fclx==29">
+          <FormItem class="form_item" label="发票时间"  prop="fpsj" v-show="form.fclx==28 || form.fclx==29">
             <DatePicker
               v-model="form.fpsj"
               type="date"
@@ -253,8 +255,8 @@
             />
           </FormItem>
 
-          <Divider orientation="left"  v-if="form.sfwt=='1'">代办材料</Divider>
-          <FormItem class="m_table" v-if="form.sfwt=='1'">
+          <Divider orientation="left"  v-show="form.sfwt=='1'">代办材料</Divider>
+          <FormItem class="m_table" v-show="form.sfwt=='1'">
             <Table border :columns="columns1" :data="tableData_db" style="width:773px">
               <template slot-scope="{ row, index }" slot="action">
                 <!--<Button type="primary" size="small" style="margin-right: 5px" @click="show(index)">上传</Button>-->
@@ -272,7 +274,7 @@
                     size="mini"
                     type="primary"
                     plain> 预览 </el-button>
-                  <!--<div v-if="uploadImg.url" class="upload-img">
+                  <!--<div v-show="uploadImg.url" class="upload-img">
                     <img :src="uploadImg.url">
                     <div class="upload-img-cover">
                       <Icon type="ios-eye-outline" @click.native="showBigImg = true"></Icon>
@@ -282,7 +284,7 @@
                 </Upload>
               </template>
               <template slot-scope="{ row, index }" slot="zt">
-                <Icon type="ios-checkmark-circle-outline" color="#29d21f" size="20" style="margin-left: 30%;" v-if="form.sfwt=='1'" />
+                <Icon type="ios-checkmark-circle-outline" color="#29d21f" size="20" style="margin-left: 30%;" v-show="form.sfwt=='1'" />
               </template>
             </Table>
           </FormItem>
@@ -301,12 +303,14 @@
                   <el-button
                     size="mini"
                     type="primary"
-                    plain> 点击上传 </el-button>
+                    plain> 点击上传
+                  </el-button>
                   <el-button
                     size="mini"
                     type="primary"
-                    plain> 预览 </el-button>
-                  <!--<div v-if="uploadImg.url" class="upload-img">
+                    plain> 预览
+                  </el-button>
+                  <!--<div v-show="uploadImg.url" class="upload-img">
                     <img :src="uploadImg.url">
                     <div class="upload-img-cover">
                       <Icon type="ios-eye-outline" @click.native="showBigImg = true"></Icon>
@@ -316,7 +320,7 @@
                 </Upload>
               </template>
               <template slot-scope="{ row, index }" slot="zt">
-                <Icon type="ios-checkmark-circle-outline" color="#29d21f" size="20" style="margin-left: 30%;" v-if="form.sfwt=='1'" />
+                <Icon type="ios-checkmark-circle-outline" color="#29d21f" size="20" style="margin-left: 30%;" v-show="form.sfwt=='1'" />
               </template>
             </Table>
           </FormItem>
@@ -355,13 +359,13 @@
               type="primary"
               :loading="submitLoading"
               @click="submitForm"
-              v-if="type==0||type==1"
+              v-show="type==0||type==1"
             >保存并关闭
             </Button>
-            <Button @click="handelPrint" v-if="type!=0" type="info">打印</Button>
+            <Button @click="handelPrint" v-show="type!=0" type="info">打印</Button>
             <Button @click="handelCancel">关闭</Button>
           </Form-item>
-          <Spin size="large" fix v-if="loading"></Spin>
+          <Spin size="large" fix v-show="loading"></Spin>
         </Form>
       </Row>
     </Card>
@@ -488,25 +492,27 @@
         },
         formValidate: {
           // 表单验证规则
-          tname: [{required: true, message: "补助人姓名不能为空", trigger: "blur"}],
-          enterpriseName: [{required: true, message: "代办企业不能为空", trigger: "blur"}],
-          personName: [{required: true, message: "代办人姓名不能为空", trigger: "blur"}],
-          telephone: [{required: true, message: "代办人电话不能为空", trigger: "blur"}],
-          fpsj: [{required: true,type: 'date', message: "发票时间不能为空", trigger: "blur"}],
-          dbrcardID: [{required: true, message: "代办人身份证号不能为空", trigger: "blur"}],
-          cardId: [{required: true, message: "身份证号不能为空", trigger: "blur"}],
-          phone: [{required: true, message: "电话不能为空", trigger: "blur"}],
-          hjdz: [{required: true, message: "户籍地址不能为空", trigger: "blur"}],
-          jylx: [{required: true, message: "交易类型不能为空", trigger: "blur"}],
-          gfrq: [{required: true, type: 'date',message: "购置时间不能为空", trigger: "change"}],
-          wqrq: [{required: true, type: 'date', message: "备案时间不能为空", trigger: "change"}],
-          fcmj: [{required: true, message: "购房面积不能为空", trigger: "blur"}],
-          fcje: [{required: true, message: "发票总金额不能为空", trigger: "blur"}],
-          scwz: [{required: true, message: "资产地址不能为空", trigger: "blur"}],
+          enterpriseName: [{required: true,  type: 'string',message: "代办企业不能为空", trigger: "blur"}],
+          personName: [{required: true, type: 'string', message: "代办人姓名不能为空", trigger: "blur"}],
+          telephone: [{required: true, type: 'string', message: "代办人电话不能为空", trigger: "blur"}],
+          dbrcardID: [{required: true, type: 'string', message: "代办人身份证号不能为空", trigger: "blur"}],
 
-           // fwlx: [{required: true, message: "房屋类型不能为空", trigger: "blur"}],
-           // fclx: [{required: true, message: "资产类型不能为空", trigger: "blur"}],
-           // sqrlx: [{required: true, message: "申请人类型不能为空", trigger: "blur"}],
+          fpsj: [{required: true,type: 'date', message: "发票时间不能为空", trigger: "change"}],
+          gfrq: [{required: true,  type: 'date',message: "购置时间不能为空", trigger: "change"}],
+          wqrq: [{required: true, type: 'date', message: "备案时间不能为空", trigger: "change"}],
+
+          tname: [{required: true, type: 'string', message: "补助人姓名不能为空", trigger: "blur"}],
+          cardId: [{required: true, type: 'string', message: "身份证号不能为空", trigger: "blur"}],
+          phone: [{required: true, type: 'string', message: "电话不能为空", trigger: "blur"}],
+          hjdz: [{required: true, type: 'string', message: "户籍地址不能为空", trigger: "blur"}],
+          jylx: [{required: true, type: 'string', message: "交易类型不能为空", trigger: "blur"}],
+          fcmj: [{required: true, type: 'string', message: "购房面积不能为空", trigger: "blur"}],
+          fcje: [{required: true, type: 'string', message: "发票总金额不能为空", trigger: "blur"}],
+          scwz: [{required: true, type: 'string', message: "资产地址不能为空", trigger: "blur"}],
+
+           // fwlx: [{required: true, message: "房屋类型不能为空", trigger: "change"}],
+           // fclx: [{required: true, message: "资产类型不能为空", trigger: "change"}],
+           // sqrlx: [{required: true, message: "申请人类型不能为空", trigger: "change"}],
         },
         errorMsg: "",
         submitLoading: false, // 添加或编辑提交状态
@@ -591,6 +597,8 @@
         // alert(that.form.sqrlx.key);
         // data.sqrlx=that.form.sqrlx.key;
 
+        console.debug(that.formValidate);
+
         console.debug(that.form);
 
         var data1={
@@ -603,7 +611,6 @@
         data1.nowTime=that.form;
         console.debug(data1)
 
-
        this.$refs['form'].validate((valid) => {
           if (valid) {
             return request({
@@ -612,14 +619,15 @@
               data
             }).then(function (res) {
               alert("保存成功")
-              request({
+
+             /* request({
                 url: '/api/message/getSubsidyMoney',
                 method: 'get',
                 data1
               }).then(function (res) {
                   that.form.btje=res.resultMoney,
                   that.form.btbl=res.resultType
-              })
+              })*/
               // ({
               //   url: 'api/leave/add',
               //   method: 'get',
@@ -650,12 +658,26 @@
         //alert(this.form.type)
 
 
+        //添加验证
+        if(this.form.fclx=='28' || this.form.fclx=='29'){
+          this.formValidate.fpsj[0].required=true;
+          this.formValidate.gfrq[0].required=false;
+          this.formValidate.wqrq[0].required=false;
+          console.debug(this.formValidate)
+        }else {
+           this.formValidate.fpsj[0].required=false;
+           this.formValidate.gfrq[0].required=true;
+           this.formValidate.wqrq[0].required=true;
+          console.debug(this.formValidate)
+        }
+
         var fclx= this.form.fclx;
         var sqrlx= this.form.sqrlx;
         this.tableData=[];
         //alert(fclx+sqrlx);
         //  alert(this.form.hxlx);
         if(this.form.sqrlx){
+
           if(this.form.sfwt=='1'){
             //委托材料
             this.tableData_db=[];
@@ -666,6 +688,8 @@
           }
           //标准厂房提供材料
           if(this.form.fclx=='13'){
+
+
             //通用材料
             this.tableData.push(this.tableData1);
             this.tableData.push(this.tableData2);
@@ -700,6 +724,8 @@
           }
           //二手营业用房、二手住房
           if(this.form.fclx=='28'||this.form.fclx=='29'){
+
+
             //通用材料
             this.tableData.push(this.tableData1);
             this.tableData.push(this.tableData2);
@@ -790,11 +816,47 @@
             this.tableData.push(this.tableData8)
           }
       },
+
       //改变 是否改变委托 触发
       changeFromWT(){
+          //清空表格
           this.tableData=[];
+
+          //添加验证
+          if(this.form.sfwt=='0'){
+
+            //  清空表单里的委托信息
+            this.form.enterpriseName=null;
+            this.form.personName=null;
+            this.form.dbrcardID=null;
+            this.form.telephone=null;
+
+            this.formValidate.dbrcardID[0].required=false;
+            this.formValidate.enterpriseName[0].required=false;
+            this.formValidate.personName[0].required=false;
+            this.formValidate.telephone[0].required=false;
+          }else {
+            this.formValidate.dbrcardID[0].required=true;
+            this.formValidate.enterpriseName[0].required=true;
+            this.formValidate.personName[0].required=true;
+            this.formValidate.telephone[0].required=true;
+          }
+          console.debug(this.formValidate);
           if(this.form.fclx || this.form.sqrlx){
             if(this.form.sfwt=='1'){
+              var that= this;
+             /* setTimeout(function () {
+                //添加验证
+                that.formValidate.enterpriseName[0].required=true;
+                that.formValidate.personName[0].required=true;
+                that.formValidate.telephone[0].required=true;
+                this.formValidate.dbrcardID[0].required=true;
+              },10);*/
+
+
+
+
+              //表单清空
               this.tableData_db=[];
               //委托材料
               this.tableData_db.push(this.tableData10);
