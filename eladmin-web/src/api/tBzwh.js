@@ -34,4 +34,12 @@ export function get(data) {
   );
 }
 
-export default { get,add, edit, del }
+export function getDepts(params) {
+  return request({
+    url: 'api/dept',
+    method: 'get',
+    params
+  })
+}
+
+export default { get,add, edit, del,getDepts }

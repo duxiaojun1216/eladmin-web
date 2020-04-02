@@ -20,6 +20,7 @@
       </Row>
       <Row class="operation">        
         <Button @click="getDataList" icon="md-refresh">刷新</Button>
+         <Button @click="addData" icon="md-add">新增</Button>
         <Button type="dashed" @click="openSearch=!openSearch">{{openSearch ? '关闭搜索' : '开启搜索'}}</Button>
         <Button type="dashed" @click="openTip=!openTip">{{openTip ? '关闭提示' : '开启提示'}}</Button>
       </Row>
@@ -57,11 +58,41 @@
         ></Page>
       </Row>
     </Card>
+     <!-- 操作 -->
+    <Modal :title="modalTaskTitle" v-model="modalTaskVisible" :mask-closable="false" :width="500">
+      <Form ref="form" :model="form" :rules="rules" size="small" :label-width="80">
+          <FormItem label="资产类型">
+            <Select v-model="form.zclx" filterable placeholder="请选择">
+              <Option
+                v-for="item in dictPriority"
+                :key="item.id"
+                :label="item.label"
+                :value="item.value" />
+            </Select>
+          </FormItem>
+          <FormItem label="起始时间">
+            <DatePicker v-model="form.qssj" type="datetime" style="width: 370px;" />
+          </FormItem>
+          <FormItem label="终止时间">
+            <DatePicker v-model="form.zzsj" type="datetime" style="width: 370px;" />
+          </FormItem>
+          <FormItem label="所属区域">
+            <Input v-model="form.ssqy" style="width: 370px;" />
+          </FormItem>
+          <FormItem label="标准">
+            <Input v-model="form.bz" style="width: 370px;" />
+          </FormItem>
+        </Form>
+      <div slot="footer">
+        <Button type="text" @click="modalTaskVisible=false">取消</Button>
+        <Button type="primary" :loading="submitLoading" @click="handelSubmit">提交</Button>
+      </div>
+    </Modal>
 	</div>
 </template>
 <script>
-
-	import { get,add, edit, del }from "@/api/tBzwh";
+  import { getDictDataByType }from "@/api/index";
+	import { get,add, edit, del,getDepts }from "@/api/tBzwh";
 	export default {
 		data() {
 			return {
@@ -75,6 +106,12 @@
         userList: [],
         selectCount: 0, // 多选计数
         selectList: [], // 多选数据
+        submitLoading: false, // 添加或编辑提交状态
+        
+        modalTaskTitle:"",//弹框标题
+        dictPriority:[],//数据字典
+        form: { id: null, zclx: null, qssj: null, zzsj: null, bak4: null, bak5: null, createId: null, createTime: null, updateId: null, updateTime: null, ssqy: null, bz: null },
+        rules:{},
 				searchForm: {
           // 搜索框对应data对象
           zclx: '',
@@ -171,11 +208,6 @@
             width: 150,
             align: 'center',
           },
-          /*{
-            title: '委托代办人',
-            key: 'owner',
-            width: 130
-          },*/
           {
             title: '起始时间',
             key: 'qssj',
@@ -296,20 +328,21 @@
 		 methods: {
 		 	// 获取数据前设置好接口地址
       init() {
-        //this.getDictDataType();
+        this.getDictDataType();
         this.getDataList();
+        getDepts
 
       },
-     
+     //获取字典
       getDictDataType() {
-
-        getDictDataByType('priority').then(res => {
+				let _this= this;
+        getDictDataByType('house_type').then(res => {
           if (res.success) {
-            this.dictPriority = res.result;
+            _this.dictPriority = res.result;
           }
         });
       },
-
+			//查询
       searchUser(v) {
         if (!v) {
           return;
@@ -329,6 +362,16 @@
           this.searchForm.order = '';
         }
         this.getDataList();
+      },
+      //新增
+       addData(v) {
+        this.modalTaskTitle = '添加标准';
+        this.form.id = v.id;
+        this.modalTaskVisible = true;
+      
+      },
+      handelSubmit(){
+      	
       },
       changePage(v) {
         this.searchForm.pageNumber = v;
@@ -369,6 +412,9 @@
 
 			formartDate(date, fmt)
 			{
+				if(date == undefined||date == null){
+					return "";
+				}
 				date = date == undefined ? new Date() : date;
 				date = typeof date == 'number' ? new Date(date) : date;
 				fmt = fmt || 'yyyy-MM-dd HH:mm:ss';

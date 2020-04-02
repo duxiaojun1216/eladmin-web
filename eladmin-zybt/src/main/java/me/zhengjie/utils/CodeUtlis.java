@@ -29,7 +29,7 @@ public class CodeUtlis {
     public static String  sNumber(String PerTe,String Housing){
         //获取当前时间
         Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("YYYYMMdd");
+        SimpleDateFormat sdf = new SimpleDateFormat("YYYYMMddHHmmssSSS");
         String number = sdf.format(date);
         //拼接
         String s = PerTe+Housing+number;

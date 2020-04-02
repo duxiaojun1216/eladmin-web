@@ -78,7 +78,7 @@
         <visit-volume />
         </Col>
         <Col :lg="24" :xl="8" :style="{backgroundColor: '#fff'}">
-        <Row type="flex" justify="center progressItemRow" align="middle" class="right">
+        <Row type="flex" justify="center" align="middle" class="right progressItemRow">
           <div class="content">
             <progressItem value="50" title="江阳区" :data="50" color="#5089de" />
             <progressItem value="30" title="龙马潭区" :data="30" color="#23b397" />

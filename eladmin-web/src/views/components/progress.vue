@@ -7,7 +7,7 @@
     <div class="progress">
       <Progress
         :percent="data"
-        stroke-width="5"
+        :stroke-width="5"
         :stroke-color="color"
         hide-info
         style="width: 80%;"
