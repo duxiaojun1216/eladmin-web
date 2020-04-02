@@ -1,4 +1,7 @@
 <style lang="less">
+.ivu-card-body {
+    padding: 0!important;
+}
   .form_item {
     margin-bottom: 24px;
     vertical-align: top;
@@ -9,7 +12,6 @@
     padding-left: 40px;
   }
   .form_item1 {
-
     padding-left: 40px;
   }
 
@@ -54,18 +56,16 @@
     background: 0 0;
     font-weight: 500;
     color: #2d8cf0;;
-    /* font-size: 18px; */
     font-weight: bold;
-    /* margin: 16px 0; */
     padding: 0px;
   }
 
   .ivu-divider-horizontal {
     display: block;
     height: 1px;
-    width: 760px;
-    /* min-width: 100%; */
-    margin: 24px 0;
+	width:753px;
+    min-width: 753px!important;
+    margin: 16px 38px!important;
     clear: both;
   }
 
@@ -74,15 +74,15 @@
   }
 
   .ivu-card-head {
-    border-bottom: 1px solid #e8eaec;
-    padding: 15px 0 8px 8px!important;
+    border-bottom: none;
+    padding: 15px 0 8px 18px!important;
     line-height: 1;
     padding-bottom: 2px;
     width: 760px;
     margin: auto;
   }
   .m_table .ivu-form-item-content{
-    margin-left: 0px!important;
+    margin-left: 50px!important;
   }
 </style>
 <template>
@@ -94,10 +94,10 @@
         <span v-else>查看置业补贴申请</span>
       </p>
       <p slot="title" style="text-align:left ;font-size:14px;width: 250px;">
-        <span v-show="type==0">编号：JYTY032020001</span>
+        <span>编号：JYTY032020001</span>
       </p>
       <p slot="title" style="text-align: right;font-size:14px;width: 250px;float:right;">
-        <span v-show="type==0">日期：2020年4月3日</span>
+        <span>日期：2020年4月3日</span>
       </p>
       <Row style="width: 820px;margin: auto;">
         <Form
@@ -105,11 +105,12 @@
           :model="form"
           :label-width="110"
           :rules="formValidate"
-          style="position:relative"
+          style="position:relative;border: 1px solid #e8eaec;"
           inline
+		  id="applyForm"
         >
 
-          <FormItem class="form_item1" :label="label.name1"   width="100%" >
+          <FormItem class="form_item1" :label="label.name1"  prop="sfwt" width="100%"  style="   margin-bottom: 0px!important;">
             <RadioGroup v-model="form.sfwt"    @on-change="changeFromWT">
               <Radio
                 v-for="item in isWT"
@@ -128,23 +129,13 @@
             <Input v-model="form.telephone" style="width:250px"></Input>
           </FormItem>
 
-          <FormItem class="form_item" label="代办人身份证号" prop="dbrcardID" v-show="form.sfwt=='1'">
+          <FormItem class="form_item" label="身份证号" prop="dbrcardID" v-show="form.sfwt=='1'">
             <Input v-model="form.dbrcardID" style="width:250px"></Input>
           </FormItem>
 
          <!--<FormItem label="申请人" prop="name" v-show="type!=0&&type!=1">{{form.createBy}}</FormItem>-->
           <Divider orientation="left">补助对象信息</Divider>
-
-          <FormItem class="form_item" label="补助人姓名" prop="tname">
-            <Input v-model="form.tname" style="width:250px"></Input>
-          </FormItem>
-
-          <FormItem class="form_item" label="身份证号" prop="cardId">
-            <Input v-model="form.cardId" style="width:250px"></Input>
-          </FormItem>
-
-
-          <FormItem class="form_item1" :label="label.dxlx" prop="sqrlx"   width="100%">
+           <FormItem class="form_item1" :label="label.dxlx" prop="sqrlx"   width="100%">
             <RadioGroup v-model="form.sqrlx" filterable placeholder="请选择" @on-change="changeFromRY">
               <Radio
                 v-for="item in dict.peoson_type"
@@ -152,10 +143,15 @@
                 :label="item.id">{{item.label}}</Radio>
             </RadioGroup>
           </FormItem>
-
+          <FormItem class="form_item" label="补助人姓名" prop="tname">
+            <Input v-model="form.tname" style="width:250px"></Input>
+          </FormItem>
           <FormItem class="form_item" label="联系电话" prop="phone">
             <Input v-model="form.phone" style="width:250px"></Input>
           </FormItem>
+          <FormItem class="form_item" label="身份证号" prop="cardId">
+            <Input v-model="form.cardId" style="width:250px"></Input>
+          </FormItem>                
 
           <FormItem class="form_item" label="身份证地址" prop="hjdz" style="width:95%">
             <Input
@@ -257,7 +253,7 @@
 
           <Divider orientation="left"  v-show="form.sfwt=='1'">代办材料</Divider>
           <FormItem class="m_table" v-show="form.sfwt=='1'">
-            <Table border :columns="columns1" :data="tableData_db" style="width:773px">
+            <Table border :columns="columns1" :data="tableData_db" style="width:728px!important">
               <template slot-scope="{ row, index }" slot="action">
                 <!--<Button type="primary" size="small" style="margin-right: 5px" @click="show(index)">上传</Button>-->
                 <Upload
@@ -291,7 +287,7 @@
 
           <Divider orientation="left">个人材料</Divider>
           <FormItem class="m_table">
-            <Table border :columns="columns1" :data="tableData" style="width: 773px">
+            <Table border :columns="columns1" :data="tableData" style="width: 728px">
               <template slot-scope="{ row, index }" slot="action">
                 <!--<Button type="primary" size="small" style="margin-right: 5px" @click="show(index)">上传</Button>-->
                 <Upload
@@ -354,7 +350,7 @@
 
 
 
-          <Form-item class="br" style="margin-right:140px;float:right">
+          <Form-item class="br" style="margin-right:40px;float:right">
             <Button
               type="primary"
               :loading="submitLoading"
@@ -362,7 +358,7 @@
               v-show="type==0||type==1"
             >保存并关闭
             </Button>
-            <Button @click="handelPrint" v-show="type!=0" type="info">打印</Button>
+            <Button @click="handelPrint" type="info">打印</Button>
             <Button @click="handelCancel">关闭</Button>
           </Form-item>
           <Spin size="large" fix v-show="loading"></Spin>
@@ -391,11 +387,11 @@
     data() {
       return {
         label: {
-          name: '\xa0\xa0\xa0\xa0' + "备"+'\xa0\xa0'+"注",
-          name1:'\xa0\xa0' + "是否为代办",
-          dxlx:'\xa0\xa0' + "对象类型",
-          bzlx:'\xa0\xa0' + "补助类型",
-          fwlx:'\xa0\xa0' + "房屋类型",
+          name: '\xa0\xa0\xa0' + "备"+'\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0'+"注",
+          name1: "是否为代办",
+          dxlx: "对象类型",
+          bzlx: "补助类型",
+          fwlx: "房屋类型",
         },
         type: 0,
         loading: false, // 表单加载状态
@@ -479,8 +475,8 @@
 
         form: {
           // 添加或编辑表单对象初始化数据
-          sfwt:"0",
-          sqrlx: 7,
+          //sfwt:"0",
+          //sqrlx: 7,
           title: "",
           description: "",
           startDate: "",
@@ -509,10 +505,10 @@
           fcmj: [{required: true, type: 'string', message: "购房面积不能为空", trigger: "blur"}],
           fcje: [{required: true, type: 'string', message: "发票总金额不能为空", trigger: "blur"}],
           scwz: [{required: true, type: 'string', message: "资产地址不能为空", trigger: "blur"}],
-
-           // fwlx: [{required: true, message: "房屋类型不能为空", trigger: "change"}],
-           // fclx: [{required: true, message: "资产类型不能为空", trigger: "change"}],
-           // sqrlx: [{required: true, message: "申请人类型不能为空", trigger: "change"}],
+          sfwt: [{required: true, message: "请选择是否为代办", trigger: "change"}],
+          fwlx: [{required: true, message: "房屋类型不能为空", trigger: "change"}],
+          fclx: [{required: true, message: "资产类型不能为空", trigger: "change"}],
+          sqrlx: [{required: true, message: "申请人类型不能为空", trigger: "change"}],
         },
         errorMsg: "",
         submitLoading: false, // 添加或编辑提交状态
@@ -1045,32 +1041,8 @@
         });
       },
       handelPrint() {
-        let data = [];
-        let leave = {
-          申请人: this.form.createBy,
-          请假类型: this.form.type,
-          标题: this.form.title,
-          原因: this.form.description,
-          请假开始时间: this.form.startDate,
-          请假结束时间: this.form.endDate,
-          持续时长: this.form.duration + " 小时"
-        };
-        data.push(leave);
-        printJS({
-          printable: data,
-          type: "json",
-          header: "请假申请表",
-          gridStyle: "border: 1px solid lightgray;text-align:center",
-          properties: [
-            "申请人",
-            "请假类型",
-            "标题",
-            "原因",
-            "请假开始时间",
-            "请假结束时间",
-            "持续时长"
-          ]
-        });
+ 
+        printJS({ printable: 'applyForm', type: 'html', header: '这是标题内容' });
       },
       handelCancel() {
         this.closeCurrentPage();
