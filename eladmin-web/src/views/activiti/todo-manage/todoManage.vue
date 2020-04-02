@@ -96,7 +96,7 @@
           <Input type="textarea" v-model="form.comment" :rows="4"/>
         </FormItem>
 
-        <FormItem label="下一审批人" prop="assignees" v-show="showAssign" :error="error">
+        <!--<FormItem label="下一审批人" prop="assignees" v-show="showAssign" :error="error">
           <Select
             v-model="form.assignees"
             placeholder="请选择或输入搜索"
@@ -110,7 +110,27 @@
         </FormItem>
         <FormItem label="下一审批人" v-show="isGateway">
           <span>分支网关处暂不支持自定义选择下一审批人，将发送给下一节点所有人</span>
-        </FormItem>
+        </FormItem>-->
+        <template>
+          <Upload
+            class="upload-demo"
+            action="/api/yewushouli/uploadFj"
+            multiple
+            :limit="1"
+            :on-success="uploadSuccess"
+            :on-error="uploadError">
+            <el-button
+              size="mini"
+              type="primary"
+              plain>
+              上传附件
+            </el-button>
+            <!--<el-button
+              size="mini"
+              type="primary"
+              plain> 预览 </el-button>-->
+          </Upload>
+        </template>
         <div v-show="form.type==1">
           <FormItem label="驳回至">
             <Select
@@ -252,7 +272,7 @@
             width: 140,
 						key:'priority',
             align: 'center',
-						render: (h, params) => {            
+						render: (h, params) => {
 						  return h('div', [
                 h(
                   'div',
@@ -267,7 +287,7 @@
             title: '申请类型',
             key: 'processName',
             width: 150,
-            render: (h, params) => {            
+            render: (h, params) => {
 				  		return h('div', [
 		            h(
 		              'div',
@@ -282,7 +302,7 @@
             title: '申请人',
             key: 'applyer',
             width: 130,
-            render: (h, params) => {            
+            render: (h, params) => {
 				  		return h('div', [
 		            h(
 		              'div',
@@ -298,13 +318,13 @@
             key: 'name',
             minWidth: 160
           },
-          
+
           /*{
             title: '委托代办人',
             key: 'owner',
             width: 130
           },*/
-         
+
           {
             title: '优先级',
             key: 'priority',
@@ -506,9 +526,39 @@
         this.getDataList();
 
       },
+      uploadSuccess(res){
+        alert('上传成功')
+      },
+      uploadError(){
+        alert('上传失败')
+      },
+      submitAdjunct(form) {
+        let that= this;
+        let data= that.form;
+        data.fclx=that.radio1;
+        console.debug(that.form);
+        this.$refs['form'].validate((valid) => {
+          if (valid) {
+            return request({
+              url: 'api/yewushouli',
+              method: 'post',
+              data
+            }).then(function (res) {
+              if(res.success){
+                that.sbxx.code=res.code;
+                that.sbxx.sqxxid=res.sqxxid;
+                alert("附件保存成功")
+              }
+            })
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        })
+      },
       /*你是get请求，你也可以直接使用$.getJSON(路径，参数，回调函数)*/
       showDetails() {
-        var _this= this;
+        let _this= this;
         //alert(0)
         request({
           url: '/api/leave/getPer',
