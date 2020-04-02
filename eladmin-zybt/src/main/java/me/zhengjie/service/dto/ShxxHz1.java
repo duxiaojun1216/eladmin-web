@@ -42,6 +42,8 @@ public class ShxxHz1 {
 
     //资产备注
     private String zcbz;
+    //房屋类型
+    private String fwlx;
 
 
 
@@ -76,5 +78,20 @@ public class ShxxHz1 {
 
     //流程 模型 id
     private  String procDefId;
+
+    //附件ids
+    private String[]  fjids;
+    //委托信息
+
+    //是否委托 0 否 1 是
+    private String sfwt;
+    //代办企业名称
+    private String enterpriseName;
+    //代办人姓名
+    private String personName;
+    //代办人电话
+    private String telephone;
+    //代办人身份证号
+    private String dbrcardID;
 
 }

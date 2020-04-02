@@ -40,7 +40,7 @@ public class ShxxHz {
 
     //资产备注
     private String zcbz;
-    //资产备注
+    //房屋类型
     private String fwlx;
 
 

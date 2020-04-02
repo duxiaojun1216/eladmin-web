@@ -15,7 +15,7 @@ public interface TFjxxRepository extends JpaRepository<TFjxx, Long>, JpaSpecific
 
     @Transactional
     @Modifying
-    @Query(value=" update t_fjxx SET sbxxid=?1 WHERE id in ?2" ,nativeQuery = true)
+    @Query(value=" update t_fjxx SET sbxxid=?1 WHERE id =?2" ,nativeQuery = true)
     int updateSbxxIdById(String sbxxid,String idsStr);
 
 
