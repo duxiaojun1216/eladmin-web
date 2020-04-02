@@ -15,7 +15,7 @@ import me.zhengjie.entity.ActBusiness;
 import me.zhengjie.entity.ActProcess;
 import me.zhengjie.entity.business.Leave;
 import me.zhengjie.service.ActBusinessService;
-import me.zhengjie.service.ActBusinessYewuService;
+import me.zhengjie.service.ActBusinessApplyService;
 import me.zhengjie.service.ActProcessService;
 import me.zhengjie.service.business.LeaveService;
 import me.zhengjie.service.mybatis.IActService;
@@ -61,7 +61,7 @@ public class ActAplayBusinessController {
     private LeaveService leaveService;
     
     @Autowired
-    ActBusinessYewuService actBusinessYewuService;
+    ActBusinessApplyService actBusinessYewuService;
 
     @RequestMapping(value = "/getByCondition", method = RequestMethod.GET)
     @ApiOperation(value = "多条件分页获取申请列表")
@@ -77,15 +77,14 @@ public class ActAplayBusinessController {
                 e.setRouteName(actProcess.getRouteName());
                 e.setProcessName(actProcess.getName());
             }
-            e.setCode("JTLM20200331");
-            e.setPerson("test");
-            e.setPersonType("农民工");
+           
             if(ActivitiConstant.STATUS_DEALING.equals(e.getStatus())){
                 // 关联当前任务
                 List<Task> taskList = taskService.createTaskQuery().processInstanceId(e.getProcInstId()).list();
                 
-                Map<String,Object> variables =  taskService.getVariables(taskList.get(0).getId());
-                variables.put("YWcode", "JTLM20200331");
+                //获取业务数据  dengjie 20200402
+                Map<String,Object> variables  =  actBusinessYewuService.findApplyById(e.getTableId());
+                e.setVariables(variables);
                 
                 if(taskList!=null&&taskList.size()==1){
                     e.setCurrTaskName(taskList.get(0).getName());
@@ -115,13 +114,6 @@ public class ActAplayBusinessController {
         act.getParams().put("test", "tets");
         // 根据你的业务需求放入相应流程所需变量
         act = putParams(act);
-//        if(actProcessService.get(act.getProcDefId())!=null) {
-//        	if(actProcessService.get(act.getProcDefId()).getBusinessTable().equals("t_shenbaoxingxi")) {
-//        		Map<? extends String, ? extends Object> map =  actBusinessYewuService.findByIdOrderBySortOrder(actBusiness.getTableId());
-//        		act.getParams().putAll(map);
-//        	}
-//        }
-        
         String processInstanceId = actProcessService.startProcess(act);
         actBusiness.setProcInstId(processInstanceId);
         actBusiness.setStatus(ActivitiConstant.STATUS_DEALING);

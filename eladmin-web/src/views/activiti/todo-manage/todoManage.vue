@@ -250,39 +250,61 @@
           {
             title: '编号',
             width: 140,
-			key:'priority',
+						key:'priority',
             align: 'center',
-			render: (h, params) => {            
-			  return h('div', [
+						render: (h, params) => {            
+						  return h('div', [
                 h(
                   'div',
                   {
                   },
-                  params.row.variables.YWcode
+                  params.row.variables.bh
                 )
               ]);
             }
+          },
+          {
+            title: '申请类型',
+            key: 'processName',
+            width: 150,
+            render: (h, params) => {            
+				  		return h('div', [
+		            h(
+		              'div',
+		              {
+		              },
+		              params.row.variables.fcType
+		            )
+		          ]);
+	          }
+          },
+           {
+            title: '申请人',
+            key: 'applyer',
+            width: 130,
+            render: (h, params) => {            
+				  		return h('div', [
+		            h(
+		              'div',
+		              {
+		              },
+		              params.row.variables.tname
+		            )
+		          ]);
+	          }
           },
           {
             title: '任务名称',
             key: 'name',
             minWidth: 160
           },
-          {
-            title: '申请类型',
-            key: 'processName',
-            width: 150
-          },
+          
           /*{
             title: '委托代办人',
             key: 'owner',
             width: 130
           },*/
-          {
-            title: '申请人',
-            key: 'applyer',
-            width: 130
-          },
+         
           {
             title: '优先级',
             key: 'priority',

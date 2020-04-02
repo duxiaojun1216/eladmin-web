@@ -349,19 +349,49 @@ export default {
           title: "受理编号",
           key: "code",
           minWidth: 200,
-          sortable: true
+          sortable: true,
+          render: (h, params) => {            
+			  		return h('div', [
+	            h(
+	              'div',
+	              {
+	              },
+	              params.row.variables.bh
+	            )
+	          ]);
+          }
         },
         {
           title:"申请对象",
           key: "person",
           minWidth: 200,
-          sortable: true
+          sortable: true,
+          render: (h, params) => {            
+			  		return h('div', [
+	            h(
+	              'div',
+	              {
+	              },
+	              params.row.variables.tname
+	            )
+	          ]);
+          }
         },
         {
           title: "对象类型",
           key: "personType",
           minWidth: 200,
-          sortable: true
+          sortable: true,
+          render: (h, params) => {            
+			  		return h('div', [
+	            h(
+	              'div',
+	              {
+	              },
+	              params.row.variables.label
+	            )
+	          ]);
+          }
         },
         {
           title: "业务类型",

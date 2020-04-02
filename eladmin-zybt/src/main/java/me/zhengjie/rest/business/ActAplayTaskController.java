@@ -23,7 +23,7 @@ import me.zhengjie.common.vo.SearchVo;
 import me.zhengjie.entity.ActBusiness;
 import me.zhengjie.entity.ActProcess;
 import me.zhengjie.service.ActBusinessService;
-import me.zhengjie.service.ActBusinessYewuService;
+import me.zhengjie.service.ActBusinessApplyService;
 import me.zhengjie.service.ActProcessService;
 import me.zhengjie.service.mybatis.IHistoryIdentityService;
 import me.zhengjie.service.mybatis.IRunIdentityService;
@@ -114,7 +114,7 @@ public class ActAplayTaskController {
     private MessageUtil messageUtil;
     
     @Autowired
-    ActBusinessYewuService actBusinessYewuService;
+    ActBusinessApplyService actBusinessYewuService;
 
     @RequestMapping(value = "/todoList", method = RequestMethod.GET)
     @ApiOperation(value = "代办列表")
@@ -185,14 +185,10 @@ public class ActAplayTaskController {
             ProcessInstance pi = runtimeService.createProcessInstanceQuery().processInstanceId(tv.getProcInstId()).singleResult();
             tv.setBusinessKey(pi.getBusinessKey());
             ActBusiness actBusiness = actBusinessService.get(pi.getBusinessKey());
-
-            Map<String,Object> variables  =  actBusinessYewuService.findByIdOrderBySortOrder(actBusiness.getTableId());
-//    		act.getParams().putAll(map);;
+            //获取业务数据  dengjie 20200402
+            Map<String,Object> variables  =  actBusinessYewuService.findApplyById(actBusiness.getTableId());
+            tv.setVariables(variables);
             
-            HashMap<String,Object> map = new HashMap<String,Object>();
-            map.put("YWcode", "JTLM20200331");
-            map.putAll(variables);
-            tv.setVariables(map);
             if(actBusiness!=null){
                 tv.setTableId(actBusiness.getTableId());
             }
