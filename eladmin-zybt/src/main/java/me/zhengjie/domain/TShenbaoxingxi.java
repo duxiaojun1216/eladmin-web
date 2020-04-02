@@ -107,12 +107,12 @@ public class TShenbaoxingxi implements Serializable {
     @Column(name = "bh")
     private String  bh;
 
-    //编号
+    //批次号
     @Column(name = "pch")
     private String  pch;
 
 
-    //编号
+    //所属区域
     @Column(name = "ssqy")
     private String  ssqy;
 
@@ -122,7 +122,7 @@ public class TShenbaoxingxi implements Serializable {
 
     //委托信息id
     @Column(name = "wtxx_Id")
-    private String  wtxxId;
+    private long  wtxxId;
 
     public void copy(TShenbaoxingxi source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

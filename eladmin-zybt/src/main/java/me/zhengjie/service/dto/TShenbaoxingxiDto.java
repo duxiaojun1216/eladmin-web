@@ -1,6 +1,8 @@
 package me.zhengjie.service.dto;
 
 import lombok.Data;
+
+import javax.persistence.Column;
 import java.sql.Timestamp;
 import java.io.Serializable;
 
@@ -73,5 +75,15 @@ public class TShenbaoxingxiDto implements Serializable {
     private String bak1;
     //部门id
     private Long depId;
+    //编号
+    private String  bh;
+
+    //所属区域
+    private String  ssqy;
+    //是否委托
+    private String  sfwt;
+
+    //委托信息id
+    private long  wtxxId;
 
 }
