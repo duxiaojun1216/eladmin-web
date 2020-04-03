@@ -80,6 +80,14 @@ public class TFjxx implements Serializable {
     @Column(name = "update_time")
     private Timestamp updateTime;
 
+    /** 文件名称（资料名称） */
+    @Column(name = "fileTypeName")
+    private String fileTypeName;
+
+    /** 文件类型（属于哪种资料） */
+    @Column(name = "fileType")
+    private String fileType;
+
     public void copy(TFjxx source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
     }

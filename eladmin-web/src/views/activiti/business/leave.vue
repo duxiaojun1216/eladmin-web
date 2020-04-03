@@ -117,30 +117,30 @@
                 :label="item.value">{{item.label}}</Radio>
             </RadioGroup>
           </FormItem>
-          <Divider orientation="left" v-show="form.sfwt=='1'">代办人信息</Divider>
-          <FormItem class="form_item" label="代办企业" prop="enterpriseName" v-show="form.sfwt=='1'">
+          <Divider orientation="left" v-if="form.sfwt=='1'">代办人信息</Divider>
+          <FormItem class="form_item" label="代办企业" prop="enterpriseName" v-if="form.sfwt=='1'">
             <Input v-model="form.enterpriseName" style="width:250px"></Input>
           </FormItem>
-          <FormItem class="form_item" label="代办人姓名" prop="personName" v-show="form.sfwt=='1'">
+          <FormItem class="form_item" label="代办人姓名" prop="personName" v-if="form.sfwt=='1'">
             <Input v-model="form.personName" style="width:250px"></Input>
           </FormItem>
 
-          <FormItem class="form_item" label="代办人电话" prop="telephone" v-show="form.sfwt=='1'">
+          <FormItem class="form_item" label="代办人电话" prop="telephone" v-if="form.sfwt=='1'">
             <Input v-model="form.telephone" style="width:250px"></Input>
           </FormItem>
 
-          <FormItem class="form_item" label="身份证号" prop="dbrcardID" v-show="form.sfwt=='1'">
+          <FormItem class="form_item" label="身份证号" prop="dbrcardID" v-if="form.sfwt=='1'">
             <Input v-model="form.dbrcardID" style="width:250px"></Input>
           </FormItem>
 
-         <!--<FormItem label="申请人" prop="name" v-show="type!=0&&type!=1">{{form.createBy}}</FormItem>-->
+         <!--<FormItem label="申请人" prop="name" v-if="type!=0&&type!=1">{{form.createBy}}</FormItem>-->
           <Divider orientation="left">补助对象信息</Divider>
-           <FormItem class="form_item1" :label="label.dxlx" prop="sqrlx"   width="100%">
+           <FormItem class="form_item1" :label="label.dxlx" prop="sqrlx"  width="100%">
             <RadioGroup v-model="form.sqrlx" filterable placeholder="请选择" @on-change="changeFromRY">
               <Radio
                 v-for="item in dict.peoson_type"
                 :key="item.id"
-                :label="item.id">{{item.label}}</Radio>
+                :label="String(item.id)">{{item.label}}</Radio>
             </RadioGroup>
           </FormItem>
           <FormItem class="form_item" label="补助人姓名" prop="tname">
@@ -151,7 +151,7 @@
           </FormItem>
           <FormItem class="form_item" label="身份证号" prop="cardId">
             <Input v-model="form.cardId" style="width:250px"></Input>
-          </FormItem>                
+          </FormItem>
 
           <FormItem class="form_item" label="身份证地址" prop="hjdz" style="width:95%">
             <Input
@@ -160,40 +160,27 @@
               style="width: 100%"
             ></Input>
           </FormItem>
-
-          <FormItem class="form_item" :label="label.name"  style="width:95%">
-            <Input
-              type="textarea"
-              v-model="form.mark"
-              :rows="3"
-              placeholder="请输入详细情况"
-              style="width:100%"
-            ></Input>
-          </FormItem>
-
           <Divider orientation="left">购置房产信息</Divider>
-          <FormItem class="form_item1" :label="label.bzlx" prop="fclx"  width="100%">
+          <FormItem class="form_item1" :label="label.bzlx" prop="fclx"   width="100%">
             <RadioGroup v-model="form.fclx" filterable placeholder="请选择" @on-change="changeFromFC" id="fclxRedio">
               <Radio
                 v-for="item in dict.house_type"
                 :key="item.id"
-                :label="item.id">{{item.label}}</Radio>
+                :label="String(item.id)">{{item.label}}</Radio>
 
             </RadioGroup>
           </FormItem>
-
           <!--新增-->
-          <FormItem class="form_item1" :label="label.fwlx" prop="fwlx" width="100%">
+          <FormItem class="form_item1" :label="label.fwlx"  prop="fwlx" width="100%" v-if="form.fclx=='15'  ">
             <RadioGroup v-model="form.fwlx" filterable placeholder="请选择" id="hxlxRedio">
               <Radio
                 v-for="item in dict.apartment_type"
                 :key="item.id"
-                :label="item.id">{{item.label}}</Radio>
-
+                :label="String(item.id)">{{item.label}}</Radio>
             </RadioGroup>
           </FormItem>
 
-          <FormItem class="form_item" label="合同签订时间"  prop="gfrq" v-show="form.fclx!=28 && form.fclx!=29">
+          <FormItem class="form_item" label="合同签订时间"  prop="gfrq" v-if="form.fclx!=28 && form.fclx!=29">
             <DatePicker
               v-model="form.gfrq"
               type="date"
@@ -204,7 +191,7 @@
             ></DatePicker>
           </FormItem>
 
-          <FormItem class="form_item" label="网签备案时间"  prop="wqrq" v-show="form.fclx!=28 && form.fclx!=29">
+          <FormItem class="form_item" label="网签备案时间"  prop="wqrq" v-if="form.fclx!=28 && form.fclx!=29">
             <DatePicker
               v-model="form.wqrq"
               type="date"
@@ -216,7 +203,7 @@
           </FormItem>
 
           <!--新增-->
-          <FormItem class="form_item" label="发票时间"  prop="fpsj" v-show="form.fclx==28 || form.fclx==29">
+          <FormItem class="form_item" label="发票时间"  prop="fpsj" v-if="form.fclx==28 || form.fclx==29">
             <DatePicker
               v-model="form.fpsj"
               type="date"
@@ -241,61 +228,18 @@
               style="width:100%"
             />
           </FormItem>
-          <FormItem class="form_item" :label="label.name"  style="width:95%">
-            <Input
-              type="textarea"
-              v-model="form.zcbz"
-              :rows="3"
-              placeholder="请输入详细情况"
-              style="width:100%"
-            />
-          </FormItem>
-
-          <Divider orientation="left"  v-show="form.sfwt=='1'">代办材料</Divider>
-          <FormItem class="m_table" v-show="form.sfwt=='1'">
-            <Table border :columns="columns1" :data="tableData_db" style="width:728px!important">
-              <template slot-scope="{ row, index }" slot="action">
-                <!--<Button type="primary" size="small" style="margin-right: 5px" @click="show(index)">上传</Button>-->
-                <Upload
-                  class="upload-demo"
-                  action="/api/yewushouli/uploadFj"
-                  multiple
-                  :limit="1"
-                  :on-success="uploadSuccess">
-                  <el-button
-                    size="mini"
-                    type="primary"
-                    plain> 点击上传 </el-button>
-                  <el-button
-                    size="mini"
-                    type="primary"
-                    plain> 预览 </el-button>
-                  <!--<div v-show="uploadImg.url" class="upload-img">
-                    <img :src="uploadImg.url">
-                    <div class="upload-img-cover">
-                      <Icon type="ios-eye-outline" @click.native="showBigImg = true"></Icon>
-                      <Icon type="ios-trash-outline" @click.native="uploadImg = {}"></Icon>
-                    </div>
-                  </div>-->
-                </Upload>
-              </template>
-              <template slot-scope="{ row, index }" slot="zt">
-                <Icon type="ios-checkmark-circle-outline" color="#29d21f" size="20" style="margin-left: 30%;" v-show="form.sfwt=='1'" />
-              </template>
-            </Table>
-          </FormItem>
-
           <Divider orientation="left">个人材料</Divider>
           <FormItem class="m_table">
-            <Table border :columns="columns1" :data="tableData" style="width: 728px">
+            <Table border :columns="columns1" :data="tableData" style="width: 728px" :span-method="handleSpan" @on-row-click="bindFileData">
               <template slot-scope="{ row, index }" slot="action">
-                <!--<Button type="primary" size="small" style="margin-right: 5px" @click="show(index)">上传</Button>-->
                 <Upload
                   class="upload-demo"
                   action="/api/yewushouli/uploadFj"
                   multiple
+                  :data="form.fileData"
                   :limit="1"
-                  :on-success="uploadSuccess">
+                  :on-success="uploadSuccess"
+                  :before-upload="beforeUpload">
                   <el-button
                     size="mini"
                     type="primary"
@@ -306,17 +250,10 @@
                     type="primary"
                     plain> 预览
                   </el-button>
-                  <!--<div v-show="uploadImg.url" class="upload-img">
-                    <img :src="uploadImg.url">
-                    <div class="upload-img-cover">
-                      <Icon type="ios-eye-outline" @click.native="showBigImg = true"></Icon>
-                      <Icon type="ios-trash-outline" @click.native="uploadImg = {}"></Icon>
-                    </div>
-                  </div>-->
                 </Upload>
               </template>
               <template slot-scope="{ row, index }" slot="zt">
-                <Icon type="ios-checkmark-circle-outline" color="#29d21f" size="20" style="margin-left: 30%;" v-show="form.sfwt=='1'" />
+                <Icon type="ios-checkmark-circle-outline" color="#29d21f" size="20" style="margin-left: 30%;" v-if="form.sfwt=='1'" />
               </template>
             </Table>
           </FormItem>
@@ -348,20 +285,18 @@
 <!--          </span>-->
 <!--          </Dialog>-->
 
-
-
           <Form-item class="br" style="margin-right:40px;float:right">
             <Button
               type="primary"
               :loading="submitLoading"
               @click="submitForm"
-              v-show="type==0||type==1"
+              v-if="type==0||type==1"
             >保存并关闭
             </Button>
             <Button @click="handelPrint" type="info">打印</Button>
             <Button @click="handelCancel">关闭</Button>
           </Form-item>
-          <Spin size="large" fix v-show="loading"></Spin>
+          <Spin size="large" fix v-if="loading"></Spin>
         </Form>
       </Row>
     </Card>
@@ -408,8 +343,13 @@
             align: "center"
           },
           {
+            align: 'center',
+            title: '材料类型',
+            width: 100,
+            key: 'type',
+          },{
             title: '资料名称',
-            key: 'name'
+            key: 'name',
           },{
             title: '状态',
             key: 'address',
@@ -425,45 +365,70 @@
 
         ],
         tableData:[],
-        tableData_db:[],
         tableData1:{
-          name: '申请人身份证明（验原件，收复印件）'
+          name: '申请人身份证明',
+          type:'个人材料',
+          mergeCol:0,
         },
         tableData2:{
-          name: '增值税普通（或专用）发票（验原件，收复印件）'
+          name: '增值税普通（或专用）发票',
+          type:'个人材料',
+          mergeCol:0,
         },
         tableData3:{
-          name: '不动产属相关资料（验原件，收复印件）'
+          name: '不动产属相关资料',
+          type:'个人材料',
+          mergeCol:0,
         },
         tableData4:{
-          name: '农民工务工材料（农民工提供，原件）'
+          name: '农民工务工材料',
+          type:'个人材料',
+          mergeCol:0,
         },
         tableData5:{
-          name: '学历证明（高校毕业生提供，验原件，收复印件）'
+          name: '学历证明',
+          type:'个人材料',
+          mergeCol:0,
         },
         tableData6:{
-          name: '《商品房买卖合同》（验原件，收复印件）'
+          name: '《商品房买卖合同》',
+          type:'个人材料',
+          mergeCol:0,
         },
         tableData7:{
-          name: '营业执照、公司章程、出资材料（领办企业提供、验原件、收复印件）'
+          name: '营业执照、公司章程、出资材料',
+          type:'个人材料',
+          mergeCol:0,
         },
         tableData8:{
-          name: '其他材料'
+          name: '其他材料',
+          type:'其他材料',
+          mergeCol:0,
         },
         tableData9:{
-          name: '不动产权证（验原件，收复印件）'
+          name: '不动产权证',
+          type:'个人材料',
+          mergeCol:0,
         },
         tableData10:{
-          name: '委托书'
+          name: '委托书',
+          type:'委托材料',
+          mergeCol:0,
         },
         tableData11:{
-          name: '委托人身份证'
+          name: '委托人身份证',
+          type:'委托材料',
+          mergeCol:0,
         },
         tableData12:{
-          name: '承诺书'
+          name: '承诺书',
+          type:'委托材料',
+          mergeCol:0,
         },
         tableData13:{
-          name: '营业执照'
+          name: '营业执照',
+          type:'委托材料',
+          mergeCol:0,
         },
 
         //是否委托开发商代办
@@ -475,16 +440,27 @@
 
         form: {
           // 添加或编辑表单对象初始化数据
-          //sfwt:"0",
-          //sqrlx: 7,
-          title: "",
-          description: "",
-          startDate: "",
-          endDate: "",
-          duration: 0,
+          sfwt:"0",
+          sqrlx: 7,
           procDefId:'',
           fjids:[],
-
+          enterpriseName:'',
+          personName:'',
+          telephone:'',
+          dbrcardID:'',
+          fpsj:'',
+          fileData:{},
+          gfrq:'',
+          wqrq:'',
+          tname:'',
+          phone:'',
+          hjdz:'',
+          fcmj:'',
+          fcje:'',
+          scwz:'',
+          fclx:'',
+          fwlx:'30',
+          cardId:'',
         },
         formValidate: {
           // 表单验证规则
@@ -501,14 +477,14 @@
           cardId: [{required: true, type: 'string', message: "身份证号不能为空", trigger: "blur"}],
           phone: [{required: true, type: 'string', message: "电话不能为空", trigger: "blur"}],
           hjdz: [{required: true, type: 'string', message: "户籍地址不能为空", trigger: "blur"}],
-          jylx: [{required: true, type: 'string', message: "交易类型不能为空", trigger: "blur"}],
           fcmj: [{required: true, type: 'string', message: "购房面积不能为空", trigger: "blur"}],
           fcje: [{required: true, type: 'string', message: "发票总金额不能为空", trigger: "blur"}],
           scwz: [{required: true, type: 'string', message: "资产地址不能为空", trigger: "blur"}],
-          sfwt: [{required: true, message: "请选择是否为代办", trigger: "change"}],
-          fwlx: [{required: true, message: "房屋类型不能为空", trigger: "change"}],
-          fclx: [{required: true, message: "资产类型不能为空", trigger: "change"}],
-          sqrlx: [{required: true, message: "申请人类型不能为空", trigger: "change"}],
+          sfwt: [{required: true, type: 'string', message: "请选择是否为代办", trigger: "change"}],
+
+          fwlx: [{required: true,type: 'string', message: "补助类型不能为空", trigger: "change"}],
+          fclx: [{required: true, type: 'string',message: "资产类型不能为空", trigger: "change"}],
+          sqrlx: [{required: true,type: 'string', message: "对象类型不能为空", trigger: "change"}],
         },
         errorMsg: "",
         submitLoading: false, // 添加或编辑提交状态
@@ -566,16 +542,81 @@
         }
       };
     },
+
     methods: {
+      //点击表格 某行 绑定数据
+      bindFileData(data){
+        this.form.fileData={};
+        this.form.fileData.name=data.name;
+        this.form.fileData.type=data.type;
+        console.debug(this.form.fileData)
+      },
+
+
+      created() {
+        let that = this;
+        that.newData = that.integratedData(that.tableData);
+      },
+
+      // 被整理的数组中相同age的元素需放在一块，否则还要再整理数据（暂未处理）
+      integratedData(data) {
+        let that = this;
+        // 获取所有的附件类型
+        let arrId = [];
+        data.forEach(i => {
+          !arrId.includes(i.type) ? arrId.push(i.type) : arrId;
+        });
+        // 提前为每个type设置跨行数为0
+        let arrObj = [];
+        arrId.forEach(j => {
+          arrObj.push({
+            id: j,
+            num: 0
+          })
+        });
+        // 计算每个type的可跨行数
+        data.forEach(k => {
+          arrObj.forEach(l => {
+            k.type === l.id ? l.num ++ : l.num;
+          })
+        });
+        data.forEach(m => {
+          arrObj.forEach((n,index) => {
+            if(m.type === n.id){
+              if(arrId.includes(m.type)){
+                m.mergeCol = n.num;
+                arrId.splice(arrId.indexOf(m.type),1)
+              }else{
+                m.mergeCol = 0;
+              }
+            }
+          })
+        });
+        return data;
+      },
+
+      //合并表格行
+      handleSpan({ row, column, rowIndex, columnIndex }) {
+
+        if (columnIndex === 1) {
+          return {
+            rowspan: this.tableData.mergeCol === 0 ? 0:row.mergeCol,
+            colspan: this.tableData.mergeCol === 0 ? 0:1
+          };
+        }
+      },
+
+      //附件上传之前
+      beforeUpload(){
+        console.debug(this.form.fileData)
+      },
+
       //附件上传成功 回调
       uploadSuccess(res){
-        alert('上传成功'),
-        console.debug(res),
-        console.debug(res[0].id)
+        alert('上传成功')
         for (var i=0;i<res.length;i++  ){
           this.form.fjids.push(res[i].id)
         }
-        console.debug(this.form.fjids)
 
       },
 
@@ -587,17 +628,14 @@
         var data= that.form;
         var url= getQueryObject();
         //alert(url.procDefId)
-        //console.debug(url);
         data.procDefId=url.procDefId;
         data.fjids= that.form.fjids;
         // alert(that.form.sqrlx.key);
         // data.sqrlx=that.form.sqrlx.key;
 
-        console.debug(that.formValidate);
 
-        console.debug(that.form);
 
-        var data1={
+        /*var data1={
           nowTime:'',
           fcType:'',
           money:''
@@ -605,7 +643,7 @@
         data1.fcType=that.form.fclx.key;
         data1.money=that.form.fcje;
         data1.nowTime=that.form;
-        console.debug(data1)
+        console.debug(data1)*/
 
        this.$refs['form'].validate((valid) => {
           if (valid) {
@@ -654,18 +692,6 @@
         //alert(this.form.type)
 
 
-        //添加验证
-        if(this.form.fclx=='28' || this.form.fclx=='29'){
-          this.formValidate.fpsj[0].required=true;
-          this.formValidate.gfrq[0].required=false;
-          this.formValidate.wqrq[0].required=false;
-          console.debug(this.formValidate)
-        }else {
-           this.formValidate.fpsj[0].required=false;
-           this.formValidate.gfrq[0].required=true;
-           this.formValidate.wqrq[0].required=true;
-          console.debug(this.formValidate)
-        }
 
         var fclx= this.form.fclx;
         var sqrlx= this.form.sqrlx;
@@ -676,11 +702,12 @@
 
           if(this.form.sfwt=='1'){
             //委托材料
-            this.tableData_db=[];
-            this.tableData_db.push(this.tableData10);
-            this.tableData_db.push(this.tableData11);
-            this.tableData_db.push(this.tableData12);
-            this.tableData_db.push(this.tableData13);
+
+
+            this.tableData.push(this.tableData10);
+            this.tableData.push(this.tableData11);
+            this.tableData.push(this.tableData12);
+            this.tableData.push(this.tableData13);
           }
           //标准厂房提供材料
           if(this.form.fclx=='13'){
@@ -741,6 +768,7 @@
 
           }
           this.tableData.push(this.tableData8);
+          this.created()
           return;
         }
 
@@ -751,12 +779,11 @@
           this.tableData=[];
           if(this.form.fclx){
             if(this.form.sfwt=='1'){
-              this.tableData_db=[];
               //委托材料
-              this.tableData_db.push(this.tableData10);
-              this.tableData_db.push(this.tableData11);
-              this.tableData_db.push(this.tableData12);
-              this.tableData_db.push(this.tableData13);
+              this.tableData.push(this.tableData10);
+              this.tableData.push(this.tableData11);
+              this.tableData.push(this.tableData12);
+              this.tableData.push(this.tableData13);
             }
             //标准厂房提供材料
             if(this.form.fclx=='13'){
@@ -811,6 +838,7 @@
             }
             this.tableData.push(this.tableData8)
           }
+          this.created()
       },
 
       //改变 是否改变委托 触发
@@ -818,7 +846,6 @@
           //清空表格
           this.tableData=[];
 
-          //添加验证
           if(this.form.sfwt=='0'){
 
             //  清空表单里的委托信息
@@ -826,46 +853,25 @@
             this.form.personName=null;
             this.form.dbrcardID=null;
             this.form.telephone=null;
-
-            this.formValidate.dbrcardID[0].required=false;
-            this.formValidate.enterpriseName[0].required=false;
-            this.formValidate.personName[0].required=false;
-            this.formValidate.telephone[0].required=false;
-          }else {
-            this.formValidate.dbrcardID[0].required=true;
-            this.formValidate.enterpriseName[0].required=true;
-            this.formValidate.personName[0].required=true;
-            this.formValidate.telephone[0].required=true;
           }
-          console.debug(this.formValidate);
+
           if(this.form.fclx || this.form.sqrlx){
             if(this.form.sfwt=='1'){
-              var that= this;
-             /* setTimeout(function () {
-                //添加验证
-                that.formValidate.enterpriseName[0].required=true;
-                that.formValidate.personName[0].required=true;
-                that.formValidate.telephone[0].required=true;
-                this.formValidate.dbrcardID[0].required=true;
-              },10);*/
-
-
-
 
               //表单清空
-              this.tableData_db=[];
+              this.tableData=[];
               //委托材料
-              this.tableData_db.push(this.tableData10);
-              this.tableData_db.push(this.tableData11);
-              this.tableData_db.push(this.tableData12);
-              this.tableData_db.push(this.tableData13);
+              this.tableData.push(this.tableData10);
+              this.tableData.push(this.tableData11);
+              this.tableData.push(this.tableData12);
+              this.tableData.push(this.tableData13);
             }
             if(this.form.sfwt=='0'){
               //委托材料
-              this.tableData_db.splice(this.tableData.indexOf(this.tableData10),1);
-              this.tableData_db.splice(this.tableData.indexOf(this.tableData11),1);
-              this.tableData_db.splice(this.tableData.indexOf(this.tableData12),1);
-              this.tableData_db.splice(this.tableData.indexOf(this.tableData13),1);
+              this.tableData.splice(this.tableData.indexOf(this.tableData10),1);
+              this.tableData.splice(this.tableData.indexOf(this.tableData11),1);
+              this.tableData.splice(this.tableData.indexOf(this.tableData12),1);
+              this.tableData.splice(this.tableData.indexOf(this.tableData13),1);
             }
             //标准厂房提供材料
             if(this.form.fclx=='13'){
@@ -919,6 +925,7 @@
             }
             this.tableData.push(this.tableData8);
           }
+        this.created()
       },
       init() {
         this.type = this.$route.query.type;
@@ -931,7 +938,7 @@
           this.$refs.form.resetFields();
           this.selectDate = [];
         }
-
+        console.debug(this.dict.peoson_type)
       },
       selectDateRange(v) {
         if (v[0]) {
@@ -974,7 +981,11 @@
             }
             let str = JSON.stringify(v);
             let data = JSON.parse(str);
+
             this.form = data;
+            this.form.sqrlx=parseInt(this.form.sqrlx);
+            this.form.fclx=parseInt(this.form.fclx);
+            this.form.fwlx=parseInt(this.form.fwlx);
             this.selectDate = [];
             this.selectDate[0] = data.startDate;
             this.selectDate[1] = data.endDate;
@@ -1041,7 +1052,7 @@
         });
       },
       handelPrint() {
- 
+
         printJS({ printable: 'applyForm', type: 'html', header: '这是标题内容' });
       },
       handelCancel() {

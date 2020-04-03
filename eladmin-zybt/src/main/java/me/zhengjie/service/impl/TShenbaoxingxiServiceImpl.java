@@ -156,7 +156,7 @@ public class TShenbaoxingxiServiceImpl implements TShenbaoxingxiService {
     }
 
     @Override
-    public List<TFjxxDto> uploadFj(MultipartFile[] files , String userId ) throws IOException{
+    public List<TFjxxDto> uploadFj(MultipartFile[] files , EnclosureParameter fileData ) throws IOException{
         List<TFjxxDto> rest=new ArrayList<>();
         if(files !=null && files.length>0){
             for (MultipartFile file :files) {
@@ -200,8 +200,10 @@ public class TShenbaoxingxiServiceImpl implements TShenbaoxingxiService {
                 fjxx.setFjdx(fileSize);
                 fjxx.setUrl(path);
                 fjxx.setFjhz(fileType);
-                fjxx.setCreateId(userId);
+                fjxx.setCreateId(fileData.getIdStr());
                 fjxx.setCreateTime(new Timestamp(System.currentTimeMillis()));
+                fjxx.setFileType(fileData.getType());
+                fjxx.setFileTypeName(fileData.getName());
                 TFjxxDto tFjxxDto = fjxxService.create(fjxx);
                 rest.add(tFjxxDto);
             }

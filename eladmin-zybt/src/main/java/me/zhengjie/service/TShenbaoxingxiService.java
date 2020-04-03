@@ -70,7 +70,7 @@ public interface TShenbaoxingxiService {
      * 保存附件
      * @param file 上传的文件
      */
-    List<TFjxxDto> uploadFj(MultipartFile[] file,String userId ) throws IOException;
+    List<TFjxxDto> uploadFj(MultipartFile[] file,EnclosureParameter fileData ) throws IOException;
 
     /**
      * 业务受理 表单保存
