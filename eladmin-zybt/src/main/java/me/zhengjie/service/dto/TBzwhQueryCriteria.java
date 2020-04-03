@@ -13,4 +13,8 @@ public class TBzwhQueryCriteria{
     /** 精确 */
     @Query
     private String zclx;
+    
+    /** 主键id */
+    @Query
+    private String id;
 }

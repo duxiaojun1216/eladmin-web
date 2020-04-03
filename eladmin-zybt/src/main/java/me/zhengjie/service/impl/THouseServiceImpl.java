@@ -8,6 +8,8 @@ import me.zhengjie.service.THouseService;
 import me.zhengjie.service.dto.THouseDto;
 import me.zhengjie.service.dto.THouseQueryCriteria;
 import me.zhengjie.service.mapper.THouseMapper;
+
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,14 +19,20 @@ import org.springframework.transaction.annotation.Transactional;
 //import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
 import me.zhengjie.utils.PageUtil;
 import me.zhengjie.utils.QueryHelp;
+
 import java.util.List;
 import java.util.Map;
 import java.io.IOException;
+
+import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletResponse;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import javax.persistence.Query;
 
 /**
 * @author zengjian
@@ -84,7 +92,7 @@ public class THouseServiceImpl implements THouseService {
 
     @Override
     //@CacheEvict(allEntries = true)
-    public void deleteAll(Long[] ids) {
+    public void deleteAll(Long[] ids) {   	  	
         for (Long id : ids) {
             tHouseRepository.deleteById(id);
         }

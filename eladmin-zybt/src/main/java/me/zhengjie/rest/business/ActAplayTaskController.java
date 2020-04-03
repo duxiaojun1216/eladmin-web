@@ -11,6 +11,9 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+
 import lombok.extern.slf4j.Slf4j;
 import me.zhengjie.common.constant.ActivitiConstant;
 import me.zhengjie.common.exception.XbootException;
@@ -20,6 +23,7 @@ import me.zhengjie.common.utils.SnowFlakeUtil;
 import me.zhengjie.common.vo.PageVo;
 import me.zhengjie.common.vo.Result;
 import me.zhengjie.common.vo.SearchVo;
+import me.zhengjie.domain.TShenbaoxingxi;
 import me.zhengjie.entity.ActBusiness;
 import me.zhengjie.entity.ActProcess;
 import me.zhengjie.service.ActBusinessService;
@@ -31,6 +35,7 @@ import me.zhengjie.system.domain.User;
 import me.zhengjie.system.service.UserService;
 import me.zhengjie.system.service.dto.UserDto;
 import me.zhengjie.utils.MessageUtil;
+import me.zhengjie.utils.StringUtils;
 import me.zhengjie.vo.ActPage;
 import me.zhengjie.vo.Assignee;
 import me.zhengjie.vo.HistoricTaskVo;
@@ -57,6 +62,7 @@ import org.activiti.engine.task.IdentityLink;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -114,13 +120,14 @@ public class ActAplayTaskController {
     private MessageUtil messageUtil;
     
     @Autowired
-    ActBusinessApplyService actBusinessYewuService;
+    ActBusinessApplyService actBusinessYewuService;   
 
     @RequestMapping(value = "/todoList", method = RequestMethod.GET)
     @ApiOperation(value = "代办列表")
     public Result<Object> todoList(@RequestParam(required = false) String name,
                                    @RequestParam(required = false) String categoryId,
                                    @RequestParam(required = false) Integer priority,
+                                   @RequestParam(required = false) String region,
                                    SearchVo searchVo,
                                    PageVo pageVo){
 
@@ -129,7 +136,10 @@ public class ActAplayTaskController {
 
         String userId = securityUtil.getCurrUser().getId().toString();
         TaskQuery query = taskService.createTaskQuery().taskCandidateOrAssigned(userId);
-
+        if(StringUtils.isNotBlank(region)&& region.trim().length() > 0){
+        	query = taskService.createTaskQuery().processVariableValueLike("region",region);
+        }
+        
         // 多条件搜索
         if("createTime".equals(pageVo.getSort())&&"asc".equals(pageVo.getOrder())){
             query.orderByTaskCreateTime().asc();
@@ -205,8 +215,7 @@ public class ActAplayTaskController {
                                    @RequestParam(required = false) String categoryId,
                                    @RequestParam(required = false) Integer priority,
                                    SearchVo searchVo,
-                                   PageVo pageVo){
-
+                                   PageVo pageVo){        	
         ActPage<HistoricTaskVo> page = new ActPage<HistoricTaskVo>();
         List<HistoricTaskVo> list = new ArrayList<>();
 

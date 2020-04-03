@@ -72,6 +72,9 @@ public class ActAplayBusinessController {
         Page<ActBusiness> page = actBusinessService.findByCondition(actBusiness, searchVo, PageUtil.initPage(pageVo));
  
         page.getContent().forEach(e -> {
+        	//获取业务数据  dengjie 20200402
+            Map<String,Object> variables  =  actBusinessYewuService.findApplyById(e.getTableId());
+            e.setVariables(variables);
             if(StrUtil.isNotBlank(e.getProcDefId())){
                 ActProcess actProcess = actProcessService.get(e.getProcDefId());
                 e.setRouteName(actProcess.getRouteName());
@@ -80,11 +83,7 @@ public class ActAplayBusinessController {
            
             if(ActivitiConstant.STATUS_DEALING.equals(e.getStatus())){
                 // 关联当前任务
-                List<Task> taskList = taskService.createTaskQuery().processInstanceId(e.getProcInstId()).list();
-                
-                //获取业务数据  dengjie 20200402
-                Map<String,Object> variables  =  actBusinessYewuService.findApplyById(e.getTableId());
-                e.setVariables(variables);
+                List<Task> taskList = taskService.createTaskQuery().processInstanceId(e.getProcInstId()).list();                              
                 
                 if(taskList!=null&&taskList.size()==1){
                     e.setCurrTaskName(taskList.get(0).getName());
@@ -111,7 +110,7 @@ public class ActAplayBusinessController {
             return ResultUtil.error("actBusiness表中该id不存在");
         }
         act.setTableId(actBusiness.getTableId());
-        act.getParams().put("test", "tets");
+        act.getParams().put("region", "7");
         // 根据你的业务需求放入相应流程所需变量
         act = putParams(act);
         String processInstanceId = actProcessService.startProcess(act);

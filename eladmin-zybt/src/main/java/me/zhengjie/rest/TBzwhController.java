@@ -1,11 +1,15 @@
 package me.zhengjie.rest;
 
 import me.zhengjie.aop.log.Log;
+import me.zhengjie.common.utils.ResultUtil;
+import me.zhengjie.common.utils.SecurityUtil;
 import me.zhengjie.common.vo.PageVo;
+import me.zhengjie.common.vo.Result;
 import me.zhengjie.domain.TBzwh;
 import me.zhengjie.service.TBzwhService;
 import me.zhengjie.service.dto.TBzwhQueryCriteria;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -31,6 +36,8 @@ import javax.servlet.http.HttpServletResponse;
 public class TBzwhController {
 
     private final TBzwhService tBzwhService;
+    @Autowired
+    private SecurityUtil securityUtil;
 
     public TBzwhController(TBzwhService tBzwhService) {
         this.tBzwhService = tBzwhService;
@@ -56,38 +63,49 @@ public class TBzwhController {
     //@Log("查询t_bzwh")
     @ApiOperation("查询t_bzwh")
 //    @PreAuthorize("@el.check('tBzwh:list')")
-    public ResponseEntity<Object> getTBzwhsBypage(TBzwhQueryCriteria criteria, PageVo pageVo){
+    public Result<Object> getTBzwhsBypage(TBzwhQueryCriteria criteria, PageVo pageVo){
     	Sort s = new Sort(Sort.Direction.DESC, "id");
-  
     	Pageable pagealeble =  PageRequest.of(pageVo.getPageNumber()-1,pageVo.getPageSize(),s);
     	criteria  = new TBzwhQueryCriteria();
-        return new ResponseEntity<>(tBzwhService.queryAll(criteria,pagealeble),HttpStatus.OK);
+        return ResultUtil.data(tBzwhService.queryAll(criteria,pagealeble));
     }
-
+    @RequestMapping(value = "/getTBzwhsById", method = RequestMethod.GET)
+    //@Log("查询t_bzwh")
+    @ApiOperation("查询t_bzwh")
+//    @PreAuthorize("@el.check('tBzwh:list')")
+    public Result<Object> getTBzwhsById(int id){    	
+        return ResultUtil.data(tBzwhService.findById(id));
+    }
 
     @PostMapping
     @Log("新增t_bzwh")
     @ApiOperation("新增t_bzwh")
     @PreAuthorize("@el.check('tBzwh:add')")
-    public ResponseEntity<Object> create(@Validated @RequestBody TBzwh resources){
-        return new ResponseEntity<>(tBzwhService.create(resources),HttpStatus.CREATED);
+    public Result<Object>  create(@Validated @RequestBody TBzwh resources){
+    	String userId=securityUtil.getCurrUser().getId().toString();
+    	resources.setCreateId(userId);
+    	resources.setCreateTime(new Timestamp(System.currentTimeMillis()));   	
+        return ResultUtil.data(tBzwhService.create(resources));
     }
 
     @PutMapping
     @Log("修改t_bzwh")
     @ApiOperation("修改t_bzwh")
     @PreAuthorize("@el.check('tBzwh:edit')")
-    public ResponseEntity<Object> update(@Validated @RequestBody TBzwh resources){
+    public Result<Object>  update(@Validated @RequestBody TBzwh resources){
+    	String userId=securityUtil.getCurrUser().getId().toString();
+   	 	resources.setUpdateId(userId);
+   	 	resources.setUpdateTime(new Timestamp(System.currentTimeMillis()));
         tBzwhService.update(resources);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResultUtil.success("操作成功");
     }
 
     @Log("删除t_bzwh")
     @ApiOperation("删除t_bzwh")
     @PreAuthorize("@el.check('tBzwh:del')")
     @DeleteMapping
-    public ResponseEntity<Object> deleteAll(@RequestBody Integer[] ids) {
+    public Result<Object> deleteAll(@RequestBody Integer[] ids) {
         tBzwhService.deleteAll(ids);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResultUtil.success("操作成功");
     }
 }

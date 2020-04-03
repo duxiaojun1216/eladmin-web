@@ -34,12 +34,19 @@ export function get(data) {
   );
 }
 
-export function getDepts(params) {
+export function getDeptsByPid(params) {
   return request({
-    url: 'api/dept',
+    url: 'api/dept/getDeptsByPid',
+    method: 'get',
+    params
+  })
+}
+export function getTBzwhsById(params) {
+  return request({
+    url: 'api/tBzwh/getTBzwhsById',
     method: 'get',
     params
   })
 }
 
-export default { get,add, edit, del,getDepts }
+export default { get,add, edit, del,getDeptsByPid ,getTBzwhsById}

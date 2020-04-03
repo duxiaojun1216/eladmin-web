@@ -76,6 +76,17 @@ public class DeptController {
     }
     
     @Log("查询部门")
+    @ApiOperation("根据父Id查询部门")
+    @GetMapping(value = "/getDeptsByPid")
+    public ResponseEntity<Object> getDeptsByPid(Long pid){
+        // 数据权限
+    	DeptQueryCriteria criteria = new DeptQueryCriteria ();
+    	criteria.setPid(pid);
+        List<DeptDto> deptDtos = deptService.queryAll(criteria);
+        return new ResponseEntity<>(deptService.buildTree(deptDtos),HttpStatus.OK);
+    }
+    
+    @Log("查询部门")
     @ApiOperation("查询部门")
     @GetMapping(value = "/getAllDpets")
     @PreAuthorize("@el.check('user:list','dept:list')")
