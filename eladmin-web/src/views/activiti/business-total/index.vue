@@ -1,3 +1,4 @@
+<script src="../../../api/activiti.js"></script>
 <style lang="less">
   @import "../../../styles/table-common.less";
   @import "./businessTotal.less";
@@ -6,37 +7,48 @@
   <div class="search">
     <Card>
       <Row v-show="openSearch" @keydown.enter.native="handleSearch">
-        <Form ref="searchForm" :model="searchForm" inline :label-width="60">
-          <Form-item label="类型" prop="type">
-            <Select v-model="searchForm.type" style="width:200px">
+        <Form ref="searchForm" :model="searchForm" inline :label-width="80" size="small">
+          <Form-item label="区县名称：" prop="area">
+            <Input v-model="searchForm.area" placeholder="请输入区县名称" style="width: 120px"/>
+          </Form-item>
+          <Form-item label="发放类型：" prop="type">
+            <Select v-model="searchForm.type" style="width:150px">
               <Option v-for="item in options" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
           </Form-item>
-          <Form-item label="日期段" prop="timeRange">
+          <Form-item label="日期段：" prop="timeRange">
             <DatePicker v-model="searchForm.timeRange" type="daterange" placement="bottom-end" placeholder="请选择日期时间段"
                         style="width: 200px"></DatePicker>
           </Form-item>
-          <Form-item style="" class="br">
-            <Button @click="handleSearch" type="primary" icon="ios-search">搜索</Button>
-            <Button @click="handleReset">重置</Button>
+
+          <Form-item style="margin-left: -80px;">
+            <Button @click="handleSearch" type="primary" icon="ios-search" size="small" :loading="isLoading">搜索</Button>
+            <Button @click="handleReset" size="small">重置</Button>
           </Form-item>
         </Form>
       </Row>
-      <Button type="primary" size="large" @click="exportData()">
+
+      <Spin fix v-show="isSpinShow">
+        <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
+        <div style="font-size: 15px;">数据导出中，请耐心等候...</div>
+      </Spin>
+
+      <Button type="primary" size="small" @click="exportData()">
         <Icon type="ios-download-outline"></Icon>
         导出
       </Button>
       <br>
       <br>
-      <Table border :columns="columns1" :data="tableData" style="width: 100%" :span-method="handleSpan" show-summary
-             :summary-method="handleSummary" :current="searchForm.pageNumber" :total="total" ref="table"
-             :page-size="searchForm.pageSize">
+
+      <Table border :columns="columns1" :data="tableData" style="width: 100%;" :span-method="handleSpan" show-summary
+             :summary-method="handleSummary" :total="total" ref="table" :loading="isLoading">
       </Table>
     </Card>
   </div>
 </template>
+
 <script>
-    import { getBusinessTotalData } from '../../../api/activiti';
+    import { exportExcel, getBusinessTotalData } from '../../../api/activiti';
 
     export default {
         name: 'business-total',
@@ -51,19 +63,19 @@
                                 title: '序号',
                                 type: 'index',
                                 align: 'center',
-                                width: 65
+                                width: 55
                             },
                             {
                                 align: 'center',
                                 title: '区县',
                                 key: 'area',
-                                minWidth: 100
+                                minWidth: 80
                             },
                             {
                                 align: 'center',
                                 title: '申报对象类型',
                                 key: 'label',
-                                minWidth: 120
+                                minWidth: 110
                             },
                             {
                                 align: 'center',
@@ -74,13 +86,13 @@
                                         align: 'center',
                                         title: '套数',
                                         key: 'house_type1_tao',
-                                        minWidth: 65
+                                        minWidth: 50
                                     },
                                     {
                                         align: 'center',
                                         title: '面积',
                                         key: 'house_type1_area',
-                                        minWidth: 65,
+                                        minWidth: 90,
                                         render: (h, params) => {
                                             return h('div', {}, params.row.house_type1_area == null ? 0 : params.row.house_type1_area)
                                         }
@@ -89,7 +101,7 @@
                                         align: 'center',
                                         title: '金额',
                                         key: 'house_type1_money',
-                                        minWidth: 65,
+                                        minWidth: 100,
                                         render: (h, params) => {
                                             return h('div', {}, params.row.house_type1_money == null ? 0 : params.row.house_type1_money)
                                         }
@@ -105,13 +117,13 @@
                                         align: 'center',
                                         title: '套数',
                                         key: 'house_type2_tao',
-                                        minWidth: 65
+                                        minWidth: 50
                                     },
                                     {
                                         align: 'center',
                                         title: '面积',
                                         key: 'house_type2_area',
-                                        minWidth: 65,
+                                        minWidth: 90,
                                         render: (h, params) => {
                                             return h('div', {}, params.row.house_type2_area == null ? 0 : params.row.house_type2_area)
                                         }
@@ -120,7 +132,7 @@
                                         align: 'center',
                                         title: '金额',
                                         key: 'house_type2_money',
-                                        minWidth: 65,
+                                        minWidth: 100,
                                         render: (h, params) => {
                                             return h('div', {}, params.row.house_type2_money == null ? 0 : params.row.house_type2_money)
                                         }
@@ -136,13 +148,13 @@
                                         align: 'center',
                                         title: '套数',
                                         key: 'house_type3_tao',
-                                        minWidth: 65
+                                        minWidth: 50
                                     },
                                     {
                                         align: 'center',
                                         title: '面积',
                                         key: 'house_type3_area',
-                                        minWidth: 65,
+                                        minWidth: 90,
                                         render: (h, params) => {
                                             return h('div', {}, params.row.house_type3_area == null ? 0 : params.row.house_type3_area)
                                         }
@@ -151,7 +163,7 @@
                                         align: 'center',
                                         title: '金额',
                                         key: 'house_type3_money',
-                                        minWidth: 65,
+                                        minWidth: 100,
                                         render: (h, params) => {
                                             return h('div', {}, params.row.house_type3_money == null ? 0 : params.row.house_type3_money)
                                         }
@@ -167,13 +179,13 @@
                                         align: 'center',
                                         title: '套数',
                                         key: 'house_type4_tao',
-                                        minWidth: 65
+                                        minWidth: 50
                                     },
                                     {
                                         align: 'center',
                                         title: '面积',
                                         key: 'house_type4_area',
-                                        minWidth: 65,
+                                        minWidth: 90,
                                         render: (h, params) => {
                                             return h('div', {}, params.row.house_type4_area == null ? 0 : params.row.house_type4_area)
                                         }
@@ -182,7 +194,7 @@
                                         align: 'center',
                                         title: '金额',
                                         key: 'house_type4_money',
-                                        minWidth: 65,
+                                        minWidth: 100,
                                         render: (h, params) => {
                                             return h('div', {}, params.row.house_type4_money == null ? 0 : params.row.house_type4_money)
                                         }
@@ -198,13 +210,13 @@
                                         align: 'center',
                                         title: '套数',
                                         key: 'house_type5_tao',
-                                        minWidth: 65
+                                        minWidth: 50
                                     },
                                     {
                                         align: 'center',
                                         title: '面积',
                                         key: 'house_type5_area',
-                                        minWidth: 65,
+                                        minWidth: 90,
                                         render: (h, params) => {
                                             return h('div', {}, params.row.house_type5_area == null ? 0 : params.row.house_type5_area)
                                         }
@@ -213,7 +225,7 @@
                                         align: 'center',
                                         title: '金额',
                                         key: 'house_type5_money',
-                                        minWidth: 65,
+                                        minWidth: 100,
                                         render: (h, params) => {
                                             return h('div', {}, params.row.house_type5_money == null ? 0 : params.row.house_type5_money)
                                         }
@@ -229,13 +241,13 @@
                                         align: 'center',
                                         title: '个数',
                                         key: 'house_type6_tao',
-                                        minWidth: 65
+                                        minWidth: 50
                                     },
                                     {
                                         align: 'center',
                                         title: '面积',
                                         key: 'house_type6_area',
-                                        minWidth: 65,
+                                        minWidth: 90,
                                         render: (h, params) => {
                                             return h('div', {}, params.row.house_type6_area == null ? 0 : params.row.house_type6_area)
                                         }
@@ -244,7 +256,7 @@
                                         align: 'center',
                                         title: '金额',
                                         key: 'house_type6_money',
-                                        minWidth: 65,
+                                        minWidth: 100,
                                         render: (h, params) => {
                                             return h('div', {}, params.row.house_type6_money == null ? 0 : params.row.house_type6_money)
                                         }
@@ -276,14 +288,15 @@
                 openSearch: true,
                 total: 0, // 表格数据总数
                 tableData: [],//表格数据
+                isLoading: false,
+                isSpinShow: false,
                 searchForm: {
                     // 搜索框对应data对象
                     timeRange: [],
                     startTime: '',
                     endTime: '',
                     type: '',
-                    pageNumber: 1, // 当前页数
-                    pageSize: 10 // 页面大小
+                    area: ''
                 }
             };
         },
@@ -299,7 +312,7 @@
                     if (index === 0) {
                         sums[key] = {
                             key,
-                            value: '总价'
+                            value: '合计'
                         };
                         return;
                     }
@@ -369,53 +382,25 @@
                 //     }
                 // }
             },
-            //下载Excel
-            downLoadExcel() {
-                /* generate workbook object from table */
-                var xlsxParam = { raw: true };//转换成excel时，使用原始的格式
-                var wb = XLSX.utils.table_to_book(document.querySelector('#table'), xlsxParam)
-                /* get binary string as output */
-                var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array', cellStyles: true })
-                try {
-                    let date = new Date();
-                    FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '统计报表（' + (date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()) + '）.xlsx')
-                } catch (e) {
-                    if (typeof console !== 'undefined') console.log(e, wbout)
-                }
-                return wbout
-            },
             //搜索
             handleSearch() {
-                this.searchForm.pageNumber = 1;
-                this.searchForm.pageSize = 10;
                 this.getDataList();
             },
             handleReset() {
                 this.$refs.searchForm.resetFields();
-                this.searchForm.pageNumber = 1;
-                this.searchForm.pageSize = 10;
                 // 重新加载数据
                 this.getDataList();
             },
-            changePage(v) {
-                this.searchForm.pageNumber = v;
-                this.getDataList();
-                this.clearSelectAll();
-            },
-            changePageSize(v) {
-                this.searchForm.pageSize = v;
-                this.getDataList();
-            },
             getDataList() {
-                this.loading = true;
+                this.isLoading = true;
                 this.searchForm.startTime = this.searchForm.timeRange[0].toString();
                 this.searchForm.endTime = this.searchForm.timeRange[1].toString();
                 getBusinessTotalData(this.searchForm).then(res => {
-                    this.loading = false;
                     if (res.success) {
                         this.tableData = res.result;
                         this.total = res.result.length
                     }
+                    this.isLoading = false;
                 });
             },
             exportData() {
@@ -423,9 +408,42 @@
                 //     filename: '泸州市置业补助统计表'
                 // });
                 //导出调用后台接口
+                //window.location.href = '/api/leave/exportExcel';
 
-
+                //window.open('/api/leave/exportExcel', "_blank")
+                this.isSpinShow = true;
+                exportExcel(this.searchForm).then(res => {
+                    const content = res;
+                    const blob = new Blob([content], { type: 'application/ms-excel' });
+                    var date = new Date();
+                    var seperator1 = '-';
+                    var year = date.getFullYear();
+                    var month = date.getMonth() + 1;
+                    var strDate = date.getDate();
+                    if (month >= 1 && month <= 9) {
+                        month = '0' + month;
+                    }
+                    if (strDate >= 0 && strDate <= 9) {
+                        strDate = '0' + strDate;
+                    }
+                    var currentdate = year + seperator1 + month + seperator1 + strDate;
+                    const fileName = '泸州市置业补助统计表（' + currentdate + '）.xlsx';
+                    if ('download' in document.createElement('a')) { // 非IE下载
+                        const elink = document.createElement('a');
+                        elink.download = fileName;
+                        elink.style.display = 'none';
+                        elink.href = URL.createObjectURL(blob);
+                        document.body.appendChild(elink);
+                        elink.click();
+                        URL.revokeObjectURL(elink.href); // 释放URL 对象
+                        document.body.removeChild(elink);
+                    } else { // IE10+下载
+                        navigator.msSaveBlob(blob, fileName);
+                    }
+                    this.isSpinShow = false;
+                });
             }
+
         },
         mounted() {
             this.init();

@@ -3,32 +3,37 @@ package me.zhengjie.service.impl;
 import me.zhengjie.common.utils.SecurityUtil;
 import me.zhengjie.domain.*;
 import me.zhengjie.entity.ActBusiness;
+import me.zhengjie.repository.TShenbaoxingxiRepository;
 import me.zhengjie.service.*;
 import me.zhengjie.service.business.LeaveService;
 import me.zhengjie.service.dto.*;
+import me.zhengjie.service.mapper.TShenbaoxingxiMapper;
 import me.zhengjie.system.service.DeptService;
 import me.zhengjie.system.service.dto.UserDto;
 import me.zhengjie.utils.*;
-import me.zhengjie.repository.TShenbaoxingxiRepository;
-import me.zhengjie.service.mapper.TShenbaoxingxiMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
 // 默认不使用缓存
 //import org.springframework.cache.annotation.CacheConfig;
 //import org.springframework.cache.annotation.CacheEvict;
 //import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.io.IOException;
-import javax.servlet.http.HttpServletResponse;
 
 /**
 * @author zengjian
@@ -64,6 +69,8 @@ public class TShenbaoxingxiServiceImpl implements TShenbaoxingxiService {
     @Autowired
     private final DeptService deptService;
 
+    @Autowired
+    private LocalContainerEntityManagerFactoryBean entityManagerFactory;
 
     public TShenbaoxingxiServiceImpl(TShenbaoxingxiRepository tShenbaoxingxiRepository, TShenbaoxingxiMapper tShenbaoxingxiMapper, TFjxxService fjxxService, DeptService deptService) {
         this.tShenbaoxingxiRepository = tShenbaoxingxiRepository;
@@ -441,15 +448,6 @@ public class TShenbaoxingxiServiceImpl implements TShenbaoxingxiService {
         return bh;
     }
 
-    //    @Override
-//    public List<BusinessTotal> getBusinessTotalData(String startTime, String endTime, String type) {
-//        return tShenbaoxingxiTotalRepository.getBusinessTotalData(startTime,endTime,type);
-//    }
-
-    @Override
-    public List<Map<String, String>> getBusinessTotalData(String startTime, String endTime, String type) {
-        return tShenbaoxingxiRepository.getBusinessTotalData(startTime,endTime,type);
-    }
 
     public TShenbaoxingxi findOneById(Long id) {
         TShenbaoxingxi tShenbaoxingxi = tShenbaoxingxiRepository.findById(id).orElseGet(TShenbaoxingxi::new);
@@ -457,5 +455,140 @@ public class TShenbaoxingxiServiceImpl implements TShenbaoxingxiService {
         return tShenbaoxingxi;
     }
 
+    @Override
+    public List<BusinessTotal> getBusinessTotalData(String startTime, String endTime, String type, String area) throws ParseException {
+        //return tShenbaoxingxiRepository.getBusinessTotalData(startTime,endTime,type);
+        EntityManager em = entityManagerFactory.getNativeEntityManagerFactory().createEntityManager();
+        StringBuilder sqljoint = new StringBuilder();
+        StringBuilder strWhere = new StringBuilder();
 
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        if (StringUtils.isNotEmpty(startTime)) {
+            Date date = new Date(startTime);
+            strWhere.append(" AND htsj >= '" + simpleDateFormat.format(date) + "'");
+        }
+
+        if (StringUtils.isNotEmpty(endTime)) {
+            Date date = new Date(endTime);
+            strWhere.append(" AND htsj <= '" + simpleDateFormat.format(date)+ "'");
+        }
+
+        if (StringUtils.isNotEmpty(type)) {
+            //暂定
+        }
+
+        String allWhere = "WHERE 1 = 1";
+        if (StringUtils.isNotEmpty(area)) {
+            allWhere += " AND area LIKE '%" + area.trim() + "%'";
+        }
+
+        sqljoint.append("\n" +
+                "SELECT * FROM (\n" +
+                "\n" +
+                "SELECT '江阳区' AS area\n" +
+                ", label\n" +
+                ",UUID() AS id\n" +
+                ",(SELECT COUNT(*) FROM t_shenbaoxingxi WHERE create_id IN (SELECT id FROM `user` WHERE region = 7) AND fclx = 13 AND sqrlx = dict_detail.id " + strWhere.toString() + ")  AS house_type1_tao\n" +
+                ",(SELECT SUM(fcje) FROM t_shenbaoxingxi WHERE create_id IN (SELECT id FROM `user` WHERE region = 7) AND fclx = 13 AND sqrlx = dict_detail.id " + strWhere.toString() + ")  AS house_type1_money\n" +
+                ",(SELECT SUM(fcmj) FROM t_house WHERE id IN (SELECT fcid FROM `t_shenbaoxingxi` WHERE create_id IN (SELECT id FROM `user` WHERE region = 7) AND fclx = 13 AND sqrlx = dict_detail.id " + strWhere.toString() + "))  AS house_type1_area\n" +
+                "\n" +
+                ",(SELECT COUNT(*) FROM t_shenbaoxingxi WHERE create_id IN (SELECT id FROM `user` WHERE region = 7) AND fclx = 14 AND sqrlx = dict_detail.id " + strWhere.toString() + ")  AS house_type2_tao\n" +
+                ",(SELECT SUM(fcje) FROM t_shenbaoxingxi WHERE create_id IN (SELECT id FROM `user` WHERE region = 7) AND fclx = 14 AND sqrlx = dict_detail.id " + strWhere.toString() + ")  AS house_type2_money\n" +
+                ",(SELECT SUM(fcmj) FROM t_house WHERE id IN (SELECT fcid FROM `t_shenbaoxingxi` WHERE create_id IN (SELECT id FROM `user` WHERE region = 7) AND fclx = 14 AND sqrlx = dict_detail.id " + strWhere.toString() + "))  AS house_type2_area\n" +
+                "\n" +
+                "\n" +
+                ",(SELECT COUNT(*) FROM t_shenbaoxingxi WHERE create_id IN (SELECT id FROM `user` WHERE region = 7) AND fclx = 15 AND sqrlx = dict_detail.id " + strWhere.toString() + ")  AS house_type3_tao\n" +
+                ",(SELECT SUM(fcje) FROM t_shenbaoxingxi WHERE create_id IN (SELECT id FROM `user` WHERE region = 7) AND fclx = 15 AND sqrlx = dict_detail.id " + strWhere.toString() + ")  AS house_type3_money\n" +
+                ",(SELECT SUM(fcmj) FROM t_house WHERE id IN (SELECT fcid FROM `t_shenbaoxingxi` WHERE create_id IN (SELECT id FROM `user` WHERE region = 7) AND fclx = 15 AND sqrlx = dict_detail.id " + strWhere.toString() + "))  AS house_type3_area\n" +
+                "\n" +
+                "\n" +
+                ",(SELECT COUNT(*) FROM t_shenbaoxingxi WHERE create_id IN (SELECT id FROM `user` WHERE region = 7) AND fclx = 28 AND sqrlx = dict_detail.id " + strWhere.toString() + ")  AS house_type4_tao\n" +
+                ",(SELECT SUM(fcje) FROM t_shenbaoxingxi WHERE create_id IN (SELECT id FROM `user` WHERE region = 7) AND fclx = 28 AND sqrlx = dict_detail.id " + strWhere.toString() + ")  AS house_type4_money\n" +
+                ",(SELECT SUM(fcmj) FROM t_house WHERE id IN (SELECT fcid FROM `t_shenbaoxingxi` WHERE create_id IN (SELECT id FROM `user` WHERE region = 7) AND fclx = 28 AND sqrlx = dict_detail.id " + strWhere.toString() + "))  AS house_type4_area\n" +
+                "\n" +
+                "\n" +
+                ",(SELECT COUNT(*) FROM t_shenbaoxingxi WHERE create_id IN (SELECT id FROM `user` WHERE region = 7) AND fclx = 29 AND sqrlx = dict_detail.id " + strWhere.toString() + ")  AS house_type5_tao\n" +
+                ",(SELECT SUM(fcje) FROM t_shenbaoxingxi WHERE create_id IN (SELECT id FROM `user` WHERE region = 7) AND fclx = 29 AND sqrlx = dict_detail.id " + strWhere.toString() + ")  AS house_type5_money\n" +
+                ",(SELECT SUM(fcmj) FROM t_house WHERE id IN (SELECT fcid FROM `t_shenbaoxingxi` WHERE create_id IN (SELECT id FROM `user` WHERE region = 7) AND fclx = 29 AND sqrlx = dict_detail.id " + strWhere.toString() + "))  AS house_type5_area\n" +
+                "\n" +
+                ",(SELECT COUNT(*) FROM t_shenbaoxingxi WHERE create_id IN (SELECT id FROM `user` WHERE region = 7) AND fclx = 16 AND sqrlx = dict_detail.id " + strWhere.toString() + ")  AS house_type6_tao\n" +
+                ",(SELECT SUM(fcje) FROM t_shenbaoxingxi WHERE create_id IN (SELECT id FROM `user` WHERE region = 7) AND fclx = 16 AND sqrlx = dict_detail.id " + strWhere.toString() + ")  AS house_type6_money\n" +
+                ",(SELECT SUM(fcmj) FROM t_house WHERE id IN (SELECT fcid FROM `t_shenbaoxingxi` WHERE create_id IN (SELECT id FROM `user` WHERE region = 7) AND fclx = 16 AND sqrlx = dict_detail.id " + strWhere.toString() + "))  AS house_type6_area\n" +
+                "FROM dict_detail WHERE dict_id = 6\n" +
+                "\n" +
+                "UNION ALL\n" +
+                "\n" +
+                "SELECT '龙马潭区'AS area\n" +
+                ",label\n" +
+                ",UUID() AS id\n" +
+                ",(SELECT COUNT(*) FROM t_shenbaoxingxi WHERE create_id IN (SELECT id FROM `user` WHERE region = 8) AND fclx = 13 AND sqrlx = dict_detail.id " + strWhere.toString() + ")  AS house_type1_tao\n" +
+                ",(SELECT SUM(fcje) FROM t_shenbaoxingxi WHERE create_id IN (SELECT id FROM `user` WHERE region = 8) AND fclx = 13 AND sqrlx = dict_detail.id " + strWhere.toString() + ")  AS house_type1_money\n" +
+                ",(SELECT SUM(fcmj) FROM t_house WHERE id IN (SELECT fcid FROM `t_shenbaoxingxi` WHERE create_id IN (SELECT id FROM `user` WHERE region = 8) AND fclx = 13 AND sqrlx = dict_detail.id " + strWhere.toString() + "))  AS house_type1_area\n" +
+                "\n" +
+                ",(SELECT COUNT(*) FROM t_shenbaoxingxi WHERE create_id IN (SELECT id FROM `user` WHERE region = 8) AND fclx = 14 AND sqrlx = dict_detail.id " + strWhere.toString() + ")  AS house_type2_tao\n" +
+                ",(SELECT SUM(fcje) FROM t_shenbaoxingxi WHERE create_id IN (SELECT id FROM `user` WHERE region = 8) AND fclx = 14 AND sqrlx = dict_detail.id " + strWhere.toString() + ")  AS house_type2_money\n" +
+                ",(SELECT SUM(fcmj) FROM t_house WHERE id IN (SELECT fcid FROM `t_shenbaoxingxi` WHERE create_id IN (SELECT id FROM `user` WHERE region = 8) AND fclx = 14 AND sqrlx = dict_detail.id " + strWhere.toString() + "))  AS house_type2_area\n" +
+                "\n" +
+                "\n" +
+                ",(SELECT COUNT(*) FROM t_shenbaoxingxi WHERE create_id IN (SELECT id FROM `user` WHERE region = 8) AND fclx = 15 AND sqrlx = dict_detail.id " + strWhere.toString() + ")  AS house_type3_tao\n" +
+                ",(SELECT SUM(fcje) FROM t_shenbaoxingxi WHERE create_id IN (SELECT id FROM `user` WHERE region = 8) AND fclx = 15 AND sqrlx = dict_detail.id " + strWhere.toString() + ")  AS house_type3_money\n" +
+                ",(SELECT SUM(fcmj) FROM t_house WHERE id IN (SELECT fcid FROM `t_shenbaoxingxi` WHERE create_id IN (SELECT id FROM `user` WHERE region = 8) AND fclx = 15 AND sqrlx = dict_detail.id " + strWhere.toString() + "))  AS house_type3_area\n" +
+                "\n" +
+                "\n" +
+                ",(SELECT COUNT(*) FROM t_shenbaoxingxi WHERE create_id IN (SELECT id FROM `user` WHERE region = 8) AND fclx = 28 AND sqrlx = dict_detail.id " + strWhere.toString() + ")  AS house_type4_tao\n" +
+                ",(SELECT SUM(fcje) FROM t_shenbaoxingxi WHERE create_id IN (SELECT id FROM `user` WHERE region = 8) AND fclx = 28 AND sqrlx = dict_detail.id " + strWhere.toString() + ")  AS house_type4_money\n" +
+                ",(SELECT SUM(fcmj) FROM t_house WHERE id IN (SELECT fcid FROM `t_shenbaoxingxi` WHERE create_id IN (SELECT id FROM `user` WHERE region = 8) AND fclx = 28 AND sqrlx = dict_detail.id " + strWhere.toString() + "))  AS house_type4_area\n" +
+                "\n" +
+                "\n" +
+                ",(SELECT COUNT(*) FROM t_shenbaoxingxi WHERE create_id IN (SELECT id FROM `user` WHERE region = 8) AND fclx = 29 AND sqrlx = dict_detail.id " + strWhere.toString() + ")  AS house_type5_tao\n" +
+                ",(SELECT SUM(fcje) FROM t_shenbaoxingxi WHERE create_id IN (SELECT id FROM `user` WHERE region = 8) AND fclx = 29 AND sqrlx = dict_detail.id " + strWhere.toString() + ")  AS house_type5_money\n" +
+                ",(SELECT SUM(fcmj) FROM t_house WHERE id IN (SELECT fcid FROM `t_shenbaoxingxi` WHERE create_id IN (SELECT id FROM `user` WHERE region = 8) AND fclx = 29 AND sqrlx = dict_detail.id " + strWhere.toString() + "))  AS house_type5_area\n" +
+                "\n" +
+                ",(SELECT COUNT(*) FROM t_shenbaoxingxi WHERE create_id IN (SELECT id FROM `user` WHERE region = 8) AND fclx = 16 AND sqrlx = dict_detail.id " + strWhere.toString() + ")  AS house_type6_tao\n" +
+                ",(SELECT SUM(fcje) FROM t_shenbaoxingxi WHERE create_id IN (SELECT id FROM `user` WHERE region = 8) AND fclx = 16 AND sqrlx = dict_detail.id " + strWhere.toString() + ")  AS house_type6_money\n" +
+                ",(SELECT SUM(fcmj) FROM t_house WHERE id IN (SELECT fcid FROM `t_shenbaoxingxi` WHERE create_id IN (SELECT id FROM `user` WHERE region = 8) AND fclx = 16 AND sqrlx = dict_detail.id " + strWhere.toString() + "))  AS house_type6_area\n" +
+                "FROM dict_detail WHERE dict_id = 6\n" +
+                "\n" +
+                "UNION ALL\n" +
+                "\n" +
+                "SELECT '纳溪区'AS area\n" +
+                ",label\n" +
+                ",UUID() AS id\n" +
+                ",(SELECT COUNT(*) FROM t_shenbaoxingxi WHERE create_id IN (SELECT id FROM `user` WHERE region = 12) AND fclx = 13 AND sqrlx = dict_detail.id " + strWhere.toString() + ")  AS house_type1_tao\n" +
+                ",(SELECT SUM(fcje) FROM t_shenbaoxingxi WHERE create_id IN (SELECT id FROM `user` WHERE region = 12) AND fclx = 13 AND sqrlx = dict_detail.id " + strWhere.toString() + ")  AS house_type1_money\n" +
+                ",(SELECT SUM(fcmj) FROM t_house WHERE id IN (SELECT fcid FROM `t_shenbaoxingxi` WHERE create_id IN (SELECT id FROM `user` WHERE region = 12) AND fclx = 13 AND sqrlx = dict_detail.id " + strWhere.toString() + "))  AS house_type1_area\n" +
+                "\n" +
+                ",(SELECT COUNT(*) FROM t_shenbaoxingxi WHERE create_id IN (SELECT id FROM `user` WHERE region = 12) AND fclx = 14 AND sqrlx = dict_detail.id " + strWhere.toString() + ")  AS house_type2_tao\n" +
+                ",(SELECT SUM(fcje) FROM t_shenbaoxingxi WHERE create_id IN (SELECT id FROM `user` WHERE region = 12) AND fclx = 14 AND sqrlx = dict_detail.id " + strWhere.toString() + ")  AS house_type2_money\n" +
+                ",(SELECT SUM(fcmj) FROM t_house WHERE id IN (SELECT fcid FROM `t_shenbaoxingxi` WHERE create_id IN (SELECT id FROM `user` WHERE region = 12) AND fclx = 14 AND sqrlx = dict_detail.id " + strWhere.toString() + "))  AS house_type2_area\n" +
+                "\n" +
+                "\n" +
+                ",(SELECT COUNT(*) FROM t_shenbaoxingxi WHERE create_id IN (SELECT id FROM `user` WHERE region = 12) AND fclx = 15 AND sqrlx = dict_detail.id " + strWhere.toString() + ")  AS house_type3_tao\n" +
+                ",(SELECT SUM(fcje) FROM t_shenbaoxingxi WHERE create_id IN (SELECT id FROM `user` WHERE region = 12) AND fclx = 15 AND sqrlx = dict_detail.id " + strWhere.toString() + ")  AS house_type3_money\n" +
+                ",(SELECT SUM(fcmj) FROM t_house WHERE id IN (SELECT fcid FROM `t_shenbaoxingxi` WHERE create_id IN (SELECT id FROM `user` WHERE region = 12) AND fclx = 15 AND sqrlx = dict_detail.id " + strWhere.toString() + "))  AS house_type3_area\n" +
+                "\n" +
+                "\n" +
+                ",(SELECT COUNT(*) FROM t_shenbaoxingxi WHERE create_id IN (SELECT id FROM `user` WHERE region = 12) AND fclx = 28 AND sqrlx = dict_detail.id " + strWhere.toString() + ")  AS house_type4_tao\n" +
+                ",(SELECT SUM(fcje) FROM t_shenbaoxingxi WHERE create_id IN (SELECT id FROM `user` WHERE region = 12) AND fclx = 28 AND sqrlx = dict_detail.id " + strWhere.toString() + ")  AS house_type4_money\n" +
+                ",(SELECT SUM(fcmj) FROM t_house WHERE id IN (SELECT fcid FROM `t_shenbaoxingxi` WHERE create_id IN (SELECT id FROM `user` WHERE region = 12) AND fclx = 28 AND sqrlx = dict_detail.id " + strWhere.toString() + "))  AS house_type4_area\n" +
+                "\n" +
+                "\n" +
+                ",(SELECT COUNT(*) FROM t_shenbaoxingxi WHERE create_id IN (SELECT id FROM `user` WHERE region = 12) AND fclx = 29 AND sqrlx = dict_detail.id " + strWhere.toString() + ")  AS house_type5_tao\n" +
+                ",(SELECT SUM(fcje) FROM t_shenbaoxingxi WHERE create_id IN (SELECT id FROM `user` WHERE region = 12) AND fclx = 29 AND sqrlx = dict_detail.id " + strWhere.toString() + ")  AS house_type5_money\n" +
+                ",(SELECT SUM(fcmj) FROM t_house WHERE id IN (SELECT fcid FROM `t_shenbaoxingxi` WHERE create_id IN (SELECT id FROM `user` WHERE region = 12) AND fclx = 29 AND sqrlx = dict_detail.id " + strWhere.toString() + "))  AS house_type5_area\n" +
+                "\n" +
+                ",(SELECT COUNT(*) FROM t_shenbaoxingxi WHERE create_id IN (SELECT id FROM `user` WHERE region = 12) AND fclx = 16 AND sqrlx = dict_detail.id " + strWhere.toString() + ")  AS house_type6_tao\n" +
+                ",(SELECT SUM(fcje) FROM t_shenbaoxingxi WHERE create_id IN (SELECT id FROM `user` WHERE region = 12) AND fclx = 16 AND sqrlx = dict_detail.id " + strWhere.toString() + ")  AS house_type6_money\n" +
+                ",(SELECT SUM(fcmj) FROM t_house WHERE id IN (SELECT fcid FROM `t_shenbaoxingxi` WHERE create_id IN (SELECT id FROM `user` WHERE region =128) AND fclx = 16 AND sqrlx = dict_detail.id " + strWhere.toString() + "))  AS house_type6_area\n" +
+                "FROM dict_detail WHERE dict_id = 6\n" +
+                ") AS a " + allWhere);
+        //sqljoint.apped("附加的where子句")
+        String sql = sqljoint.toString();
+        //em.getTransaction().begin();
+        //创建原生查询的时候，将info.class类即第二个参数，写成要传回的bean，这样就可以直接用List<Bean>接收
+        Query query1 = em.createNativeQuery(sql, BusinessTotal.class);
+        //List<Map<String,Object>> obj=query1.getResultList();
+        List<BusinessTotal> obj = query1.getResultList();
+        return obj;
+    }
 }

@@ -1,15 +1,15 @@
 package me.zhengjie.service;
 
-import me.zhengjie.common.vo.Result;
 import me.zhengjie.domain.TShenbaoxingxi;
 import me.zhengjie.service.dto.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Map;
-import java.util.List;
-import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.List;
+import java.util.Map;
 
 /**
 * @author zengjian
@@ -93,6 +93,6 @@ public interface TShenbaoxingxiService {
      * @param type
      * @return
      */
-    List<Map<String,String>> getBusinessTotalData(String startTime, String endTime, String type);
+    List<BusinessTotal> getBusinessTotalData(String startTime, String endTime, String type, String area) throws ParseException;
     //List<BusinessTotal> getBusinessTotalData(String startTime, String endTime, String type);
 }

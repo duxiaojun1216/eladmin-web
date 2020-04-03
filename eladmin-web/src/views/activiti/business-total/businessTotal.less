@@ -3,12 +3,70 @@
 }
 
 .ivu-table-header th {
-  font-size: 13px;
+  font-size: 10px;
   color: #606266;
   font-weight: bold;
   background-color: #D9D9D9;
-  height: 55px !important;
+  height: 45px !important;
 }
+
 .ivu-table-border td, .ivu-table-border th {
-  height: 40px !important;
+  height: 35px !important;
+}
+
+.ivu-table-cell {
+  padding-left: 5px !important;
+  padding-right: 5px !important;
+}
+
+.ivu-form .ivu-form-item-label {
+  text-align: right;
+  vertical-align: middle;
+  float: left;
+  font-size: 14px;
+  color: #515a6e;
+  line-height: 1;
+  padding: 10px 0px 10px 0 !important;
+  box-sizing: border-box;
+}
+
+/* 旋转效果 */
+.demo-spin-icon-load {
+  animation: ani-demo-spin 1s linear infinite;
+}
+
+@keyframes ani-demo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 假如内容过长，一屏放不下，滚动条下拉覆盖不全 */
+.ivu-spin-fix {
+  position: fixed;
+}
+
+.ivu-table {
+  overflow: auto;
+}
+
+
+.ivu-table-summary
+.ivu-table-body
+.ivu-table-header {
+  overflow: visible !important;
+}
+
+.ivu-table::after {
+  position: relative !important;
+}
+
+.ivu-table-overflowX {
+overflow-x: unset !important;
 }
