@@ -5,6 +5,8 @@ import java.io.Serializable;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 
+import javax.persistence.Column;
+
 /**
 * @author zengjian
 * @date 2020-03-27
@@ -45,4 +47,10 @@ public class TFjxxDto implements Serializable {
 
     /** 备用字段 */
     private String bak3;
+
+    /** 文件名称（资料名称） */
+    private String fileTypeName;
+
+    /** 文件类型（属于哪种资料） */
+    private String fileType;
 }

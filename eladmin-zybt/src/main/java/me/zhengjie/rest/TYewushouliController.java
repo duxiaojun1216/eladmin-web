@@ -160,19 +160,20 @@ public class TYewushouliController {
     @Log("上传附件信息")
     @ApiOperation("上传附件")
 //    @PreAuthorize("@   .check('yewushouli:uploadFj')")
-//    @PostMapping(value = "/uploadFj", consumes = "multipart/*", headers = "content-type=multipart/form-data")
     @RequestMapping(value = "/uploadFj", method = RequestMethod.POST)
-    public ResponseEntity<Object> uploadFj(@RequestParam("file") MultipartFile[] file) throws IOException{
+    public ResponseEntity<Object> uploadFj(@RequestParam(required = false) MultipartFile[] file
+                                          ,@RequestParam(required = false) EnclosureParameter fileDtata) throws IOException{
 
-//        UserDto currUser = securityUtil.getCurrUser();
         String idStr=null;
         if(securityUtil!=null){
             //todo 先设置为 固定的 test
-            //idStr = securityUtil.getCurrUser().getId().toString();
-            idStr="4";
+            idStr = securityUtil.getCurrUser().getId().toString();
+            if(fileDtata.getIdStr()==null){
+                fileDtata.setIdStr(idStr);
+            }
         }
 
-        List<TFjxxDto> fjxxDtos = tShenbaoxingxiService.uploadFj(file,idStr);
+        List<TFjxxDto> fjxxDtos = tShenbaoxingxiService.uploadFj(file,fileDtata);
         return new ResponseEntity<>(fjxxDtos,HttpStatus.CREATED);
     }
 
