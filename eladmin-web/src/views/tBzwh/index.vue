@@ -36,23 +36,23 @@
 		<!-- 操作 -->
 		<Modal :title="modalTaskTitle" v-model="modalTaskVisible" :mask-closable="false" :width="500">
 			<Form ref="form" :model="form" :rules="rules" size="small" :label-width="80">
-				<FormItem label="资产类型">
+				<FormItem label="资产类型" prop="zclx">
 					<Select v-model="form.zclx" placeholder="请选择">
-						<Option v-for="item in dictPriority" :key="item.id" :label="item.label" :value="item.value" />
+						<Option v-for="item in dictPriority" :key="''+item.id" :label="item.label" :value="''+item.value" />
 					</Select>
 				</FormItem>
-				<FormItem label="起始时间">
-					<DatePicker v-model="form.qssj" type="date" format="yyyy-MM-dd" :key="form.qssj" placeholder="选择起始时间" style="width: 100%"></DatePicker>
+				<FormItem label="起始时间" prop="qssj" >
+					<DatePicker v-model="form.qssj"  type="date" format="yyyy-MM-dd" :key="form.qssj" placeholder="选择起始时间" style="width: 100%"></DatePicker>
 				</FormItem>
-				<FormItem label="终止时间">
-					<DatePicker v-model="form.zzsj" type="date" format="yyyy-MM-dd" :key="form.zzsj" placeholder="选择终止时间" style="width: 100%"></DatePicker>
+				<FormItem label="终止时间" prop="zzsj">
+					<DatePicker v-model="form.zzsj"  type="date" format="yyyy-MM-dd" :key="form.zzsj" placeholder="选择终止时间" style="width: 100%"></DatePicker>
 				</FormItem>
-				<FormItem label="所属区域">
+				<FormItem label="所属区域" prop="ssqy">
 					<Select v-model="form.ssqy" filterable placeholder="请选择">
-						<Option v-for="item1 in depts" :key="item1.id" :label="item1.label" :value="''+item1.id"></Option>
+						<Option v-for="item1 in depts" :key="''+item1.id" :label="item1.label" :value="''+item1.id"></Option>
 					</Select>
 				</FormItem>
-				<FormItem label="标准">
+				<FormItem label="标准" prop="bz">
 					<Input v-model="form.bz" style="width: 100%;" />
 				</FormItem>
 			</Form>
@@ -111,7 +111,13 @@
 					ssqy: "",
 					bz: ""
 				},
-				rules: {},
+				rules: {// 表单验证规则
+          zclx: [{required: true,  type: 'string',message: "资产类比不能为空", trigger: "blur"}],
+          qssj: [{ required: true, type: 'date', message: '起始时间不能为空', trigger: 'change' }],
+          zzsj: [{required: true, type: 'date', message: "终止时间不能为空", trigger: "change"}],
+          ssqy: [{required: true, type: 'string', message: "所属区域不能为空", trigger: "blur"}],
+          bz: [{required: true,type: 'string', message: "标准不能为空", trigger: "blur"}],
+        },
 				searchForm: {
 					// 搜索框对应data对象
 					zclx: '',
@@ -423,31 +429,37 @@
 			},
 			//保存表单
 			handelSubmit(form) {
-				this.userLoading = true;
-				if(this.form.id == null) {
-					add(this.form).then(res => {
-						this.userLoading = false;
-						if(res.success) {
-							this.modalTaskVisible = false;
-							this.getDataList();
-							this.$Message.success('保存成功');
-						} else {
-							this.$Message.error('保存失败');
-						}
-					});
-				} else {
-					edit(this.form).then(res => {
-						this.userLoading = false;
-						if(res.success) {
-							this.modalTaskVisible = false;
-							this.getDataList();
-							this.$Message.success('保存成功');
-						} else {
-							this.$Message.error('保存失败');
-						}
-					});
+        this.$refs['form'].validate((valid) => {
+          if (valid) {
+            this.userLoading = true;
+            if(this.form.id == null) {
+              add(this.form).then(res => {
+                this.userLoading = false;
+                if(res.success) {
+                  this.modalTaskVisible = false;
+                  this.getDataList();
+                  this.$Message.success('保存成功');
+                } else {
+                  this.$Message.error('保存失败');
+                }
+              });
+            } else {
+              edit(this.form).then(res => {
+                this.userLoading = false;
+                if(res.success) {
+                  this.modalTaskVisible = false;
+                  this.getDataList();
+                  this.$Message.success('保存成功');
+                } else {
+                  this.$Message.error('保存失败');
+                }
+              });
+            }
+          } else {
+            this.$Message.error('Fail!');
+          }
+        })
 
-				}
 
 			},
 			//单一删除
@@ -463,7 +475,7 @@
 						this.patchdeleteData(ids);
 					}
 				});
-				
+
 			},
 			//批量删除
 			delAll() {
