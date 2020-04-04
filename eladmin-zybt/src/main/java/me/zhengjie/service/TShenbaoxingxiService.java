@@ -77,7 +77,7 @@ public interface TShenbaoxingxiService {
      * @param shxxHz 表单信息
      * @return
      */
-    TShenbaoxingxiDto addShenBaoXinXi(ShxxHz shxxHz);
+    void addShenBaoXinXi(ShxxHz shxxHz);
 
     /**
      * 根据 id 获取业务受理 表单信息
@@ -95,4 +95,11 @@ public interface TShenbaoxingxiService {
      */
     List<BusinessTotal> getBusinessTotalData(String startTime, String endTime, String type, String area) throws ParseException;
     //List<BusinessTotal> getBusinessTotalData(String startTime, String endTime, String type);
+
+    /**
+     * 业务受理 表单修改
+     * @param shxxHz 表单信息
+     * @return
+     */
+    void updateShenBaoXinXi(ShxxHz shxxHz);
 }

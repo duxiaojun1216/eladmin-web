@@ -114,14 +114,13 @@ public class TFjxxServiceImpl implements TFjxxService {
         FileUtil.downloadExcel(list, response);
     }
 
-    /**
-     *
-     * @param sbxxid 申报信息id
-     * @param idsStr 附件id
-     * @return
-     */
     @Override
     public int updateSbxxIdById(String sbxxid, String idsStr) {
         return  tFjxxRepository.updateSbxxIdById(sbxxid, idsStr);
+    }
+
+    @Override
+    public List<TFjxx> findFjxxByShenbaoxixiId(String sbxxid) {
+        return tFjxxRepository.findFjxxByShenbaoxixiId(sbxxid);
     }
 }

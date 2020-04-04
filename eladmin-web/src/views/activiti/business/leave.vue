@@ -1,6 +1,6 @@
 <style lang="less">
 .ivu-card-body {
-    padding: 0!important;	    
+    padding: 0!important;
 }
   .form_item {
     margin-bottom: 24px;
@@ -89,7 +89,7 @@
   <div class="search">
     <Card style="width: 970px;margin: auto;">
       <p slot="title" class="header_p">
-        <span>泸州市农民工进城置业补助申请表</span>       
+        <span>泸州市农民工进城置业补助申请表</span>
       </p>
       <p slot="title" style="text-align:left ;font-size:14px;width: 250px;">
         <span>编号：JYTY032020001</span>
@@ -169,7 +169,7 @@
             </RadioGroup>
           </FormItem>
           <!--新增-->
-          <FormItem class="form_item1" :label="label.fwlx"  prop="fwlx" width="100%" v-if="form.fclx=='15'  ">
+          <FormItem class="form_item1" :label="label.fwlx"  prop="fwlx" width="100%" v-if="form.fclx!='13' && form.fclx!='16'">
             <RadioGroup v-model="form.fwlx" filterable placeholder="请选择" id="hxlxRedio">
               <Radio
                 v-for="item in dict.apartment_type"
@@ -439,7 +439,7 @@
         form: {
           // 添加或编辑表单对象初始化数据
           sfwt:"0",
-          sqrlx: 7,
+          sqrlx: '7',
           procDefId:'',
           fjids:[],
           enterpriseName:'',
@@ -447,7 +447,7 @@
           telephone:'',
           dbrcardID:'',
           fpsj:'',
-          fileData:{},
+          fileData:{fileName:'', fileType:'',url:''},
           gfrq:'',
           wqrq:'',
           tname:'',
@@ -544,10 +544,12 @@
     methods: {
       //点击表格 某行 绑定数据
       bindFileData(data){
-        this.form.fileData={};
-        this.form.fileData.name=data.name;
-        this.form.fileData.type=data.type;
-        console.debug(this.form.fileData)
+        //清空之前的值
+        this.form.fileData.fileName='';
+        this.form.fileData.fileType='';
+        //绑定当前行的值
+        this.form.fileData.fileName=data.name;
+        this.form.fileData.fileType=data.type;
       },
 
 
@@ -628,21 +630,6 @@
         //alert(url.procDefId)
         data.procDefId=url.procDefId;
         data.fjids= that.form.fjids;
-        // alert(that.form.sqrlx.key);
-        // data.sqrlx=that.form.sqrlx.key;
-
-
-
-        /*var data1={
-          nowTime:'',
-          fcType:'',
-          money:''
-        } ;
-        data1.fcType=that.form.fclx.key;
-        data1.money=that.form.fcje;
-        data1.nowTime=that.form;
-        console.debug(data1)*/
-
        this.$refs['form'].validate((valid) => {
           if (valid) {
             return request({
@@ -650,29 +637,11 @@
               method: 'post',
               data
             }).then(function (res) {
-              alert("保存成功")
-
-             /* request({
-                url: '/api/message/getSubsidyMoney',
-                method: 'get',
-                data1
-              }).then(function (res) {
-                  that.form.btje=res.resultMoney,
-                  that.form.btbl=res.resultType
-              })*/
-              // ({
-              //   url: 'api/leave/add',
-              //   method: 'get',
-              //   data
-              // }).then(function (res) {
-              //   thus
-              //
-              // })
-
+              alert("保存成功");
+              this.closeCurrentPage();
             })
           } else {
             console.log('error submit!!');
-
             return false;
           }
         })
@@ -981,35 +950,29 @@
             let data = JSON.parse(str);
 
             this.form = data;
-            this.form.sqrlx=parseInt(this.form.sqrlx);
-            this.form.fclx=parseInt(this.form.fclx);
-            this.form.fwlx=parseInt(this.form.fwlx);
+            this.form.sqrlx=data.sqrlx;
+            this.form.fclx=data.fclx;
+            this.form.fwlx=data.fwlx;
+
+            this.form.sbid=data.sbid;
+            this.form.fcid=data.fcid;
+            this.form.sbrid=data.sbrid;
+            this.form.wtid=data.wtid;
+            this.form.fileData={fileName:'', fileType:'',}
             this.selectDate = [];
             this.selectDate[0] = data.startDate;
             this.selectDate[1] = data.endDate;
-            //alert(data.fclx)
-            if(data.sqrlx && data.fclx){
-              if(data.fclx=='1'){
-
-                this.tableData=this.tableData3;
-                return;
+            if(this.form.fjxxList){
+              //附件信息有值 便利附件信息 添加到table数据中
+              for(let i in data.fjxxList){
+                var temp={name:'',type:'',mergeCol:0,url:'' };
+                temp.type= data.fjxxList[i].fileType;
+                temp.name=data.fjxxList[i].fileTypeName;
+                temp.url=data.fjxxList[i].url;
+                this.tableData.push(temp);
               }
-              if(data.fclx=='2'){
-
-                this.tableData=this.tableData2;
-                return;
-              }
-              if(data.fclx=='3'){
-
-                this.tableData=this.tableData1;
-
-                return;
-              }
-              if(data.fclx=='4'){
-
-                this.tableData=this.tableData4;
-                return;
-              }
+              console.debug(this.tableData);
+              this.created()
             }
           }
         });

@@ -68,8 +68,16 @@ public interface TFjxxService {
      *
      * @param sbxxid 申报信息id
      * @param idsStr 附件ids 字符串
-     * @return
+     * @return 改变的数量
      */
 
     int updateSbxxIdById(String sbxxid,String idsStr);
+
+
+    /**
+     *根据申报信息id 获取附件信息
+     * @param sbxxid  申报信息id
+     * @return 附件信息集合
+     */
+    List<TFjxx> findFjxxByShenbaoxixiId(String sbxxid);
 }

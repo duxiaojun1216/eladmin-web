@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
@@ -66,7 +67,6 @@ public class TYewushouliController {
     @ApiOperation("新增申报信息")
     @PreAuthorize("@el.check('yewushouli:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody ShxxHz shxxHz){
-        System.out.println(shxxHz);
         //房产信息
         THouse tHouse = new THouse();
         //申请人信息
@@ -160,20 +160,26 @@ public class TYewushouliController {
     @Log("上传附件信息")
     @ApiOperation("上传附件")
 //    @PreAuthorize("@   .check('yewushouli:uploadFj')")
-    @RequestMapping(value = "/uploadFj", method = RequestMethod.POST)
-    public ResponseEntity<Object> uploadFj(@RequestParam(required = false) MultipartFile[] file
-                                          ,@RequestParam(required = false) EnclosureParameter fileDtata) throws IOException{
+    @PostMapping(value = "uploadFj", consumes = "multipart/*", headers = "content-type=multipart/form-data")
+    public ResponseEntity<Object> uploadFj(@RequestParam(required = false) MultipartFile[] file,
+                                           @RequestParam(value = "fileName")  String fileName,
+                                           @RequestParam(value = "fileType")  String fileType ) throws IOException{
 
         String idStr=null;
+        EnclosureParameter fileData = new EnclosureParameter();
+        fileData.setName(fileName);
+        fileData.setType(fileType);
         if(securityUtil!=null){
             //todo 先设置为 固定的 test
-            idStr = securityUtil.getCurrUser().getId().toString();
-            if(fileDtata.getIdStr()==null){
-                fileDtata.setIdStr(idStr);
-            }
+            idStr="4";
+            fileData.setIdStr(idStr);
+//            idStr = securityUtil.getCurrUser().getId().toString();
+//            if(fileData.getIdStr()==null){
+//                fileData.setIdStr(idStr);
+//            }
         }
 
-        List<TFjxxDto> fjxxDtos = tShenbaoxingxiService.uploadFj(file,fileDtata);
+        List<TFjxxDto> fjxxDtos =  tShenbaoxingxiService.uploadFj(file,fileData);
         return new ResponseEntity<>(fjxxDtos,HttpStatus.CREATED);
     }
 

@@ -1,8 +1,10 @@
 package me.zhengjie.service.dto;
 
 import lombok.Data;
+import me.zhengjie.domain.TFjxx;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 //审核信息汇总
 @Data
@@ -57,6 +59,9 @@ public class ShxxHz1 {
     /** 房产id */
     private Long fcid;
 
+    /**委托id*/
+    private Long wtid;
+
     /** 购房日期 */
     private String gfrq;
 
@@ -80,7 +85,7 @@ public class ShxxHz1 {
     private  String procDefId;
 
     //附件ids
-    private String[]  fjids;
+    private List  fjids;
     //委托信息
 
     //是否委托 0 否 1 是
@@ -93,5 +98,7 @@ public class ShxxHz1 {
     private String telephone;
     //代办人身份证号
     private String dbrcardID;
+    //附件信息
+    private List<TFjxx> fjxxList;
 
 }

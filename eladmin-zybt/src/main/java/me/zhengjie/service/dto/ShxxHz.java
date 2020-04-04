@@ -1,9 +1,11 @@
 package me.zhengjie.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.Column;
 import java.sql.Timestamp;
+import java.util.List;
 
 //审核信息汇总
 @Data
@@ -67,7 +69,6 @@ public class ShxxHz {
     /** 房产金额 */
     private String fcje;
 
-
     /** 补贴金额 */
     private String btje;
 
@@ -78,12 +79,12 @@ public class ShxxHz {
     private  String procDefId;
 
     //附件ids
-    private String[]  fjids;
-
+    private List<String>  fjids;
     //委托信息
     //是否委托 0 否 1 是
     private String sfwt;
-
+    // 委托id
+    private Long wtid;
     //代办企业名称
     private String enterpriseName;
     //代办人姓名
