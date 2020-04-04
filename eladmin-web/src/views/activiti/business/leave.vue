@@ -1,6 +1,6 @@
 <style lang="less">
 .ivu-card-body {
-    padding: 0!important;
+    padding: 0!important;	    
 }
   .form_item {
     margin-bottom: 24px;
@@ -89,9 +89,7 @@
   <div class="search">
     <Card style="width: 970px;margin: auto;">
       <p slot="title" class="header_p">
-        <span v-if="type==0">泸州市农民工进城置业补贴申请表</span>
-        <span v-else-if="type==1">填报置业补贴申请表</span>
-        <span v-else>查看置业补贴申请</span>
+        <span>泸州市农民工进城置业补助申请表</span>       
       </p>
       <p slot="title" style="text-align:left ;font-size:14px;width: 250px;">
         <span>编号：JYTY032020001</span>
@@ -110,7 +108,7 @@
 		  id="applyForm"
         >
 
-          <FormItem class="form_item1" :label="label.name1"  prop="sfwt" width="100%"  style="   margin-bottom: 0px!important;">
+          <FormItem class="form_item1" :label="label.name1"  prop="sfwt" width="100%"  style="margin-top: 15px;margin-bottom: 0px!important;">
             <RadioGroup v-model="form.sfwt"    @on-change="changeFromWT">
               <Radio
                 v-for="item in isWT"
@@ -119,18 +117,18 @@
           </FormItem>
           <Divider orientation="left" v-if="form.sfwt=='1'">代办人信息</Divider>
           <FormItem class="form_item" label="代办企业" prop="enterpriseName" v-if="form.sfwt=='1'">
-            <Input v-model="form.enterpriseName" style="width:250px"></Input>
+            <Input v-model="form.enterpriseName" placeholder="请输入代办企业名称" style="width:250px"></Input>
           </FormItem>
           <FormItem class="form_item" label="代办人姓名" prop="personName" v-if="form.sfwt=='1'">
-            <Input v-model="form.personName" style="width:250px"></Input>
+            <Input v-model="form.personName" placeholder="请输入代办人姓名" style="width:250px"></Input>
           </FormItem>
 
           <FormItem class="form_item" label="代办人电话" prop="telephone" v-if="form.sfwt=='1'">
-            <Input v-model="form.telephone" style="width:250px"></Input>
+            <Input v-model="form.telephone" placeholder="请输入代办人联系电话" style="width:250px"></Input>
           </FormItem>
 
           <FormItem class="form_item" label="身份证号" prop="dbrcardID" v-if="form.sfwt=='1'">
-            <Input v-model="form.dbrcardID" style="width:250px"></Input>
+            <Input v-model="form.dbrcardID" placeholder="请输入代办人身份证号" style="width:250px"></Input>
           </FormItem>
 
          <!--<FormItem label="申请人" prop="name" v-if="type!=0&&type!=1">{{form.createBy}}</FormItem>-->
@@ -143,20 +141,20 @@
                 :label="String(item.id)">{{item.label}}</Radio>
             </RadioGroup>
           </FormItem>
-          <FormItem class="form_item" label="补助人姓名" prop="tname">
-            <Input v-model="form.tname" style="width:250px"></Input>
+          <FormItem class="form_item" label="补助对象姓名" prop="tname">
+            <Input v-model="form.tname" placeholder="请输入补助对象姓名" style="width:250px"></Input>
           </FormItem>
           <FormItem class="form_item" label="联系电话" prop="phone">
-            <Input v-model="form.phone" style="width:250px"></Input>
+            <Input v-model="form.phone"  placeholder="请输入补助对象联系电话" style="width:250px"></Input>
           </FormItem>
           <FormItem class="form_item" label="身份证号" prop="cardId">
-            <Input v-model="form.cardId" style="width:250px"></Input>
+            <Input v-model="form.cardId" placeholder="请输入补助对象身份证号码" style="width:250px"></Input>
           </FormItem>
 
           <FormItem class="form_item" label="身份证地址" prop="hjdz" style="width:95%">
             <Input
               v-model="form.hjdz"
-              placeholder="请输入详细情况"
+              placeholder="请输入补助对象身份证地址"
               style="width: 100%"
             ></Input>
           </FormItem>
@@ -216,10 +214,10 @@
 
 
           <FormItem class="form_item" label="建筑面积" prop="fcmj">
-            <Input v-model="form.fcmj" style="width:250px"/>
+            <Input v-model="form.fcmj" placeholder="请输入购房建筑面积" style="width:250px"/>
           </FormItem>
           <FormItem class="form_item" label="购房款总额" prop="fcje">
-            <Input v-model="form.fcje"  style="width:250px" />
+            <Input v-model="form.fcje" placeholder="请输入购房款总额" style="width:250px" />
           </FormItem>
           <FormItem class="form_item" label="房屋坐落地址" prop="scwz" style="width:95%">
             <Input
@@ -433,8 +431,8 @@
 
         //是否委托开发商代办
         isWT:[
-          {value:'0',label:'否'},
-          {value:'1',label:'是'},
+          {value:'0',label:'本人办理'},
+          {value:'1',label:'开发商代办'},
           ],
 
 
