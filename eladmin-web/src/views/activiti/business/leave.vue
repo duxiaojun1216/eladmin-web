@@ -84,6 +84,9 @@
   .m_table .ivu-form-item-content{
     margin-left: 50px!important;
   }
+  .ivu-date-picker-cells {
+    width: 100%!important; 
+}
 </style>
 <template>
   <div class="search">
